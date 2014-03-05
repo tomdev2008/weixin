@@ -1,0 +1,38 @@
+{
+    "description": "Description of repository structures, for generation (DDL: http://en.wikipedia.org/wiki/Data_Definition_Language) of the relational database table and persistence validation.",
+    "version": "1.0.0.0, Mar 5, 2014",
+    "authors": ["Liang Ding"],
+    "since": "1.0.0",
+    "repositories": [
+        {
+            "name": "notification",
+            "keys": [
+                {
+                    "name": "oId",
+                    "type": "String",
+                    "length": 19
+                },
+                {
+                    "name": "userId",
+                    "type": "String",
+                    "length": 19
+                },
+                {
+                    "name": "dataId",
+                    "type": "String",
+                    "length": 19
+                },
+                {
+                    "name": "dataType",
+                    "type": "int",
+                    "description": "0: article, 1: comment, 2: at, 3: commented, 4: followingUseer"
+                },
+                {
+                    "name": "hasRead",
+                    "type": "boolean",
+                    "desription": "has read or not"
+                }
+            ]
+        }
+    ]
+}
