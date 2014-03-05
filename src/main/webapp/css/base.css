@@ -91,7 +91,7 @@ a {
 }
 
 a:hover {
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 sub,
@@ -188,13 +188,6 @@ textarea {
     display: none;
 }
 
-.fn-ellipsis {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    word-wrap: normal;
-}
-
 .ft-gray {
     color: #999;
 }
@@ -226,6 +219,7 @@ textarea {
     border-width: 0;
     height: 33px;
     width: 80%;
+    background-color: #FFF;
 }
 
 .button {
@@ -239,17 +233,59 @@ textarea {
     width: 100%;
 }
 
+.button.white {
+    background-color: #FFFFFF;
+    border: 1px solid #999999;
+    color: #999999;
+}
+
 .wrap {
     width: 90%;
     margin: 0 auto;
 }
 
+.textarea {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    background-color: #FFFFFF;
+    border: 1px solid #999999;
+    border-radius: 5px;
+    height: 180px;
+    margin-top: 30px;
+    width: 100%;
+}
+
 footer {
-      border-top: 1px solid #E3E3E3;
+    border-top: 1px solid #E3E3E3;
     font-size: 0.9em;
     margin-top: 30px;
     padding: 10px 0;
     text-align: center;
+}
+
+.sub-nav {
+    background-color: #5F9200;
+    height: 50px;
+}
+
+.sub-nav li {
+    float: left;
+    text-align: center;
+    width: 20%;
+}
+
+.sub-nav a {
+    color: #FFFFFF;
+    display: inline-block;
+    font-size: 1.05em;
+    height: 22px;
+    padding: 14px 0 8px;
+    text-align: center;
+}
+
+.sub-nav a.current {
+    border-bottom: 2px solid #FFFFFF;
 }
 /* start common */
 
@@ -319,3 +355,50 @@ footer {
     padding-left: 6%;
 }
 /* end search */
+
+/* start user-list */
+.user-list li {
+    border-bottom: 1px solid #E3E3E3;
+    padding: 10px;
+    clear: both;
+}
+
+.user-list li.last {
+    border-bottom-width: 0;
+}
+
+.user-list img {
+    float: left;
+    height: 80px;
+    margin-right: 10px;
+}
+
+.user-list .name {
+    display: block;
+    font-size: 1.1em;
+    margin: 3px 0 7px;
+    color: #333;
+}
+
+.user-list .title {
+    color: #9A9A9A;
+}
+/* end user-list */
+
+/* start user-card */
+.user-card .user-list .name {
+    display: inline-block;
+}
+
+.user-card-sub {
+    background-color: #E3E3E3;
+    font-size: 1.1em;
+    height: 45px;
+    line-height: 45px;
+    text-align: center;
+}
+
+.user-card-sub-list li {
+     padding: 10px 5%;
+}
+/* end user-card */

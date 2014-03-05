@@ -1,45 +1,28 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-        <title>用户登录 - 新助邦</title>
-        <link type="text/css" rel="stylesheet" href="${staticServePath}/css/base${miniPostfix}.css?${staticResourceVersion}" />
+        <#include "../macro-meta.ftl">
+        <@meta title="用户登录 - 新助邦"/>
     </head>
-    <body class="search">
-        <nav>
-            <ul class="fn-clear">
-                <li class="current">
-                    <span>
-                        学科门类<span class="ico-arrow-down"></span>
-                    </span>
-                </li>
-                <li>
-                    <span>
-                        一级学科<span class="ico-arrow-down"></span>
-                    </span>
-                </li> 
-                <li>
-                    <span>
-                        二级学科<span class="ico-arrow-down"></span>
-                    </span>
-                </li>
-            </ul>
-        </nav>
-        <ul class="list">
-            <li>
-                学科门类学科门类学科门类
-            </li>
-            <li>
-                学科门类学科门类学科门类
-            </li>
-            <li>
-                学科门类学科门类学科门类
-            </li>
-            <li>
-                学科门类学科门类学科门类
-            </li>
-        </ul>
+    <body>
+        <div class="wrap">
+            <div class="form">
+                <label class="first">
+                    帐号：
+                    <input placeholder="请输入帐号"/>
+                </label>
+                <label>
+                    密码：
+                    <input placeholder="请输入密码"/>
+                </label>
+            </div>
+            <label class="ft-gray"><input type="checkbox" checked="checked"/> 记住登录状态</label>
+            <button class="button">登 录</button>
+            <div class="fn-clear">
+                <a class="fn-left" href="/register">立即注册>></a>
+                <a class="fn-right" href="/forget-password">忘记密码？</a>
+            </div>
+            <#include "footer.ftl">
+        </div>
     </body>
 </html>
