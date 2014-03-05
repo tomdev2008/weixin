@@ -20,7 +20,6 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.b3log.latke.Latkes;
 import org.b3log.latke.logging.Logger;
 import org.b3log.latke.service.LangPropsService;
 import org.b3log.latke.servlet.HTTPRequestContext;
@@ -31,46 +30,34 @@ import org.b3log.latke.servlet.renderer.freemarker.AbstractFreeMarkerRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
 
 /**
- * 首页处理器.
+ * 注册处理器.
  *
- * @author <a href="http://88250.b3log.org">Liang Ding</a>
+ * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @version 1.0.0.0, Mar 5, 2014
  * @since 1.0.0
  */
 @RequestProcessor
-public class IndexProcessor {
-
-    /**
-     * Logger.
-     */
-    private static final Logger LOGGER = Logger.getLogger(IndexProcessor.class.getName());
-
-    /**
-     * Language service.
-     */
-    @Inject
-    private LangPropsService langPropsService;
+public class RegisterProcessor {
     
     @Inject
     private Filler filler;
 
     /**
-     * 展示首页.
+     * 展示注册页面.
      *
      * @param context the specified context
      * @param request the specified request
      * @param response the specified response
      * @throws Exception exception
      */
-    @RequestProcessing(value = "/", method = HTTPRequestMethod.GET)
+    @RequestProcessing(value = "/register", method = HTTPRequestMethod.GET)
     public void showIndex(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
-        renderer.setTemplateName("index.ftl");
-        final Map<String, Object> dataModel = renderer.getDataModel();
+        renderer.setTemplateName("/register.ftl");
         
-        dataModel.put("xinzhubang", "新助邦");
+        final Map<String, Object> dataModel = renderer.getDataModel();
 
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
