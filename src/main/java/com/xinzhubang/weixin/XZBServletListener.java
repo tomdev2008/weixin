@@ -19,11 +19,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.http.HttpSessionEvent;
 import org.b3log.latke.Latkes;
-import org.b3log.latke.logging.Level;
 import org.b3log.latke.logging.Logger;
 import org.b3log.latke.servlet.AbstractServletListener;
-import org.b3log.latke.util.Stopwatchs;
-import org.b3log.latke.util.Strings;
 
 /**
  * Servlet 监听器.

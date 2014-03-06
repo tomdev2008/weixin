@@ -28,32 +28,54 @@ import org.b3log.latke.servlet.renderer.freemarker.AbstractFreeMarkerRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
 
 /**
- * 忘记密码处理器.
+ * 用户处理器.
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
- * @version 1.0.0.0, Mar 5, 2014
+ * @author <a href="http://88250.b3log.org">Liang Ding</a>
+ * @version 1.0.0.1, Mar 6, 2014
  * @since 1.0.0
  */
 @RequestProcessor
-public class ForgetPasswordProcessor {
+public class UserProcessor {
     
     @Inject
     private Filler filler;
 
     /**
-     * 展示忘记密码页面.
+     * 展示用户列表页面.
      *
      * @param context the specified context
      * @param request the specified request
      * @param response the specified response
      * @throws Exception exception
      */
-    @RequestProcessing(value = "/forget-password", method = HTTPRequestMethod.GET)
-    public void showIndex(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+    @RequestProcessing(value = "/user-list", method = HTTPRequestMethod.GET)
+    public void showUserList(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
-        renderer.setTemplateName("/forget-password.ftl");
+        renderer.setTemplateName("/community/user-list.ftl");
+        
+        final Map<String, Object> dataModel = renderer.getDataModel();
+
+        filler.fillHeader(request, response, dataModel);
+        filler.fillFooter(dataModel);
+    }
+    
+     /**
+     * 展示用户名片页面.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/user-card", method = HTTPRequestMethod.GET)
+    public void showUserCard(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+        context.setRenderer(renderer);
+        renderer.setTemplateName("/community/user-card.ftl");
         
         final Map<String, Object> dataModel = renderer.getDataModel();
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <#include "../macro-meta.ftl">
+        <#include "macro-meta.ftl">
         <@meta title="用户注册 - 新助邦"/>
     </head>
     <body>
