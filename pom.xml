@@ -21,10 +21,9 @@
 
     <!-- Properties -->
     <properties>
-        <org.b3log.latke.version>1.0.6</org.b3log.latke.version>
+        <org.b3log.latke.version>1.0.8-SNAPSHOT</org.b3log.latke.version>
         <servlet.version>2.5</servlet.version>
         <slf4j.version>1.7.5</slf4j.version>
-        <mysql-connector-java.version>5.1.18</mysql-connector-java.version>
         <jsoup.version>1.7.1</jsoup.version>
         <net.sf.json.version>2.4</net.sf.json.version>
 
@@ -142,20 +141,8 @@
         
         <dependency>
             <groupId>org.b3log</groupId>
-            <artifactId>latke-repository-mysql</artifactId>
+            <artifactId>latke-repository-sqlserver</artifactId>
             <version>${org.b3log.latke.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.jolbox</groupId>
-                    <artifactId>bonecp</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        
-        <dependency>         
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql-connector-java.version}</version>
         </dependency>
         
         <dependency>
