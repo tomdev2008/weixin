@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
     Description: 新助邦微信公众平台项目 POM.
-    Version: 1.0.0.0, Mar 15, 2014
+    Version: 1.0.0.1, Mar 6, 2014
     Author: Liang Ding
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -26,6 +26,7 @@
         <slf4j.version>1.7.5</slf4j.version>
         <mysql-connector-java.version>5.1.18</mysql-connector-java.version>
         <jsoup.version>1.7.1</jsoup.version>
+        <net.sf.json.version>2.4</net.sf.json.version>
 
         <!-- maven plugin -->
         <maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
@@ -93,6 +94,20 @@
     </scm>
 
     <dependencies>
+        <dependency>
+            <groupId>net.sf.json-lib</groupId>
+            <artifactId>json-lib</artifactId>
+            <version>${net.sf.json.version}</version>
+            <classifier>jdk15</classifier>
+        </dependency>
+        
+        <dependency>
+            <groupId>xom</groupId>
+            <artifactId>xom</artifactId>
+            <version>1.2.5</version>
+        </dependency>
+            
+        
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
@@ -258,7 +273,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
-                    <skipTests>true</skipTests>
+                    <skipTests>false</skipTests>
                 </configuration>
             </plugin>
             
