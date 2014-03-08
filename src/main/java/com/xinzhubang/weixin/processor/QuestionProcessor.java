@@ -1,3 +1,5 @@
+package com.xinzhubang.weixin.processor;
+
 /*
  * Copyright (c) 2014, XinZhuBang
  *
@@ -13,8 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.xinzhubang.weixin.processor;
 
+
+import com.xinzhubang.weixin.processor.*;
 import com.xinzhubang.weixin.util.Filler;
 import java.util.Map;
 import javax.inject.Inject;
@@ -28,32 +31,32 @@ import org.b3log.latke.servlet.renderer.freemarker.AbstractFreeMarkerRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
 
 /**
- * 发送悄悄话处理器.
+ * 提问处理器.
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @version 1.0.0.0, Mar 5, 2014
  * @since 1.0.0
  */
 @RequestProcessor
-public class SendMessageProcessor {
+public class QuestionProcessor {
     
     @Inject
     private Filler filler;
 
     /**
-     * 展示发送悄悄话页面.
+     * 展示消息列表页面.
      *
      * @param context the specified context
      * @param request the specified request
      * @param response the specified response
      * @throws Exception exception
      */
-    @RequestProcessing(value = "/send-message", method = HTTPRequestMethod.GET)
+    @RequestProcessing(value = "/question-list", method = HTTPRequestMethod.GET)
     public void showIndex(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
-        renderer.setTemplateName("/admin/message-send.ftl");
+        renderer.setTemplateName("/community/question-list.ftl");
         
         final Map<String, Object> dataModel = renderer.getDataModel();
 

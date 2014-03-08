@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <#include "../macro-meta.ftl">
+        <#include "../common/macro-meta.ftl">
         <@meta title="{userName} - 新助邦"/>
     </head>
     <body class="user-card">

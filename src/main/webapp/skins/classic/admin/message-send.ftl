@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <#include "../macro-meta.ftl">
+        <#include "../common/macro-meta.ftl">
         <@meta title="留言 - 新助邦"/>
     </head>
     <body>

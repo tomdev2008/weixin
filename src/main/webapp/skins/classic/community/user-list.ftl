@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <#include "../macro-meta.ftl">
+        <#include "../common/macro-meta.ftl">
         <@meta title="用户列表 - 新助邦"/>
     </head>
     <body>
@@ -14,7 +14,7 @@
                     <a href="user-list?type=teacher">老师</a>
                 </li>
                 <li>
-                    <a href="">提问</a>
+                    <a href="question-list">提问</a>
                 </li>
                 <li>
                     <a href="">需求</a>
@@ -30,7 +30,7 @@
                     <img src="/images/default-user-thumbnail.png"/>
                     <div class="fn-left">
                         <span class="name">新助邦</span>
-                        <div class="title">
+                        <div class="ft-light-gray">
                             XXXXXXXXXx学校 ZZZZZZZZZZZ学院 YYYYYY专业
                             <br/>
                             学科门类学科门类学科门类学科门类学科门类学科门类
@@ -43,7 +43,7 @@
                     <img src="/images/default-user-thumbnail.png"/>
                     <div class="fn-left">
                         <span class="name">新助邦</span>
-                        <div class="title">
+                        <div class="ft-light-gray">
                             XXXXXXXXXx学校 ZZZZZZZZZZZ学院 YYYYYY专业
                             <br/>
                             学科门类学科门类学科门类学科门类学科门类学科门类
@@ -56,7 +56,7 @@
                     <img src="/images/default-user-thumbnail.png"/>
                     <div class="fn-left">
                         <span class="name">新助邦</span>
-                        <div class="title">
+                        <div class="ft-light-gray">
                             XXXXXXXXXx学校 ZZZZZZZZZZZ学院 YYYYYY专业
                             <br/>
                             学科门类学科门类学科门类学科门类学科门类学科门类
@@ -69,7 +69,7 @@
                     <img src="/images/default-user-thumbnail.png"/>
                     <div class="fn-left">
                         <span class="name">新助邦</span>
-                        <div class="title">
+                        <div class="ft-light-gray">
                             XXXXXXXXXx学校 ZZZZZZZZZZZ学院 YYYYYY专业
                             <br/>
                             学科门类学科门类学科门类学科门类学科门类学科门类

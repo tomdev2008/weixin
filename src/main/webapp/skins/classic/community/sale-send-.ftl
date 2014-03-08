@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <#include "../common/macro-meta.ftl">
-        <@meta title="专业搜索 - 新助邦"/>
+        <#include "../macro-meta.ftl">
+        <@meta title="圈子设置 - 新助邦"/>
     </head>
     <body class="search">
         <nav>
             <ul class="fn-clear">
                 <li class="current">
                     <span>
-                        学科门类<span class="ico-arrow-down"></span>
+                        省份<span class="ico-arrow-down"></span>
                     </span>
                 </li>
                 <li>
                     <span>
-                        一级学科<span class="ico-arrow-down"></span>
+                        学校<span class="ico-arrow-down"></span>
                     </span>
                 </li> 
                 <li>
                     <span>
-                        二级学科<span class="ico-arrow-down"></span>
+                        学院<span class="ico-arrow-down"></span>
                     </span>
                 </li>
             </ul>

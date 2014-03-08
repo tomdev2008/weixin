@@ -48,7 +48,7 @@ public class SetCommunityProcessor {
      * @param response the specified response
      * @throws Exception exception
      */
-    @RequestProcessing(value = "/set-community", method = HTTPRequestMethod.GET)
+    @RequestProcessing(value = "/admin/set-community", method = HTTPRequestMethod.GET)
     public void showIndex(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
