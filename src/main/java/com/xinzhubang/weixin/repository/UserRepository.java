@@ -17,19 +17,20 @@
 package com.xinzhubang.weixin.repository;
 
 import org.b3log.latke.repository.AbstractRepository;
+import org.b3log.latke.repository.annotation.Repository;
 
 /**
- * 用户库.
+ * 用户数据存取.
  *
- * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.0.1, Mar 6, 2014
+ * @version 1.0.0.2, Mar 9, 2014
  * @since 1.0.0
  */
+@Repository
 public class UserRepository extends AbstractRepository {
 
     public UserRepository() {
-        super("");
+        super("Users");
     }
     
 }

@@ -15,6 +15,7 @@
  */
 package com.xinzhubang.weixin.processor;
 
+import com.xinzhubang.weixin.repository.UserRepository;
 import com.xinzhubang.weixin.util.Filler;
 import java.util.Map;
 import javax.inject.Inject;
@@ -24,8 +25,10 @@ import org.b3log.latke.servlet.HTTPRequestContext;
 import org.b3log.latke.servlet.HTTPRequestMethod;
 import org.b3log.latke.servlet.annotation.RequestProcessing;
 import org.b3log.latke.servlet.annotation.RequestProcessor;
+import org.b3log.latke.servlet.renderer.JSONRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.AbstractFreeMarkerRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
+import org.json.JSONObject;
 
 /**
  * 登录、注册处理器.
@@ -40,6 +43,9 @@ public class LoginProcessor {
 
     @Inject
     private Filler filler;
+    
+    @Inject
+    private UserRepository userRepository;
 
     /**
      * 展示登录页面.
@@ -61,7 +67,30 @@ public class LoginProcessor {
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
-    
+
+    /**
+     * 用户登录.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/login", method = HTTPRequestMethod.POST)
+    public void login(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final JSONRenderer renderer = new JSONRenderer();
+        context.setRenderer(renderer);
+        final JSONObject ret = new JSONObject();
+        renderer.setJSONObject(ret);
+        
+        final String userName = request.getParameter("userName");
+        final String password = request.getParameter("password");
+        
+        
+
+    }
+
     /**
      * 展示忘记密码页面.
      *
@@ -76,13 +105,13 @@ public class LoginProcessor {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
         renderer.setTemplateName("/forget-password.ftl");
-        
+
         final Map<String, Object> dataModel = renderer.getDataModel();
 
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
-    
+
     /**
      * 展示注册页面.
      *
@@ -97,7 +126,7 @@ public class LoginProcessor {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
         renderer.setTemplateName("/register.ftl");
-        
+
         final Map<String, Object> dataModel = renderer.getDataModel();
 
         filler.fillHeader(request, response, dataModel);

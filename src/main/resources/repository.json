@@ -1,36 +1,54 @@
 {
     "description": "Description of repository structures, for generation (DDL: http://en.wikipedia.org/wiki/Data_Definition_Language) of the relational database table and persistence validation.",
-    "version": "1.0.0.0, Mar 5, 2014",
+    "version": "1.0.0.0, Mar 7, 2014",
     "authors": ["Liang Ding"],
     "since": "1.0.0",
     "repositories": [
         {
-            "name": "notification",
+            "name": "Users",
             "keys": [
                 {
-                    "name": "oId",
+                    "name": "id",
+                    "type": "int"
+                },
+                {
+                    "name": "group_id",
+                    "type": "int"
+                },
+                {
+                    "name": "user_name",
                     "type": "String",
-                    "length": 19
+                    "length": 100
                 },
                 {
-                    "name": "userId",
+                    "name": "password",
                     "type": "String",
-                    "length": 19
+                    "length": 100
                 },
                 {
-                    "name": "dataId",
+                    "name": "email",
                     "type": "String",
-                    "length": 19
+                    "length": 50
                 },
                 {
-                    "name": "dataType",
-                    "type": "int",
-                    "description": "0: article, 1: comment, 2: at, 3: commented, 4: followingUseer"
+                    "name": "nick_name",
+                    "type": "String",
+                    "length": 100
                 },
                 {
-                    "name": "hasRead",
-                    "type": "boolean",
-                    "desription": "has read or not"
+                    "name": "RealName",
+                    "type": "String",
+                    "length": 100
+                },
+                {
+                    "name": "avatar",
+                    "type": "String",
+                    "length": 255
+                },
+                {
+                    "name": "sex",
+                    "type": "String",
+                    "length": 20
                 }
             ]
         }

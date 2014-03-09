@@ -20,6 +20,7 @@ import javax.servlet.ServletRequestEvent;
 import javax.servlet.http.HttpSessionEvent;
 import org.b3log.latke.Latkes;
 import org.b3log.latke.logging.Logger;
+import org.b3log.latke.repository.jdbc.util.JdbcRepositories;
 import org.b3log.latke.servlet.AbstractServletListener;
 
 /**
@@ -39,6 +40,9 @@ public class XZBServletListener extends AbstractServletListener {
     @Override
     public void contextInitialized(final ServletContextEvent servletContextEvent) {
         super.contextInitialized(servletContextEvent);
+        
+        // 数据库表主键名为 id
+        JdbcRepositories.setDefaultKeyName("id");
 
         Latkes.loadSkin("classic");
 
