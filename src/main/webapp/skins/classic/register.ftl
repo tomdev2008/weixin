@@ -8,8 +8,12 @@
         <div class="wrap">
             <div class="form">
                 <label class="first">
-                    帐号：
-                    <input id="account" placeholder="请输入帐号"/>
+                    邮箱：
+                    <input id="account" placeholder="请输入邮箱"/>
+                </label>
+                <label>
+                    昵称：
+                    <input id="account" placeholder="请输入昵称"/>
                 </label>
                 <label>
                     密码：

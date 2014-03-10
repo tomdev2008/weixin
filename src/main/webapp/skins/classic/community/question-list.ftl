@@ -8,23 +8,23 @@
         <nav class="sub-nav">
             <ul>
                 <li>
-                    <a href="user-list?type=student">学生</a>
+                    <a href="/user-list?type=student">学生</a>
                 </li>
                 <li>
-                    <a href="user-list?type=teacher">老师</a>
+                    <a href="/user-list?type=teacher">老师</a>
                 </li>
                 <li>
-                    <a class="current" href="">提问</a>
+                    <a class="current" href="#">提问</a>
                 </li>
                 <li>
-                    <a href="">需求</a>
+                    <a href="/requirement-list">需求</a>
                 </li>
                 <li>
-                    <a href="">出售</a>
+                    <a href="/sale-list">出售</a>
                 </li>
             </ul>
         </nav>
-        <div class="question-list-nav">
+        <div class="list-nav">
             <ul class="fn-clear">
                 <li>
                     <a href="#" class="current">最新问题</a>
@@ -36,110 +36,128 @@
                     <a href="#">待解决</a>
                 </li>
                 <li>
-                    <a class="last" href="/question-send">我要提问</a>
+                    <a class="last" href="/question-send">提问</a>
                 </li>
             </ul>
         </div>
-        <ul class="question-list">
+        <ul class="question-list list">
             <li class="fn-clear">
-                <div class="count fn-left">
+                <div class="list-view">
                     <div class="num">10</div>
                     <div class="text">回答</div>
                 </div>
-                <div class="fn-left">
+                <div class="list-content">
                     <a href="/question-details">
                         <span class="name">想要东北师大中国古代文化史真题答案</span> 
                     </a>
                     <div class="ft-light-gray">
-                        提问者： 冬雪 7小时前 <br>
-                        <span class="ft-green">[待解决]</span> &nbsp; &nbsp; 
-                        浏览2000 &nbsp; &nbsp; 
-                        <a href="/question-answer">评论</a>
+                        <div>提问者： 冬雪  &nbsp; &nbsp; 7小时前 </div>
+                        <div>
+                            <span class="fn-left">
+                                <span class="ft-green">[待解决]</span> &nbsp; &nbsp; 
+                                浏览2000 &nbsp; &nbsp;  
+                            </span>
+                        </div>
                     </div>
                 </div>
             </li>
             <li class="fn-clear">
-                <div class="count fn-left">
+                <div class="list-view">
                     <div class="num">10</div>
                     <div class="text">回答</div>
                 </div>
-                <div class="fn-left">
+                <div class="list-content">
                     <a href="/question-details">
                         <span class="name">想要东北师大中国古代文化史真题答案</span> 
                     </a>
                     <div class="ft-light-gray">
-                        提问者： 冬雪 7小时前 <br>
-                        <span class="ft-green">[待解决]</span> &nbsp; &nbsp; 
-                        浏览2000 &nbsp; &nbsp; 
-                        <a href="/question-answer">评论</a>
+                        <div>提问者： 冬雪  &nbsp; &nbsp; 7小时前 </div>
+                        <div>
+                            <span class="fn-left">
+                                <span class="ft-green">[待解决]</span> &nbsp; &nbsp; 
+                                浏览2000 &nbsp; &nbsp;  
+                            </span>
+                        </div>
                     </div>
                 </div>
             </li>
             <li class="fn-clear">
-                <div class="count fn-left">
+                <div class="list-view">
                     <div class="num">10</div>
                     <div class="text">回答</div>
                 </div>
-                <div class="fn-left">
+                <div class="list-content">
                     <a href="/question-details">
                         <span class="name">想要东北师大中国古代文化史真题答案</span> 
                     </a>
                     <div class="ft-light-gray">
-                        提问者： 冬雪 7小时前 <br>
-                        <span class="ft-green">[待解决]</span> &nbsp; &nbsp; 
-                        浏览2000 &nbsp; &nbsp; 
-                        <a href="/question-answer">评论</a>
+                        <div>提问者： 冬雪  &nbsp; &nbsp; 7小时前 </div>
+                        <div>
+                            <span class="fn-left">
+                                <span class="ft-green">[待解决]</span> &nbsp; &nbsp; 
+                                浏览2000 &nbsp; &nbsp;  
+                            </span>
+                        </div>
                     </div>
                 </div>
             </li>
             <li class="fn-clear">
-                <div class="count fn-left">
+                <div class="list-view">
                     <div class="num">10</div>
                     <div class="text">回答</div>
                 </div>
-                <div class="fn-left">
+                <div class="list-content">
                     <a href="/question-details">
                         <span class="name">想要东北师大中国古代文化史真题答案</span> 
                     </a>
                     <div class="ft-light-gray">
-                        提问者： 冬雪 7小时前 <br>
-                        <span class="ft-green">[待解决]</span> &nbsp; &nbsp; 
-                        浏览2000 &nbsp; &nbsp; 
-                        <a href="/question-answer">评论</a>
+                        <div>提问者： 冬雪  &nbsp; &nbsp; 7小时前 </div>
+                        <div>
+                            <span class="fn-left">
+                                <span class="ft-green">[待解决]</span> &nbsp; &nbsp; 
+                                浏览2000 &nbsp; &nbsp;  
+                            </span>
+                        </div>
                     </div>
                 </div>
             </li>
             <li class="fn-clear">
-                <div class="count fn-left">
+                <div class="list-view">
                     <div class="num">10</div>
                     <div class="text">回答</div>
                 </div>
-                <div class="fn-left">
+                <div class="list-content">
                     <a href="/question-details">
                         <span class="name">想要东北师大中国古代文化史真题答案</span> 
                     </a>
                     <div class="ft-light-gray">
-                        提问者： 冬雪 7小时前 <br>
-                        <span class="ft-green">[待解决]</span> &nbsp; &nbsp; 
-                        浏览2000 &nbsp; &nbsp; 
-                        <a href="/question-answer">评论</a>
+                        <div>提问者： 冬雪  &nbsp; &nbsp; 7小时前 </div>
+                        <div>
+                            <span class="fn-left">
+                                <span class="ft-green">[待解决]</span> &nbsp; &nbsp; 
+                                浏览2000 &nbsp; &nbsp;  
+                            </span>
+                        </div>
                     </div>
                 </div>
             </li>
-            <li class="fn-clear">
-                <div class="count fn-left">
+            <li class="fn-clear last">
+                <div class="list-view">
                     <div class="num">10</div>
                     <div class="text">回答</div>
                 </div>
-                <div class="fn-left">
+                <div class="list-content">
                     <a href="/question-details">
                         <span class="name">想要东北师大中国古代文化史真题答案</span> 
                     </a>
                     <div class="ft-light-gray">
-                        提问者： 冬雪 7小时前 <br>
-                        <span class="ft-green">[待解决]</span> &nbsp; &nbsp; 
-                        浏览2000 &nbsp; &nbsp; 
-                        <a href="/question-answer">评论</a>
+                        <div>提问者： 冬雪  &nbsp; &nbsp; 7小时前 </div>
+                        <div>
+                            <span class="fn-left">
+                                <span class="ft-green">[待解决]</span> &nbsp; &nbsp; 
+                                浏览2000 &nbsp; &nbsp;  
+                            </span>
+                        </div>
                     </div>
                 </div>
             </li>
