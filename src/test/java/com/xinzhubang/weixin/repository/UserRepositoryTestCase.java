@@ -61,8 +61,6 @@ public class UserRepositoryTestCase {
         query.setFilter(new PropertyFilter("user_name", FilterOperator.EQUAL, "88250"));
 
         final JSONObject result = userRepository.get(query);
-        result.getJSONArray(Keys.RESULTS);
         System.out.println(result.toString());
-
     }
 }

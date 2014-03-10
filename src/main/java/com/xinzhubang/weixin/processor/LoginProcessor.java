@@ -15,13 +15,15 @@
  */
 package com.xinzhubang.weixin.processor;
 
-import com.xinzhubang.weixin.repository.UserRepository;
+import com.xinzhubang.weixin.service.UserService;
 import com.xinzhubang.weixin.util.DESs;
 import com.xinzhubang.weixin.util.Filler;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.b3log.latke.Keys;
+import org.b3log.latke.model.User;
 import org.b3log.latke.servlet.HTTPRequestContext;
 import org.b3log.latke.servlet.HTTPRequestMethod;
 import org.b3log.latke.servlet.annotation.RequestProcessing;
@@ -29,6 +31,8 @@ import org.b3log.latke.servlet.annotation.RequestProcessor;
 import org.b3log.latke.servlet.renderer.JSONRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.AbstractFreeMarkerRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
+import org.b3log.latke.util.Requests;
+import org.b3log.latke.util.Sessions;
 import org.json.JSONObject;
 
 /**
@@ -44,9 +48,9 @@ public class LoginProcessor {
 
     @Inject
     private Filler filler;
-    
+
     @Inject
-    private UserRepository userRepository;
+    private UserService userService;
 
     /**
      * 展示登录页面.
@@ -83,15 +87,25 @@ public class LoginProcessor {
         final JSONRenderer renderer = new JSONRenderer();
         context.setRenderer(renderer);
         final JSONObject ret = new JSONObject();
+        ret.put(Keys.STATUS_CODE, true);
         renderer.setJSONObject(ret);
-        
-        final String userName = request.getParameter("userName");
-        final String password = request.getParameter("password");
-        
-        final String passwordEncrypted = DESs.encrypt(password, userName);
-        
-        
 
+        final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
+        final String userName = requestJSONObject.getString("userName");
+        final String password = requestJSONObject.getString("password");
+
+        final JSONObject user = userService.getUserByName(userName);
+        if (null == user || !user.optString("password").equals(DESs.encrypt(password, "XHJY"))) {
+            ret.put(Keys.STATUS_CODE, false);
+            ret.put(Keys.MSG, "用户不存在或密码错误");
+            
+            return;
+        }
+
+        user.put(User.USER_EMAIL, user.getString("email"));
+        user.put(User.USER_PASSWORD, user.getString("password"));
+
+        Sessions.login(request, response, user);
     }
 
     /**

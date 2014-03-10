@@ -12,8 +12,8 @@
                     <input id="account" placeholder="请输入邮箱"/>
                 </label>
                 <label>
-                    昵称：
-                    <input id="account" placeholder="请输入昵称"/>
+                    用户名：
+                    <input id="account" placeholder="请输入用户名"/>
                 </label>
                 <label>
                     密码：

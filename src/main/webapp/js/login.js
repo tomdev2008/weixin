@@ -17,6 +17,7 @@
  * @fileOverview 登录、注册、找回密码
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
+ * @author <a href="http://88250.b3log.org">Liang Ding</a>
  * @version 1.0.0.1, Mar 8, 2014
  */
 var login = {
@@ -26,7 +27,24 @@ var login = {
         } else if ($.trim($("#password").val()).length === 0) {
             tip.show("登录失败", "密码不能为空");
         } else {
+            var requestJSONObject = {
+                userName: $.trim($("#account").val()),
+                password: $.trim($("#password").val())
+            };
 
+            $.ajax({
+                url: "/login",
+                type: "POST",
+                cache: false,
+                data: JSON.stringify(requestJSONObject),
+                success: function(result, textStatus) {
+                    if (result.sc) {
+                        window.location.reload();
+                    } else {
+                        tip.show("登录失败", result.msg);
+                    }
+                }
+            });
         }
     },
     register: function() {
