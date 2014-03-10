@@ -15,11 +15,17 @@
  */
 package com.xinzhubang.weixin.service;
 
+import com.xinzhubang.weixin.repository.UserCardRepository;
 import com.xinzhubang.weixin.repository.UserRepository;
+import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
 import org.b3log.latke.Keys;
 import org.b3log.latke.logging.Level;
 import org.b3log.latke.logging.Logger;
+import org.b3log.latke.repository.CompositeFilter;
+import org.b3log.latke.repository.CompositeFilterOperator;
+import org.b3log.latke.repository.Filter;
 import org.b3log.latke.repository.FilterOperator;
 import org.b3log.latke.repository.PropertyFilter;
 import org.b3log.latke.repository.Query;
@@ -36,22 +42,63 @@ import org.json.JSONObject;
  */
 @Service
 public class UserService {
-    
+
     private static final Logger LOGGER = Logger.getLogger(UserService.class);
 
     @Inject
     private UserRepository userRepository;
+
+    @Inject
+    private UserCardRepository userCardRepository;
+
+    /**
+     * 根据用户 id 与类型（老师或学生）获取用户名片。
+     *
+     * @param userId 用户 id
+     * @param type 类型，老师：t；学生：s；e：企业，其他情况默认老师
+     * @return
+     * @throws ServiceException
+     */
+    public JSONObject getUserCard(final int userId, final String type) throws ServiceException {
+        final List<Filter> filters = new ArrayList<Filter>();
+        filters.add(new PropertyFilter("t_user_id", FilterOperator.EQUAL, userId));
+
+        int property;
+        if ("t".equals(type)) {
+            property = 1;
+        } else if ("s".equals(type)) {
+            property = 0;
+        } else if ("e".equals(type)) {
+            property = 2;
+        } else {
+            property = 0;
+        }
+
+        filters.add(new PropertyFilter("property", FilterOperator.EQUAL, property));
+
+        final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+
+        try {
+            final JSONObject result = userCardRepository.get(query);
+
+            return result.getJSONArray(Keys.RESULTS).optJSONObject(0);
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "查询用户名片 [userId=" + userId + ", type=" + type + "] 异常", e);
+
+            return null;
+        }
+    }
 
     public JSONObject getUserByName(final String userName) throws ServiceException {
         final Query query = new Query().setFilter(new PropertyFilter("user_name", FilterOperator.EQUAL, userName));
 
         try {
             final JSONObject result = userRepository.get(query);
-            
+
             return result.getJSONArray(Keys.RESULTS).optJSONObject(0);
         } catch (final Exception e) {
-            LOGGER.log(Level.ERROR, "根据用户名 ["+ userName+ "] 获取用户异常", e);
-            
+            LOGGER.log(Level.ERROR, "根据用户名 [" + userName + "] 获取用户异常", e);
+
             return null;
         }
     }

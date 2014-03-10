@@ -18,6 +18,13 @@ package com.xinzhubang.weixin.util;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+/**
+ * DES 加解密工具单元测试.
+ *
+ * @author <a href="http://88250.b3log.org">Liang Ding</a>
+ * @version 1.0.0.0, Mar 10, 2014
+ * @since 1.0.0
+ */
 public class DESsTestCase {
 
     @Test

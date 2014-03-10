@@ -2,7 +2,7 @@
 <html>
     <head>
         <#include "../common/macro-meta.ftl">
-        <@meta title="{userName} - 新助邦"/>
+        <@meta title="${userName} - 新助邦"/>
     </head>
     <body class="user-card">
         <div class="wrap">
@@ -10,7 +10,7 @@
                 <li class="fn-clear">
                     <img src="/images/default-user-thumbnail.png"/>
                     <div class="fn-left">
-                        <span class="name">新助邦</span>
+                        <span class="name">${cardTitle}</span>
                         <div class="title">
                             XXXXXXXXXx学校 ZZZZZZZZZZZ学院 YYYYYY专业
                             <br/>

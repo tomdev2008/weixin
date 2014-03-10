@@ -15,6 +15,7 @@
  */
 package com.xinzhubang.weixin.processor;
 
+import com.xinzhubang.weixin.service.UserService;
 import com.xinzhubang.weixin.util.Filler;
 import java.util.Map;
 import javax.inject.Inject;
@@ -26,6 +27,7 @@ import org.b3log.latke.servlet.annotation.RequestProcessing;
 import org.b3log.latke.servlet.annotation.RequestProcessor;
 import org.b3log.latke.servlet.renderer.freemarker.AbstractFreeMarkerRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
+import org.json.JSONObject;
 
 /**
  * 用户处理器.
@@ -37,9 +39,12 @@ import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
  */
 @RequestProcessor
 public class UserProcessor {
-    
+
     @Inject
     private Filler filler;
+
+    @Inject
+    private UserService userService;
 
     /**
      * 展示用户列表页面.
@@ -55,14 +60,14 @@ public class UserProcessor {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
         renderer.setTemplateName("/community/user-list.ftl");
-        
+
         final Map<String, Object> dataModel = renderer.getDataModel();
 
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
-    
-     /**
+
+    /**
      * 展示用户名片页面.
      *
      * @param context the specified context
@@ -76,7 +81,48 @@ public class UserProcessor {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
         renderer.setTemplateName("/community/user-card.ftl");
+
+        final String userName = request.getParameter("userName");
+        final String type = request.getParameter("type"); // t:老师；s:学生；e：企业
+
+        final JSONObject user = userService.getUserByName(userName);
+        if (null == user) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+
+            return;
+        }
+
+        final int userId = user.getInt("id");
+        final JSONObject card = userService.getUserCard(userId, type);
+        if (null == card) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+
+            return;
+        }
         
+        final Map<String, Object> dataModel = renderer.getDataModel();
+        dataModel.put("userName", user.getString("user_name"));
+        dataModel.put("cardTitle", card.getString("PropertyTitle"));
+
+        filler.fillHeader(request, response, dataModel);
+        filler.fillFooter(dataModel);
+    }
+
+    /**
+     * 展示用户名片设置页面.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/user-card-settings", method = HTTPRequestMethod.GET)
+    public void showUserCardSettings(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+        context.setRenderer(renderer);
+        renderer.setTemplateName("/community/user-card.ftl");
+
         final Map<String, Object> dataModel = renderer.getDataModel();
 
         filler.fillHeader(request, response, dataModel);

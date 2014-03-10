@@ -19,6 +19,13 @@ import junit.framework.Assert;
 import org.json.JSONObject;
 import org.testng.annotations.Test;
 
+/**
+ * JSON 工具工具单元测试.
+ *
+ * @author <a href="http://88250.b3log.org">Liang Ding</a>
+ * @version 1.0.0.0, Mar 7, 2014
+ * @since 1.0.0
+ */
 public class JSONsTestCase {
 
     @Test
