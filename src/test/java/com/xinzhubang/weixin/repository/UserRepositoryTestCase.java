@@ -16,6 +16,7 @@
 package com.xinzhubang.weixin.repository;
 
 import java.util.Collection;
+import org.b3log.latke.Keys;
 import org.b3log.latke.Latkes;
 import org.b3log.latke.ioc.LatkeBeanManager;
 import org.b3log.latke.ioc.Lifecycle;
@@ -60,6 +61,7 @@ public class UserRepositoryTestCase {
         query.setFilter(new PropertyFilter("user_name", FilterOperator.EQUAL, "88250"));
 
         final JSONObject result = userRepository.get(query);
+        result.getJSONArray(Keys.RESULTS);
         System.out.println(result.toString());
 
     }

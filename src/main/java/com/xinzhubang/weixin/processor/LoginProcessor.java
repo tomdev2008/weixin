@@ -16,6 +16,7 @@
 package com.xinzhubang.weixin.processor;
 
 import com.xinzhubang.weixin.repository.UserRepository;
+import com.xinzhubang.weixin.util.DESs;
 import com.xinzhubang.weixin.util.Filler;
 import java.util.Map;
 import javax.inject.Inject;
@@ -86,6 +87,8 @@ public class LoginProcessor {
         
         final String userName = request.getParameter("userName");
         final String password = request.getParameter("password");
+        
+        final String passwordEncrypted = DESs.encrypt(password, userName);
         
         
 
