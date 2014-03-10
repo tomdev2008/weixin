@@ -51,6 +51,69 @@
                     "length": 20
                 }
             ]
-        }
+        },
+        {
+            "name": "User_Property",
+            "keys": [
+                {
+                    "name": "id",
+                    "type": "int"
+                },
+                {
+                    "name": "t_user_id",
+                    "type": "int"
+                },
+                {
+                    "name": "Property",
+                    "type": "int"
+                },
+                {
+                    "name": "IsDefault",
+                    "type": "int",
+                    "length": 100
+                },
+                {
+                    "name": "CreateTime",
+                    "type": "Date"
+                },
+                {
+                    "name": "IdentificationFiles",
+                    "type": "String",
+                    "length": 500
+                },
+                {
+                    "name": "IdentificationStatus",
+                    "type": "int"
+                },
+                {
+                    "name": "IdentificationTime",
+                    "type": "Date"
+                },
+                {
+                    "name": "FavorableRate",
+                    "type": "decimal",
+                    "length": 9,
+                    "precision": 2
+                },
+                {
+                    "name": "PropertyTitle",
+                    "type": "String",
+                    "length": 100
+                },
+                {
+                    "name": "PropertyRemark",
+                    "type": "String",
+                    "length": 500
+                },
+                {
+                    "name": "AuditingManage",
+                    "type": "int"
+                },
+                {
+                    "name": "AuditingTime",
+                    "type": "Date"
+                }
+            ]
+        },
     ]
 }
