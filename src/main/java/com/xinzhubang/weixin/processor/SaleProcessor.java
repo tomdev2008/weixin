@@ -1,7 +1,5 @@
 package com.xinzhubang.weixin.processor;
 
-
-
 /*
  * Copyright (c) 2014, XinZhuBang
  *
@@ -17,8 +15,6 @@ package com.xinzhubang.weixin.processor;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 import com.xinzhubang.weixin.util.Filler;
 import java.util.Map;
 import javax.inject.Inject;
@@ -35,12 +31,12 @@ import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
  * 出售处理器.
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
- * @version 1.0.0.0, Mar 9, 2014
+ * @version 1.0.0.1, Mar 13, 2014
  * @since 1.0.0
  */
 @RequestProcessor
 public class SaleProcessor {
-    
+
     @Inject
     private Filler filler;
 
@@ -58,9 +54,54 @@ public class SaleProcessor {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
         renderer.setTemplateName("/community/sale-list.ftl");
-        
+
         final Map<String, Object> dataModel = renderer.getDataModel();
 
+        dataModel.put("type", "sale");
+
+        filler.fillHeader(request, response, dataModel);
+        filler.fillFooter(dataModel);
+    }
+
+    /**
+     * 展示出售细节页面.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/sale-details", method = HTTPRequestMethod.GET)
+    public void showDetails(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+        context.setRenderer(renderer);
+        renderer.setTemplateName("/community/sale-details.ftl");
+
+        final Map<String, Object> dataModel = renderer.getDataModel();
+        dataModel.put("type", "sale");
+        filler.fillHeader(request, response, dataModel);
+        filler.fillFooter(dataModel);
+    }
+
+    /**
+     * 展示发布出售页面.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/sale-publish", method = HTTPRequestMethod.GET)
+    public void showPublish(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+        context.setRenderer(renderer);
+        renderer.setTemplateName("/community/sale-publish.ftl");
+
+        final Map<String, Object> dataModel = renderer.getDataModel();
+        dataModel.put("type", "sale");
+        
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }

@@ -5,42 +5,8 @@
         <@meta title="出售列表 - 新助邦"/>
     </head>
     <body>
-        <nav class="sub-nav">
-            <ul>
-                <li>
-                    <a href="/user-list?type=student">学生</a>
-                </li>
-                <li>
-                    <a href="/user-list?type=teacher">老师</a>
-                </li>
-                <li>
-                    <a href="/question-list">提问</a>
-                </li>
-                <li>
-                    <a href="/requirement-list">需求</a>
-                </li>
-                <li>
-                    <a class="current" href="#">出售</a>
-                </li>
-            </ul>
-        </nav>
-        <div class="list-nav">
-            <ul class="fn-clear">
-                <li>
-                    <a href="#" class="current">资料</a>
-                </li>
-                <li>
-                    <a href="#">答疑</a>
-                </li>
-                <li>
-                    <a href="#">授课</a>
-                </li>
-                <li>
-                    <a class="last" href="/question-send">发布需求</a>
-                    <a class="last" href="/question-send">发布出售</a>
-                </li>
-            </ul>
-        </div>
+        <#include "../common/community-nav.ftl">
+        <#include "../common/community-sub-nav.ftl">
         <ul class="list">
             <li class="fn-clear">
                 <a href="/user-card">
@@ -50,7 +16,7 @@
                         <div class="ft-light-gray">
                             提问者： 冬雪  &nbsp; &nbsp; 7小时前 
                             <br/>
-                           <span class="ft-green">230 元</span>
+                            <span class="ft-green">230 元</span>
                         </div>
                     </div>
                 </a>
@@ -63,7 +29,7 @@
                         <div class="ft-light-gray">
                             提问者： 冬雪  &nbsp; &nbsp; 7小时前 
                             <br/>
-                           <span class="ft-green">230 元</span>
+                            <span class="ft-green">230 元</span>
                         </div>
                     </div>
                 </a>
@@ -76,7 +42,7 @@
                         <div class="ft-light-gray">
                             提问者： 冬雪  &nbsp; &nbsp; 7小时前 
                             <br/>
-                           <span class="ft-green">230 元</span>
+                            <span class="ft-green">230 元</span>
                         </div>
                     </div>
                 </a>
@@ -89,7 +55,7 @@
                         <div class="ft-light-gray">
                             提问者： 冬雪  &nbsp; &nbsp; 7小时前 
                             <br/>
-                           <span class="ft-green">230 元</span>
+                            <span class="ft-green">230 元</span>
                         </div>
                     </div>
                 </a>
@@ -102,7 +68,7 @@
                         <div class="ft-light-gray">
                             提问者： 冬雪  &nbsp; &nbsp; 7小时前 
                             <br/>
-                           <span class="ft-green">230 元</span>
+                            <span class="ft-green">230 元</span>
                         </div>
                     </div>
                 </a>
