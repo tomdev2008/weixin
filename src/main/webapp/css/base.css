@@ -127,6 +127,9 @@ textarea {
     vertical-align: middle;
     font-family: '\5fae\8f6f\96c5\9ed1';
     outline: none;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
 
 button,
@@ -204,51 +207,6 @@ textarea {
 /* end function */
 
 /* start common */
-.form {
-    border: 1px solid #CCCCCC;
-    border-radius: 5px;
-    margin: 30px 0;
-}
-
-.form label {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    border-top: 1px solid #CCCCCC;
-    color: #999999;
-    display: block;
-    padding: 10px;
-    width: 100%;
-}
-
-.form label.first {
-    border-top-width: 0;
-}
-
-.form label > input {
-    border-width: 0;
-    height: 33px;
-    width: 80%;
-    background-color: #FFF;
-}
-
-.button {
-    background-color: #5F9200;
-    border-radius: 5px;
-    border-width: 0;
-    color: #FFFFFF;
-    display: block;
-    height: 48px;
-    margin: 30px 0;
-    width: 100%;
-}
-
-.button.white {
-    background-color: #FFFFFF;
-    border: 1px solid #999999;
-    color: #999999;
-}
-
 .wrap {
     width: 90%;
     margin: 0 auto;
@@ -302,8 +260,8 @@ footer {
 .sub-nav {
     background-color: #F1F1F1;
     border-bottom: 1px solid #CCCCCC;
-    height: 45px;
-    line-height: 45px;
+    line-height: 1;
+    padding: 0.85em 0;
 }
 
 .sub-nav li {
@@ -327,6 +285,10 @@ footer {
     padding: 5px 10px;
     white-space: pre;
 }
+/* end common */
+
+/* start form */
+
 
 .tip-bg {
     position: absolute;
@@ -367,11 +329,75 @@ footer {
     margin: 0 auto;
     width: 90%;
 }
-/* start common */
+/* start form */
+/* start form */
+.form {
+    border: 1px solid #CCCCCC;
+    border-radius: 5px;
+    margin: 30px 0;
+}
+
+.form label {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border-top: 1px solid #CCCCCC;
+    color: #999999;
+    display: block;
+    padding: 10px;
+    width: 100%;
+}
+
+.form label.first {
+    border-top-width: 0;
+}
+
+.form label > input {
+    border-width: 0;
+    height: 33px;
+    width: 80%;
+    background-color: #FFF;
+}
+
+.publish input,
+.publish textarea {
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 0.3125em;
+    margin: 1em 0;
+    padding: 0.85em 1em;
+    width: 100%;
+}
+
+.publish > div {
+    color: #999999;
+    text-align: right;
+}
+
+.button {
+    background-color: #5F9200;
+    border-radius: 0.3125em;
+    border-width: 0;
+    color: #FFFFFF;
+    display: block;
+    line-height: 1;
+    margin: 1em 0;
+    padding: 0.8em 1.5em;
+    width: 100%;
+}
+
+.button.white {
+    background-color: #FFFFFF;
+    border: 1px solid #999999;
+    color: #999999;
+}
+/* end form */
 
 /* start icon */
 .ico-arrow-down,
-.ico-cmt {
+.ico-cmt,
+.ico-radio-checked,
+.ico-radio {
     background-image: url('../images/icons.png');
     background-size: 70px auto;
 }
@@ -391,6 +417,15 @@ footer {
     height: 22px;
     margin: 2px 0 0;
     width: 23px;
+}
+
+.ico-radio-checked,
+.ico-radio {
+    background-position: -42px -3px;
+    display: inline-block;
+    height: 22px;
+    line-height: 5em;
+    width: 22px;
 }
 /* end icon */
 
