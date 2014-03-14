@@ -49,5 +49,11 @@ var community = {
                 }
             });
         }
+    },
+    salePublishInit: function () {
+        $(".sub-nav > span").click(function () {
+            $(".sub-nav > span i").removeClass("ico-radio-checked").addClass("ico-radio");
+            $(this).find("i").addClass("ico-radio-checked").removeClass("ico-radio");
+        });
     }
 };

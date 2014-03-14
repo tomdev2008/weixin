@@ -265,7 +265,7 @@ footer {
 }
 
 .sub-nav li {
-    width: 25%;
+    width: 20%;
     text-align: center;
     float: left;
 }
@@ -284,6 +284,13 @@ footer {
     color: #FFFFFF;
     padding: 5px 10px;
     white-space: pre;
+}
+
+.sub-nav > span {
+    width: 32%;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer
 }
 /* end common */
 
@@ -425,7 +432,13 @@ footer {
     display: inline-block;
     height: 22px;
     line-height: 5em;
+    margin-right: 0.5em;
+    vertical-align: middle;
     width: 22px;
+}
+
+.ico-radio {
+    background-position: -42px -30px;
 }
 /* end icon */
 

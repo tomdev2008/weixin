@@ -25,5 +25,8 @@
         <script src="/js/lib/jquery-2.1.0.min.js"></script>
         <script src="/js/common.js"></script>
         <script src="/js/community.js"></script>
+        <script>
+            community.salePublishInit();
+        </script>
     </body>
 </html>
