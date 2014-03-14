@@ -8,71 +8,30 @@
         <#include "../common/community-nav.ftl">
         <#include "../common/community-sub-nav.ftl">
         <ul class="list">
+            <#list 1..3 as i>
             <li class="fn-clear">
-                <a href="/user-card">
+                <a href="/sale-details">
                     <img class="list-view" src="/images/default-user-thumbnail.png"/>
                     <div class="list-content">
-                        <span class="name">新助邦</span>
-                        <div class="ft-light-gray">
-                            提问者： 冬雪  &nbsp; &nbsp; 7小时前 
-                            <br/>
-                            <span class="ft-green">230 元</span>
+                        <div class="fn-clear">
+                            <span class="ft-gray fn-left">{userName}</span>
+                            <span class="ico ico-cater"></span>
+                            <span class="ico ico-level1"></span>
+                        </div>
+                        <div>一句话描述</div>
+                        <div class="ft-gray">
+                            北京-北京大学-计算机
+                        </div>
+                        <div class="fn-clear">
+                            <span class="ft-gray ft-small fn-left">
+                                2013-21-12 &nbsp; 浏览：200
+                            </span>
+                            <span class="ft-green fn-right">￥200</span>
                         </div>
                     </div>
                 </a>
             </li>
-            <li class="fn-clear">
-                <a href="/user-card">
-                    <img class="list-view" src="/images/default-user-thumbnail.png"/>
-                    <div class="list-content">
-                        <span class="name">新助邦</span>
-                        <div class="ft-light-gray">
-                            提问者： 冬雪  &nbsp; &nbsp; 7小时前 
-                            <br/>
-                            <span class="ft-green">230 元</span>
-                        </div>
-                    </div>
-                </a>
-            </li>
-            <li class="fn-clear">
-                <a href="/user-card">
-                    <img class="list-view" src="/images/default-user-thumbnail.png"/>
-                    <div class="list-content">
-                        <span class="name">新助邦</span>
-                        <div class="ft-light-gray">
-                            提问者： 冬雪  &nbsp; &nbsp; 7小时前 
-                            <br/>
-                            <span class="ft-green">230 元</span>
-                        </div>
-                    </div>
-                </a>
-            </li>
-            <li class="fn-clear">
-                <a href="/user-card">
-                    <img class="list-view" src="/images/default-user-thumbnail.png"/>
-                    <div class="list-content">
-                        <span class="name">新助邦</span>
-                        <div class="ft-light-gray">
-                            提问者： 冬雪  &nbsp; &nbsp; 7小时前 
-                            <br/>
-                            <span class="ft-green">230 元</span>
-                        </div>
-                    </div>
-                </a>
-            </li>
-            <li class="fn-clear last">
-                <a href="/user-card">
-                    <img class="list-view" src="/images/default-user-thumbnail.png"/>
-                    <div class="list-content">
-                        <span class="name">新助邦</span>
-                        <div class="ft-light-gray">
-                            提问者： 冬雪  &nbsp; &nbsp; 7小时前 
-                            <br/>
-                            <span class="ft-green">230 元</span>
-                        </div>
-                    </div>
-                </a>
-            </li>
+            </#list>
         </ul>
     </body>
 </html>

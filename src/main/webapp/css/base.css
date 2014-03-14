@@ -198,8 +198,8 @@ textarea {
     color: #5F9200;
 }
 
-.ft-light-gray {
-    color: #9A9A9A;
+.ft-small {
+    font-size: 0.8em;
 }
 /* end function */
 
@@ -409,10 +409,7 @@ footer {
 /* end list */
 
 /* start icon */
-.ico-arrow-down,
-.ico-cmt,
-.ico-radio-checked,
-.ico-radio {
+.ico {
     background-image: url('../images/icons.png');
     background-size: 70px auto;
 }
@@ -422,16 +419,6 @@ footer {
     display: inline-block;
     height: 20px;
     width: 21px;
-}
-
-.ico-cmt {
-    background-position: -5px -79px;
-    display: inline-block;
-    float: left;
-    font-size: 0;
-    height: 22px;
-    margin: 2px 0 0;
-    width: 23px;
 }
 
 .ico-radio-checked,
@@ -447,6 +434,67 @@ footer {
 
 .ico-radio {
     background-position: -42px -30px;
+}
+
+.ico-cater {
+    background-position: -45px -51px;
+    float: left;
+    height: 18px;
+    margin: 4px 0 0 7px;
+    width: 16px;
+}
+
+.ico-level1,
+.ico-level2,
+.ico-level3,
+.ico-level4,
+.ico-level5,
+.ico-level6,
+.ico-level7,
+.ico-level8,
+.ico-level9,
+.ico-level10 {
+    background-position: 0 -111px;
+    float: left;
+    height: 15px;
+    margin: 6px 0 0 7px;
+    width: 53px;
+}
+
+.ico-level2 {
+    background-position: 0 -134px;
+}
+
+.ico-level3 {
+    background-position: 0 -156px;
+}
+
+.ico-level4 {
+    background-position: 0 -178px;
+}
+
+.ico-level5 {
+    background-position: 0 -200px;
+}
+
+.ico-level6 {
+    background-position: 0 -223px;
+}
+
+.ico-level7 {
+    background-position: 0 -246px;
+}
+
+.ico-level8 {
+    background-position: 0 -268px;
+}
+
+.ico-level9 {
+    background-position: 0 -291px;
+}
+
+.ico-level10 {
+    background-position: 0 -311px;
 }
 /* end icon */
 

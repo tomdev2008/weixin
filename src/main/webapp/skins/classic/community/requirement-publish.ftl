@@ -7,9 +7,9 @@
     <body>
         <#include "../common/community-nav.ftl">
         <div class="sub-nav">
-            <span><i class="ico-radio-checked" data-type="1"></i>资料</span>
-            <span><i class="ico-radio" data-type="2"></i>答疑</span>
-            <span><i class="ico-radio" data-type="3"></i>授课</span>
+            <span><i class="ico ico-radio-checked" data-type="1"></i>资料</span>
+            <span><i class="ico ico-radio" data-type="2"></i>答疑</span>
+            <span><i class="ico ico-radio" data-type="3"></i>授课</span>
         </div>
         <div class="wrap">
             <div class="publish">
