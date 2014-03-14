@@ -142,7 +142,8 @@
                 {
                     "name": "IdentityRequirement",
                     "type": "String",
-                    "length": 10
+                    "length": 10,
+                    "nullable": true
                 },
                 {
                     "name": "RealName",
@@ -152,86 +153,103 @@
                 {
                     "name": "Credit",
                     "type": "String",
-                    "length": 10
+                    "length": 10,
+                    "nullable": true
                 },
                 {
                     "name": "Area",
                     "type": "String",
-                    "length": 50
+                    "length": 50,
+                    "nullable": true
                 },
                 {
                     "name": "AreaCode",
                     "type": "String",
-                    "length": 50
+                    "length": 50,
+                    "nullable": true
                 },
                 {
                     "name": "University",
                     "type": "String",
-                    "length": 50
+                    "length": 50,
+                    "nullable": true
                 },
                 {
                     "name": "UniversityCode",
                     "type": "String",
-                    "length": 50
+                    "length": 50,
+                    "nullable": true
                 },
                 {
                     "name": "College",
                     "type": "String",
-                    "length": 50
+                    "length": 50,
+                    "nullable": true
                 },
                 {
                     "name": "CollegeCode",
                     "type": "String",
-                    "length": 50
+                    "length": 50,
+                    "nullable": true
                 },
                 {
                     "name": "MainMajor",
                     "type": "String",
-                    "length": 50
+                    "length": 50,
+                    "nullable": true
                 },
                 {
                     "name": "MainMajorCode",
                     "type": "String",
-                    "length": 50
+                    "length": 50,
+                    "nullable": true
                 },
                 {
                     "name": "FirstMajor",
                     "type": "String",
-                    "length": 50
+                    "length": 50,
+                    "nullable": true
                 },
                 {
                     "name": "FirstMajorCode",
                     "type": "String",
-                    "length": 50
+                    "length": 50,
+                    "nullable": true
                 },
                 {
                     "name": "SecondMajor",
                     "type": "String",
-                    "length": 50
+                    "length": 50,
+                    "nullable": true
                 },
                 {
                     "name": "SecondMajorCode",
                     "type": "String",
-                    "length": 50
+                    "length": 50,
+                    "nullable": true
                 },
                 {
                     "name": "SchoolID",
-                    "type": "int"
+                    "type": "int",
+                    "nullable": true
                 },
                 {
                     "name": "ItemContent",
                     "type": "String",
-                    "length": "MAX"
+                    "length": "MAX",
+                    "nullable": true
                 },
                 {
                     "name": "Thumbnail",
                     "type": "String",
-                    "length": 200
+                    "length": 200,
+                    "nullable": true
                 },
                 {
                     "name": "AttachmentPaths",
                     "type": "String",
-                    "length": "MAX"
+                    "length": "MAX",
+                    "nullable": true
                 },
                 {
                     "name": "Price",
@@ -242,7 +260,8 @@
                 {
                     "name": "Remark",
                     "type": "String",
-                    "length": "MAX"
+                    "length": "MAX",
+                    "nullable": true
                 },
                 {
                     "name": "LinkMan",
@@ -252,56 +271,68 @@
                 {
                     "name": "QQ",
                     "type": "String",
-                    "length": 50
+                    "length": 50,
+                    "nullable": true
                 },
                 {
                     "name": "Tel",
                     "type": "String",
-                    "length": 50
+                    "length": 50,
+                    "nullable": true
                 },
                 {
                     "name": "Mobile",
                     "type": "String",
-                    "length": 50
+                    "length": 50,
+                    "nullable": true
                 },
                 {
                     "name": "ClickCount",
-                    "type": "int"
+                    "type": "int",
+                    "nullable": true
                 },
                 {
                     "name": "CreateTime",
-                    "type": "Datetime"
+                    "type": "Datetime",
+                    "nullable": true
                 },
                 {
                     "name": "Status",
-                    "type": "int"
+                    "type": "int",
+                    "nullable": true
                 },
                 {
                     "name": "CloseReason",
                     "type": "String",
-                    "length": "MAX"
+                    "length": "MAX",
+                    "nullable": true
                 },
                 {
                     "name": "ValidityDate",
-                    "type": "Datetime"
+                    "type": "Datetime",
+                    "nullable": true
                 },
                 {
                     "name": "OrderBy",
-                    "type": "int"
+                    "type": "int",
+                    "nullable": true
                 },
                 {
                     "name": "AuditStatus",
-                    "type": "int"
+                    "type": "int",
+                    "nullable": true
                 },
                 {
                     "name": "Plat_fee",
                     "type": "Decimal",
                     "length": 18,
-                    "precision": 0
+                    "precision": 0,
+                    "nullable": true
                 },
                 {
                     "name": "Items_Num",
-                    "type": "int"
+                    "type": "int",
+                    "nullable": true
                 },
                 {
                     "name": "Email",
@@ -311,15 +342,18 @@
                 {
                     "name": "YY",
                     "type": "String",
-                    "length": 50
+                    "length": 50,
+                    "nullable": true
                 },
                 {
                     "name": "ItemsID",
-                    "type": "int"
+                    "type": "int",
+                    "nullable": true
                 },
                 {
                     "name": "IsDefault",
-                    "type": "int"
+                    "type": "int",
+                    "nullable": true
                 }
             ]
         }

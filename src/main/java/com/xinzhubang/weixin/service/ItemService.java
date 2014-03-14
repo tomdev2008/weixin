@@ -75,7 +75,10 @@ public class ItemService {
             
             final String realName = user.optString("RealName");
             final String mobile = user.optString("mobile");
+            final String email = user.optString("email");
             
+            sale.put("RealName", realName);
+            sale.put("Email", email);
             sale.put("LinkMan", realName);
             sale.put("Mobile", mobile);
             
