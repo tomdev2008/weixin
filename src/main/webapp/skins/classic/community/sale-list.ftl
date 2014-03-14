@@ -14,7 +14,7 @@
                     <img class="list-view" src="/images/default-user-thumbnail.png"/>
                     <div class="list-content">
                         <div class="fn-clear">
-                            <span class="ft-gray fn-left">${sale.RealName}</span>
+                            <span class="ft-gray fn-left">${sale.userName}</span>
                             <span class="ico ico-cater"></span>
                             <span class="ico ico-level1"></span>
                         </div>
