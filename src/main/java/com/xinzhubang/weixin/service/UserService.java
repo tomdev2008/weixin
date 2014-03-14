@@ -17,20 +17,29 @@ package com.xinzhubang.weixin.service;
 
 import com.xinzhubang.weixin.repository.UserCardRepository;
 import com.xinzhubang.weixin.repository.UserRepository;
+import com.xinzhubang.weixin.util.Sessions;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.b3log.latke.Keys;
 import org.b3log.latke.logging.Level;
 import org.b3log.latke.logging.Logger;
+import org.b3log.latke.model.User;
 import org.b3log.latke.repository.CompositeFilter;
 import org.b3log.latke.repository.CompositeFilterOperator;
 import org.b3log.latke.repository.Filter;
 import org.b3log.latke.repository.FilterOperator;
 import org.b3log.latke.repository.PropertyFilter;
 import org.b3log.latke.repository.Query;
+import org.b3log.latke.repository.RepositoryException;
 import org.b3log.latke.service.ServiceException;
 import org.b3log.latke.service.annotation.Service;
+import org.b3log.latke.user.GeneralUser;
+import org.b3log.latke.user.UserServiceFactory;
+import org.b3log.latke.util.Strings;
 import org.json.JSONObject;
 
 /**
@@ -101,5 +110,84 @@ public class UserService {
 
             return null;
         }
+    }
+
+    /**
+     * Gets the current user.
+     *
+     * @param request the specified request
+     * @return the current user, {@code null} if not found
+     * @throws ServiceException service exception
+     */
+    public JSONObject getCurrentUser(final HttpServletRequest request) throws ServiceException {
+        final JSONObject currentUser = Sessions.currentUser(request);
+
+        if (null == currentUser) {
+            return null;
+        }
+
+        final String userId = currentUser.optString("userId");
+
+        try {
+            return userRepository.get(userId);
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "获取当前登录用户异常", e);
+            
+            return null;
+        }
+    }
+
+    /**
+     * Tries to login with cookie.
+     *
+     * @param request the specified request
+     * @param response the specified response
+     * @return returns {@code true} if logged in, returns {@code false} otherwise
+     */
+    public boolean tryLogInWithCookie(final HttpServletRequest request, final HttpServletResponse response) {
+        final Cookie[] cookies = request.getCookies();
+        if (null == cookies || 0 == cookies.length) {
+            return false;
+        }
+
+        try {
+            for (final Cookie cookie : cookies) {
+                if (!"b3log-latke".equals(cookie.getName())) {
+                    continue;
+                }
+
+                final JSONObject cookieJSONObject = new JSONObject(cookie.getValue());
+
+                final String userId = cookieJSONObject.optString("userId");
+                if (Strings.isEmptyOrNull(userId)) {
+                    break;
+                }
+
+                final JSONObject user = userRepository.get(userId);
+                if (null == user) {
+                    break;
+                }
+
+                final int id = user.optInt("id");
+                final String userPassword = user.optString("password");
+                final String password = cookieJSONObject.optString("password");
+                if (userPassword.equals(password)) {
+                    Sessions.login(request, response, user);
+                    LOGGER.log(Level.DEBUG, "Logged in with cookie[id={0}]", userId);
+
+                    return true;
+                }
+            }
+        } catch (final Exception e) {
+            LOGGER.log(Level.WARN, "Parses cookie failed, clears the cookie[name=b3log-latke]", e);
+
+            final Cookie cookie = new Cookie("b3log-latke", null);
+            cookie.setMaxAge(0);
+            cookie.setPath("/");
+
+            response.addCookie(cookie);
+        }
+
+        return false;
     }
 }
