@@ -116,6 +116,7 @@ public class ItemService {
      *     "type": int // 项目类型：1：资料2：答疑3：授课4：公开课
      * }
      * </pre>
+     *
      * @param pageNum 指定的分页页号
      *
      * @return
@@ -133,25 +134,48 @@ public class ItemService {
             filters.add(new PropertyFilter("UniversityCode", FilterOperator.EQUAL, universityCode));
             filters.add(new PropertyFilter("CollegeCode", FilterOperator.EQUAL, collegeCode));
             filters.add(new PropertyFilter("ItemType", FilterOperator.EQUAL, type));
-            
+
             final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
             query.setCurrentPageNum(pageNum).setPageSize(10);
             final JSONObject result = itemRepository.get(query);
-            
+
             final JSONArray results = result.getJSONArray(Keys.RESULTS);
             final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
-            
+
             for (final JSONObject sale : ret) {
                 final String userId = sale.getString("MemberID");
                 final JSONObject user = userRepository.get(userId);
                 sale.put("userName", user.getString("user_name"));
             }
-            
+
             return ret;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "获取社区圈子中的出售项目异常", e);
-            
+
             return Collections.emptyList();
+        }
+    }
+
+    /**
+     * 获取指定的 Id 的出售项目.
+     *
+     * @param id 指定的 Id
+     *
+     * @return
+     */
+    public JSONObject getSale(final String id) {
+        try {
+            final JSONObject ret = itemRepository.get(id);
+
+            final String userId = ret.getString("MemberID");
+            final JSONObject user = userRepository.get(userId);
+            ret.put("userName", user.getString("user_name"));
+
+            return ret;
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "获取出售项目 [id=" + id + "] 异常", e);
+
+            return null;
         }
     }
 

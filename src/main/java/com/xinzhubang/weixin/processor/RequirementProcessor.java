@@ -57,6 +57,7 @@ public class RequirementProcessor {
 
         final Map<String, Object> dataModel = renderer.getDataModel();
         dataModel.put("type", "requirement");
+        dataModel.put("subType", "1");
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }

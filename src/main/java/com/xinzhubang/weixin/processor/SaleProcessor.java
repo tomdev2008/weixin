@@ -93,6 +93,7 @@ public class SaleProcessor {
         dataModel.put("sales", (Object) list);
         dataModel.put("pageNum", pageNum);
         dataModel.put("type", "sale");
+        dataModel.put("subType", typeStr);
 
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
@@ -113,8 +114,14 @@ public class SaleProcessor {
         context.setRenderer(renderer);
         renderer.setTemplateName("/community/sale-details.ftl");
 
+        final String id = request.getParameter("id");
+
         final Map<String, Object> dataModel = renderer.getDataModel();
+
+        final JSONObject sale = itemService.getSale(id);
+        dataModel.put("sale", sale);
         dataModel.put("type", "sale");
+
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
