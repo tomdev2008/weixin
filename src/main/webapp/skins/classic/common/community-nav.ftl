@@ -1,5 +1,5 @@
 <nav class="nav">
-    <ul>
+    <ul class="fn-clear">
         <li>
             <a href="/user-list?type=student">学生</a>
         </li>

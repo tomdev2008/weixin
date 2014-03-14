@@ -122,9 +122,7 @@ button,
 input,
 select,
 textarea {
-    margin: 0;
     font-size: 100%;
-    vertical-align: middle;
     font-family: '\5fae\8f6f\96c5\9ed1';
     outline: none;
     box-sizing: border-box;
@@ -134,7 +132,7 @@ textarea {
 
 button,
 input {
-    line-height: normal;
+    line-height: 1;
 }
 
 button::-moz-focus-inner,
@@ -202,40 +200,26 @@ textarea {
 
 .ft-light-gray {
     color: #9A9A9A;
-    font-size: 0.8em;
 }
 /* end function */
 
-/* start common */
+/* start framework */
 .wrap {
     width: 90%;
     margin: 0 auto;
 }
 
-.textarea {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    background-color: #FFFFFF;
-    border: 1px solid #999999;
-    border-radius: 0.3125em;
-    height: 180px;
-    margin-top: 30px;
-    width: 100%;
-    padding: 5px;
-}
-
 footer {
     border-top: 1px solid #E3E3E3;
     font-size: 0.9em;
-    margin-top: 30px;
-    padding: 10px 0;
+    margin-top: 2em;
+    padding: 0.85em 0;
     text-align: center;
 }
 
 .nav {
     background-color: #5F9200;
-    height: 50px;
+    line-height: 1;
 }
 
 .nav li {
@@ -248,13 +232,13 @@ footer {
     color: #FFFFFF;
     display: inline-block;
     font-size: 1.05em;
-    height: 22px;
-    padding: 14px 0 8px;
+    padding: 0.85em 0.5em;
     text-align: center;
+    margin-bottom: 1px;
 }
 
 .nav a.current {
-    border-bottom: 2px solid #FFFFFF;
+    border-bottom: 1px solid #FFFFFF;
 }
 
 .sub-nav {
@@ -292,11 +276,9 @@ footer {
     display: inline-block;
     cursor: pointer
 }
-/* end common */
+/* end framework */
 
-/* start form */
-
-
+/* start tip */
 .tip-bg {
     position: absolute;
     height: 100%;
@@ -308,27 +290,25 @@ footer {
 }
 
 .tip-content {
-    position: absolute;
-    height: 16em;
-    width: 70%;
     background-color: #303537;
-    margin: 0 auto;
-    z-index: 10;
     display: none;
+    margin: 0 auto;
+    padding-bottom: 1em;
+    position: absolute;
+    width: 70%;
+    z-index: 10;
 }
 
 #tipTitle {
     border-bottom: 1px solid #5F9200;
     color: #5F9200;
-    height: 48px;
-    line-height: 48px;
-    padding-left: 10px;
+    line-height: 1;
+    padding: 0.85em 1em;
 }
 
 #tipContent {
     color: #5F9200;
-    height: 76px;
-    margin-top: 46px;
+    padding: 2em 1em;
     text-align: center;
 }
 
@@ -336,12 +316,13 @@ footer {
     margin: 0 auto;
     width: 90%;
 }
-/* start form */
+/* end tip */
+
 /* start form */
 .form {
     border: 1px solid #CCCCCC;
     border-radius: 0.3125em;
-    margin: 30px 0;
+    margin: 2em 0;
 }
 
 .form label {
@@ -351,7 +332,7 @@ footer {
     border-top: 1px solid #CCCCCC;
     color: #999999;
     display: block;
-    padding: 10px;
+    padding: 0.85em 1em;
     width: 100%;
 }
 
@@ -361,13 +342,17 @@ footer {
 
 .form label > input {
     border-width: 0;
-    height: 33px;
-    width: 80%;
+    width: 79%;
     background-color: #FFF;
 }
 
-.publish input,
-.publish textarea {
+.publish > div {
+    color: #999999;
+    text-align: right;
+}
+
+.textarea,
+.input {
     background-color: #FFFFFF;
     border: 1px solid #CCCCCC;
     border-radius: 0.3125em;
@@ -376,18 +361,12 @@ footer {
     width: 100%;
 }
 
-.publish > div {
-    color: #999999;
-    text-align: right;
-}
-
 .button {
     background-color: #5F9200;
     border-radius: 0.3125em;
     border-width: 0;
     color: #FFFFFF;
     display: block;
-    line-height: 1;
     margin: 1em 0;
     padding: 0.8em 1.5em;
     width: 100%;
@@ -399,6 +378,35 @@ footer {
     color: #999999;
 }
 /* end form */
+
+/* start list */
+.list li {
+    border-bottom: 1px solid #E3E3E3;
+    padding: 0.5em;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.list li.last {
+    border-bottom-width: 0;
+}
+
+.list .list-view {
+    float: left;
+    width: 20%;
+}
+
+.list .list-content {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    color: #333333;
+    float: left;
+    padding-left: 0.85em;
+    width: 80%;
+}
+/* end list */
 
 /* start icon */
 .ico-arrow-down,
@@ -494,36 +502,6 @@ footer {
     padding: 0 6%;
 }
 /* end search */
-
-/* start list */
-.list li {
-    border-bottom: 1px solid #E3E3E3;
-    padding: 10px;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-}
-
-.list li.last {
-    border-bottom-width: 0;
-}
-
-.list .list-view {
-    float: left;
-    width: 20%;
-}
-
-.list .list-content {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    color: #333333;
-    float: left;
-    font-size: 1.1em;
-    padding-left: 10px;
-    width: 80%;
-}
-/* end list */
 
 /* start user-card */
 .user-card .user-list .name {
