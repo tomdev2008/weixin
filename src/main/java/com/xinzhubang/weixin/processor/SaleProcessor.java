@@ -18,6 +18,8 @@ package com.xinzhubang.weixin.processor;
 import com.xinzhubang.weixin.processor.advice.LoginCheck;
 import com.xinzhubang.weixin.service.ItemService;
 import com.xinzhubang.weixin.util.Filler;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +34,7 @@ import org.b3log.latke.servlet.renderer.JSONRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.AbstractFreeMarkerRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
 import org.b3log.latke.util.Requests;
+import org.b3log.latke.util.Strings;
 import org.json.JSONObject;
 
 /**
@@ -60,14 +63,35 @@ public class SaleProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/sale-list", method = HTTPRequestMethod.GET)
-    public void showIndex(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+    public void showSaleList(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
         renderer.setTemplateName("/community/sale-list.ftl");
 
+        String pageStr = request.getParameter("p");
+        if (Strings.isEmptyOrNull(pageStr)) {
+            pageStr = "1";
+        }
+
+        String typeStr = request.getParameter("type");
+        if (Strings.isEmptyOrNull(typeStr)) {
+            typeStr = "1";
+        }
+
+        final int pageNum = Integer.valueOf(pageStr);
+        final int type = Integer.valueOf(typeStr);
+
         final Map<String, Object> dataModel = renderer.getDataModel();
 
+        final JSONObject community = new JSONObject();
+        community.put("areaCode", "43676");
+        community.put("universityCode", "43762");
+        community.put("type", type);
+        final List<JSONObject> list = itemService.getSales(community, pageNum);
+
+        dataModel.put("sales", (Object) list);
+        dataModel.put("pageNum", pageNum);
         dataModel.put("type", "sale");
 
         filler.fillHeader(request, response, dataModel);
@@ -132,8 +156,8 @@ public class SaleProcessor {
         final JSONRenderer renderer = new JSONRenderer();
         context.setRenderer(renderer);
         final JSONObject ret = new JSONObject();
-        
-           final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
+
+        final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
 
         final String name = requestJSONObject.getString("name");
         final int type = requestJSONObject.getInt("type");
@@ -141,7 +165,7 @@ public class SaleProcessor {
         final int price = requestJSONObject.getInt("price");
 
         final JSONObject sale = new JSONObject();
-        
+
         final JSONObject user = (JSONObject) request.getAttribute("user");
 
         sale.put("Name", name);

@@ -8,25 +8,25 @@
         <#include "../common/community-nav.ftl">
         <#include "../common/community-sub-nav.ftl">
         <ul class="list">
-            <#list 1..3 as i>
+            <#list sales as sale>
             <li class="fn-clear">
                 <a href="/sale-details">
                     <img class="list-view" src="/images/default-user-thumbnail.png"/>
                     <div class="list-content">
                         <div class="fn-clear">
-                            <span class="ft-gray fn-left">{userName}</span>
+                            <span class="ft-gray fn-left">${sale.RealName}</span>
                             <span class="ico ico-cater"></span>
                             <span class="ico ico-level1"></span>
                         </div>
-                        <div>一句话描述</div>
+                        <div>${sale.Name}</div>
                         <div class="ft-gray">
-                            北京-北京大学-计算机
+                            ${sale.Area}-${sale.University}<#if sale.CollegeCode != "-1">-${sale.College}</#if>
                         </div>
                         <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">
-                                2013-21-12 &nbsp; 浏览：200
+                                ${sale.CreateTime?string('yyyy-MM-dd')} &nbsp; 浏览：${sale.ClickCount}
                             </span>
-                            <span class="ft-green fn-right">￥200</span>
+                            <span class="ft-green fn-right">${sale.Price}</span>
                         </div>
                     </div>
                 </a>
