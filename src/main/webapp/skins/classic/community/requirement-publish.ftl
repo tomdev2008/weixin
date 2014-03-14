@@ -2,7 +2,7 @@
 <html>
     <head>
         <#include "../common/macro-meta.ftl">
-        <@meta title="发出售 - 新助邦"/>
+        <@meta title="发需求 - 新助邦"/>
     </head>
     <body>
         <#include "../common/community-nav.ftl">
@@ -16,17 +16,17 @@
                 <input id="title" placeholder="请填写标题名称"/>
                 <textarea id="details" placeholder="亲，请填写具体描述..."></textarea>
                 <div>50</div>
-                <input id="price" placeholder="请填写需要的费用"/>
+                <input id="price" placeholder="请填写愿意支付的价格"/>
                 <div>￥(元)</div>
             </div>
-            <button class="button" onclick="community.salePublish()">提 交</button>
+            <button class="button" onclick="community.requirementPublish()">提 交</button>
         </div>
         <#include "../common/tip.ftl">
         <script src="/js/lib/jquery-2.1.0.min.js"></script>
         <script src="/js/common.js"></script>
         <script src="/js/community.js"></script>
         <script>
-            community.salePublishInit();
+            community.requirementPublishInit();
         </script>
     </body>
 </html>

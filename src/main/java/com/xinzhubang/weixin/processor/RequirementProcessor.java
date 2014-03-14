@@ -15,8 +15,6 @@ package com.xinzhubang.weixin.processor;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 import com.xinzhubang.weixin.util.Filler;
 import java.util.Map;
 import javax.inject.Inject;
@@ -33,12 +31,12 @@ import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
  * 需求处理器.
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
- * @version 1.0.0.0, Mar 9, 2014
+ * @version 1.0.1.0, Mar 14, 2014
  * @since 1.0.0
  */
 @RequestProcessor
 public class RequirementProcessor {
-    
+
     @Inject
     private Filler filler;
 
@@ -56,13 +54,35 @@ public class RequirementProcessor {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
         renderer.setTemplateName("/community/requirement-list.ftl");
-        
+
         final Map<String, Object> dataModel = renderer.getDataModel();
+        dataModel.put("type", "requirement");
+        filler.fillHeader(request, response, dataModel);
+        filler.fillFooter(dataModel);
+    }
+
+    /**
+     * 展示需求发布页面.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/requirement-publish", method = HTTPRequestMethod.GET)
+    public void showPublish(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+        context.setRenderer(renderer);
+        renderer.setTemplateName("/community/requirement-publish.ftl");
+
+        final Map<String, Object> dataModel = renderer.getDataModel();
+        dataModel.put("type", "requirement");
 
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
-    
+
     /**
      * 展示需求细节页面.
      *
@@ -77,9 +97,9 @@ public class RequirementProcessor {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
         renderer.setTemplateName("/community/requirement-details.ftl");
-        
-        final Map<String, Object> dataModel = renderer.getDataModel();
 
+        final Map<String, Object> dataModel = renderer.getDataModel();
+        dataModel.put("type", "requirement");
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }

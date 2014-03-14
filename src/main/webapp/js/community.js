@@ -25,17 +25,18 @@ var community = {
             tip.show("提交失败", "标题不能为空");
         } else if ($.trim($("#details").val()).length === 0) {
             tip.show("提交失败", "描述不能为空");
-        } else if ($.trim($("#money").val()).length === 0) {
+        } else if ($.trim($("#price").val()).length === 0) {
             tip.show("提交失败", "价格不能为空");
         } else {
             var requestJSONObject = {
-                title: $("#title").val(),
-                details: $("#details").val(),
-                money: $("#money").val()
+                name: $("#title").val(),
+                desc: $("#details").val(),
+                price: $("#price").val(),
+                type: $(".sub-nav i.ico-radio-checked").data("type")
             };
 
             $.ajax({
-                url: "/login",
+                url: "/sale-publish",
                 type: "POST",
                 cache: false,
                 data: JSON.stringify(requestJSONObject),
@@ -55,5 +56,37 @@ var community = {
             $(".sub-nav > span i").removeClass("ico-radio-checked").addClass("ico-radio");
             $(this).find("i").addClass("ico-radio-checked").removeClass("ico-radio");
         });
+    },
+    requirementPublish: function() {
+        if ($.trim($("#title").val()).length === 0) {
+            tip.show("提交失败", "标题不能为空");
+        } else if ($.trim($("#details").val()).length === 0) {
+            tip.show("提交失败", "描述不能为空");
+        } else if ($.trim($("#money").val()).length === 0) {
+            tip.show("提交失败", "价格不能为空");
+        } else {
+            var requestJSONObject = {
+                title: $("#title").val(),
+                details: $("#details").val(),
+                money: $("#money").val()
+            };
+
+            $.ajax({
+                url: "/requirement-publish",
+                type: "POST",
+                cache: false,
+                data: JSON.stringify(requestJSONObject),
+                success: function(result, textStatus) {
+                    if (result.sc) {
+                        tip.show("成功提交！", "亲，现在去看看其他需求吧！");
+                        $("#tipContent").next().text("GO").attr("onclick", "window.location='/requirement-list'");
+                    } else {
+                        tip.show("提交失败", result.msg);
+                    }
+                }
+            });
+        }
     }
 };
+
+community.requirementPublishInit = community.salePublishInit;
