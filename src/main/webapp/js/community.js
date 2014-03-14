@@ -51,8 +51,8 @@ var community = {
             });
         }
     },
-    salePublishInit: function () {
-        $(".sub-nav > span").click(function () {
+    salePublishInit: function() {
+        $(".sub-nav > span").click(function() {
             $(".sub-nav > span i").removeClass("ico-radio-checked").addClass("ico-radio");
             $(this).find("i").addClass("ico-radio-checked").removeClass("ico-radio");
         });
@@ -86,7 +86,34 @@ var community = {
                 }
             });
         }
+    },
+    cancel: function() {
+        history.back();
+    },
+    sendWhisper: function() {
+        if ($.trim($(".textarea").val()).length === 0) {
+            tip.show("发送失败", "内容不能为空");
+        } else {
+            var requestJSONObject = {
+                title: $(".textarea").val()
+            };
+
+            $.ajax({
+                url: "/requirement-publish",
+                type: "POST",
+                cache: false,
+                data: JSON.stringify(requestJSONObject),
+                success: function(result, textStatus) {
+                    if (result.sc) {
+                        community.cancel();
+                    } else {
+                        tip.show("发送失败", result.msg);
+                    }
+                }
+            });
+        }
     }
 };
 
 community.requirementPublishInit = community.salePublishInit;
+community.requirementDetailsInit = community.saleDetailsInit;

@@ -372,10 +372,8 @@ footer {
     width: 100%;
 }
 
-.button.white {
-    background-color: #FFFFFF;
-    border: 1px solid #999999;
-    color: #999999;
+.button.orange {
+    background-color: #F48A00;
 }
 /* end form */
 
@@ -392,12 +390,12 @@ footer {
     border-bottom-width: 0;
 }
 
-.list .list-view {
+.list-view {
     float: left;
     width: 20%;
 }
 
-.list .list-content {
+.list-content {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -497,6 +495,23 @@ footer {
     background-position: 0 -311px;
 }
 /* end icon */
+
+/* start sale-details */
+.sale-details .sub-nav li {
+    width: 25%;
+}
+
+.sale-details .content {
+    padding: 0.5em;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.sale-details .button {
+    width: 48%;
+}
+/* end sale-details */
 
 /* start search */
 .search nav {
