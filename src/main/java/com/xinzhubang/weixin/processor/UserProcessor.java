@@ -75,10 +75,18 @@ public class UserProcessor {
         community.put("areaCode", "43676");
         community.put("universityCode", "43762");
         community.put("type", type);
+<<<<<<< HEAD
         final List<JSONObject> list = userService.getUserCards(community, pageNum);
 
         final Map<String, Object> dataModel = renderer.getDataModel();
         dataModel.put("type", type);
+=======
+        final List<JSONObject> userCards = userService.getUserCards(community, pageNum);
+
+        final Map<String, Object> dataModel = renderer.getDataModel();
+        dataModel.put("type", type);
+        dataModel.put("userCards", userCards);
+>>>>>>> 4a83ea778f6d49cfafb0b7a92a00b8cc5911f161
 
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);

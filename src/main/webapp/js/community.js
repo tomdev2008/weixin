@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 /*
  * Copyright (c) 2014, XinZhuBang
  *
@@ -179,6 +180,8 @@ var admin = {
 };
 community.requirementPublishInit = community.salePublishInit;
 =======
+=======
+>>>>>>> 4a83ea778f6d49cfafb0b7a92a00b8cc5911f161
 /*
  * Copyright (c) 2014, XinZhuBang
  *
@@ -359,5 +362,8 @@ var admin = {
     }
 };
 community.requirementPublishInit = community.salePublishInit;
+<<<<<<< HEAD
 >>>>>>> b8eca718bdf17f545a4a4902d5d2416f0d285207
+=======
+>>>>>>> 4a83ea778f6d49cfafb0b7a92a00b8cc5911f161
 community.requirementDetailsInit = community.saleDetailsInit;

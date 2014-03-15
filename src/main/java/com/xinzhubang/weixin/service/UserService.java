@@ -41,9 +41,13 @@ import org.b3log.latke.service.ServiceException;
 import org.b3log.latke.service.annotation.Service;
 import org.b3log.latke.util.Strings;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import org.json.JSONArray;
 >>>>>>> b8eca718bdf17f545a4a4902d5d2416f0d285207
+=======
+import org.json.JSONArray;
+>>>>>>> 4a83ea778f6d49cfafb0b7a92a00b8cc5911f161
 import org.json.JSONObject;
 
 /**
@@ -120,6 +124,7 @@ public class UserService {
         }
     }
 
+<<<<<<< HEAD
     /**
      * 获取指定的社区圈子里指定类型（学生/老师）的名片列表。
      *
@@ -151,6 +156,8 @@ public class UserService {
         }
     }
 
+=======
+>>>>>>> 4a83ea778f6d49cfafb0b7a92a00b8cc5911f161
     /**
      * 根据用户 id 与类型（老师或学生）获取用户名片。
      *
@@ -203,6 +210,7 @@ public class UserService {
         }
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     public JSONObject getUserByEmailOrUsername(final String email,final String userName){
          final Query query = new Query().setFilter(new PropertyFilter("user_name", FilterOperator.EQUAL, userName)).setFilter(new PropertyFilter("email",FilterOperator.EQUAL,userName));
          try {
@@ -216,6 +224,9 @@ public class UserService {
 =======
 
 >>>>>>> b8eca718bdf17f545a4a4902d5d2416f0d285207
+=======
+
+>>>>>>> 4a83ea778f6d49cfafb0b7a92a00b8cc5911f161
     /**
      * Gets the current user.
      *
@@ -241,6 +252,7 @@ public class UserService {
         }
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     @Transactional
     public String addUser(final JSONObject user){
         String id = null;
@@ -256,6 +268,9 @@ public class UserService {
 =======
 
 >>>>>>> b8eca718bdf17f545a4a4902d5d2416f0d285207
+=======
+
+>>>>>>> 4a83ea778f6d49cfafb0b7a92a00b8cc5911f161
     /**
      * Tries to login with cookie.
      *
