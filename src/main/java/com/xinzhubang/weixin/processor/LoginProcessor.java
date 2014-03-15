@@ -20,6 +20,7 @@ import com.xinzhubang.weixin.service.UserService;
 import com.xinzhubang.weixin.util.DESs;
 import com.xinzhubang.weixin.util.Filler;
 import com.xinzhubang.weixin.util.Sessions;
+<<<<<<< HEAD
 import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -206,6 +207,8 @@ import com.xinzhubang.weixin.service.UserService;
 import com.xinzhubang.weixin.util.DESs;
 import com.xinzhubang.weixin.util.Filler;
 import com.xinzhubang.weixin.util.Sessions;
+=======
+>>>>>>> d0737e02ed5fb6a558a3e19cab8560a2a1664ee7
 import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
