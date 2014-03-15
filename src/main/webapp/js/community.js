@@ -112,6 +112,27 @@ var community = {
                 }
             });
         }
+    },
+    follow: function(it) {
+        var $it = $(it);
+        if ($it.text() === "关注") {
+            $it.text("取消关注").css("color",);
+        } else {
+            $it.text("关注");
+        }
+        $.ajax({
+            url: "/requirement-publish",
+            type: "POST",
+            cache: false,
+            data: JSON.stringify(requestJSONObject),
+            success: function(result, textStatus) {
+                if (result.sc) {
+                    community.cancel();
+                } else {
+                    tip.show("发送失败", result.msg);
+                }
+            }
+        });
     }
 };
 

@@ -402,6 +402,7 @@ footer {
     color: #333333;
     float: left;
     padding-left: 0.85em;
+    position: relative;
     width: 80%;
 }
 /* end list */
@@ -567,20 +568,10 @@ footer {
 /* end search */
 
 /* start user-card */
-.user-card .user-list .name {
-    display: inline-block;
-}
-
-.user-card-sub {
-    background-color: #E3E3E3;
-    font-size: 1.1em;
-    height: 45px;
-    line-height: 45px;
-    text-align: center;
-}
-
-.user-card-sub-list li {
-    padding: 10px 5%;
+.list .follow {
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 /* end user-card */
 

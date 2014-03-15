@@ -62,6 +62,7 @@ public class UserProcessor {
         renderer.setTemplateName("/community/user-list.ftl");
 
         final Map<String, Object> dataModel = renderer.getDataModel();
+        dataModel.put("type", "student");
 
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
@@ -99,7 +100,7 @@ public class UserProcessor {
 
             return;
         }
-        
+
         final Map<String, Object> dataModel = renderer.getDataModel();
         dataModel.put("userName", user.getString("user_name"));
         dataModel.put("cardTitle", card.getString("PropertyTitle"));
