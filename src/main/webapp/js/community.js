@@ -138,9 +138,6 @@ var community = {
         });
     }
 };
-
-<<<<<<< HEAD
-=======
 var admin = {
     userCardInit: function() {
         $(".sub-nav a").click(function() {
@@ -179,6 +176,5 @@ var admin = {
         }
     }
 };
->>>>>>> ab9cdef6e7b2f0479729a5a223d281c0d4450128
 community.requirementPublishInit = community.salePublishInit;
 community.requirementDetailsInit = community.saleDetailsInit;

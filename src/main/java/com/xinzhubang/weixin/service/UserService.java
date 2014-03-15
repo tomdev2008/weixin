@@ -141,7 +141,6 @@ public class UserService {
             return null;
         }
     }
-<<<<<<< HEAD
     public JSONObject getUserByEmailOrUsername(final String email,final String userName){
          final Query query = new Query().setFilter(new PropertyFilter("user_name", FilterOperator.EQUAL, userName)).setFilter(new PropertyFilter("email",FilterOperator.EQUAL,userName));
          try {
@@ -152,9 +151,6 @@ public class UserService {
         }
           return null;
     }
-=======
-
->>>>>>> ab9cdef6e7b2f0479729a5a223d281c0d4450128
     /**
      * Gets the current user.
      *
@@ -179,7 +175,6 @@ public class UserService {
             return null;
         }
     }
-<<<<<<< HEAD
     @Transactional
     public String addUser(final JSONObject user){
         String id = null;
@@ -192,9 +187,6 @@ public class UserService {
         }
         return id;
     }
-=======
-
->>>>>>> ab9cdef6e7b2f0479729a5a223d281c0d4450128
     /**
      * Tries to login with cookie.
      *
