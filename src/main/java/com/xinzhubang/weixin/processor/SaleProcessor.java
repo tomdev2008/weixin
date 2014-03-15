@@ -63,6 +63,7 @@ public class SaleProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/admin/sale-list", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
     public void showMySaleList(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
@@ -75,10 +76,11 @@ public class SaleProcessor {
         }
 
         final int pageNum = Integer.valueOf(pageStr);
+        final JSONObject user = (JSONObject) request.getAttribute("user");
 
         final Map<String, Object> dataModel = renderer.getDataModel();
 
-        final List<JSONObject> list = itemService.getUserServices("", pageNum);
+        final List<JSONObject> list = itemService.getUserSales(user.optString("id"), pageNum);
 
         dataModel.put("sales", (Object) list);
         dataModel.put("pageNum", pageNum);

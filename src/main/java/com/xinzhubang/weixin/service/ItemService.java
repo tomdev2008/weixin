@@ -112,7 +112,7 @@ public class ItemService {
      *
      * @return
      */
-    public List<JSONObject> getUserServices(final String userId, final int pageNum) {
+    public List<JSONObject> getUserSales(final String userId, final int pageNum) {
         try {
             final List<Filter> filters = new ArrayList<Filter>();
             filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, userId));
