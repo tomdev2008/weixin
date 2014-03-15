@@ -114,22 +114,25 @@ var community = {
         }
     },
     follow: function(it) {
-        var $it = $(it);
-        if ($it.text() === "关注") {
-            $it.text("取消关注").css("color",);
-        } else {
-            $it.text("关注");
+        var $it = $(it),
+                url = "/follow";
+        if ($it.text() !== "关注") {
+            url = "/unfollow";
         }
+
         $.ajax({
-            url: "/requirement-publish",
+            url: url,
             type: "POST",
             cache: false,
-            data: JSON.stringify(requestJSONObject),
             success: function(result, textStatus) {
                 if (result.sc) {
-                    community.cancel();
+                    if ($it.text() === "关注") {
+                        $it.text("取消关注").css("color", "#F48A00");
+                    } else {
+                        $it.text("关注").css("color", "#5F9200");
+                    }
                 } else {
-                    tip.show("发送失败", result.msg);
+                    tip.show($it.text() + "失败", result.msg);
                 }
             }
         });

@@ -15,7 +15,7 @@
                 <div class="list-content">
                     <a href="/user-card">
                         <div class="fn-clear">
-                            <span class="fn-left">{sale.userName}</span>
+                            <span class="fn-left ft-dark">{sale.userName}</span>
                             <span class="ico ico-cater"></span>
                             <span class="ico ico-level1"></span>
                         </div>

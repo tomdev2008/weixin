@@ -12,7 +12,7 @@
                 <a href="/sale-details">
                     <img class="list-view" src="/images/default-user-thumbnail.png"/>
                     <div class="list-content">
-                        <div><span class=""></span>${sale.Name}</div>
+                        <div>${sale.Name}</div>
                         <div class="ft-gray">
                             ${sale.Area}-${sale.University}<#if sale.CollegeCode != "-1">-${sale.College}</#if>
                         </div>

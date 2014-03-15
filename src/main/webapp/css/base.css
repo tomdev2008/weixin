@@ -194,6 +194,10 @@ textarea {
     color: #999;
 }
 
+.ft-dark {
+    color: #333;
+}
+
 .ft-green {
     color: #5F9200;
 }
@@ -407,6 +411,32 @@ footer {
 }
 /* end list */
 
+/* start sale-details */
+.sale-details .sub-nav li {
+    width: 25%;
+}
+
+.sale-details .content {
+    padding: 0.5em;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.sale-details .button {
+    width: 48%;
+}
+/* end sale-details */
+
+/* start user-card */
+.list .follow {
+    position: absolute;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+}
+/* end user-card */
+
 /* start icon */
 .ico {
     background-image: url('../images/icons.png');
@@ -497,23 +527,6 @@ footer {
 }
 /* end icon */
 
-/* start sale-details */
-.sale-details .sub-nav li {
-    width: 25%;
-}
-
-.sale-details .content {
-    padding: 0.5em;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-}
-
-.sale-details .button {
-    width: 48%;
-}
-/* end sale-details */
-
 /* start search */
 .search nav {
     background-color: #F1F1F1;
@@ -566,14 +579,6 @@ footer {
     padding: 0 6%;
 }
 /* end search */
-
-/* start user-card */
-.list .follow {
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-/* end user-card */
 
 /* start question-list */
 .question-list .list-view {
