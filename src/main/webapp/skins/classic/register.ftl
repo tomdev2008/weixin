@@ -9,7 +9,7 @@
             <div class="form">
                 <label class="first">
                     邮箱：
-                    <input id="account" placeholder="请输入邮箱"/>
+                    <input id="email" placeholder="请输入邮箱"/>
                 </label>
                 <label>
                     用户名：

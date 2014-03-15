@@ -29,6 +29,8 @@ import org.b3log.latke.repository.Filter;
 import org.b3log.latke.repository.FilterOperator;
 import org.b3log.latke.repository.PropertyFilter;
 import org.b3log.latke.repository.Query;
+import org.b3log.latke.repository.RepositoryException;
+import org.b3log.latke.repository.annotation.Transactional;
 import org.b3log.latke.service.ServiceException;
 import org.b3log.latke.service.annotation.Service;
 import org.json.JSONObject;
@@ -101,5 +103,29 @@ public class UserService {
 
             return null;
         }
+    }
+    public JSONObject getUserByEmailOrUsername(final String email,final String userName){
+         final Query query = new Query().setFilter(new PropertyFilter("user_name", FilterOperator.EQUAL, userName)).setFilter(new PropertyFilter("email",FilterOperator.EQUAL,userName));
+         try {
+            final JSONObject result = userRepository.get(query);
+
+            return result.getJSONArray(Keys.RESULTS).optJSONObject(0);
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "根据用户名和邮箱 [" + email + "][" + userName + "] 获取用户异常", e);
+
+            return null;
+        }
+    }
+    @Transactional
+    public String addUser(final JSONObject user){
+        String id = null;
+        System.out.println(user.toString());
+        try {
+            id = userRepository.add(user);
+        } catch (RepositoryException ex) {
+            LOGGER.log(Level.ERROR, "保存用户出错！", ex);
+            return null;       
+        }
+        return id;
     }
 }

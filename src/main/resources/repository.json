@@ -8,14 +8,6 @@
             "name": "Users",
             "keys": [
                 {
-                    "name": "id",
-                    "type": "int"
-                },
-                {
-                    "name": "group_id",
-                    "type": "int"
-                },
-                {
                     "name": "user_name",
                     "type": "String",
                     "length": 100
@@ -29,26 +21,6 @@
                     "name": "email",
                     "type": "String",
                     "length": 50
-                },
-                {
-                    "name": "nick_name",
-                    "type": "String",
-                    "length": 100
-                },
-                {
-                    "name": "RealName",
-                    "type": "String",
-                    "length": 100
-                },
-                {
-                    "name": "avatar",
-                    "type": "String",
-                    "length": 255
-                },
-                {
-                    "name": "sex",
-                    "type": "String",
-                    "length": 20
                 }
             ]
         },
@@ -114,6 +86,6 @@
                     "type": "Date"
                 }
             ]
-        },
+        }
     ]
 }

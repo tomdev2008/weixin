@@ -93,7 +93,7 @@ public class LoginProcessor {
         final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
         final String userName = requestJSONObject.getString("userName");
         final String password = requestJSONObject.getString("password");
-
+        System.out.println(userName+"="+password);
         final JSONObject user = userService.getUserByName(userName);
         if (null == user || !user.optString("password").equals(DESs.encrypt(password, "XHJY"))) {
             ret.put(Keys.STATUS_CODE, false);
@@ -148,5 +148,38 @@ public class LoginProcessor {
 
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
+    }
+     /**
+     * 用户注册
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/register", method = HTTPRequestMethod.POST)
+    public void register(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final JSONRenderer renderer = new JSONRenderer();
+        context.setRenderer(renderer);
+        final JSONObject ret = new JSONObject();
+        ret.put(Keys.STATUS_CODE, true);
+        renderer.setJSONObject(ret);
+
+        final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
+        final String email = requestJSONObject.getString("email");
+        final String userName = requestJSONObject.getString("user_name");
+        final String password = requestJSONObject.getString("password");
+        System.out.println(email+"="+userName+"="+password);
+        final JSONObject user = userService.getUserByEmailOrUsername(email, userName);
+        if(user!=null){
+            ret.put(Keys.STATUS_CODE, false);
+            ret.put(Keys.MSG, "邮箱或用户名已存在，请重新输入！");
+        }
+        if (null == user) {
+            userService.addUser(requestJSONObject);
+            ret.put(Keys.STATUS_CODE, true);
+            ret.put(Keys.MSG, "注册成功，请登录！");
+        }
     }
 }
