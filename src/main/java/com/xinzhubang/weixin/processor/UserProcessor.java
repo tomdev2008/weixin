@@ -17,6 +17,7 @@ package com.xinzhubang.weixin.processor;
 
 import com.xinzhubang.weixin.service.UserService;
 import com.xinzhubang.weixin.util.Filler;
+import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +28,7 @@ import org.b3log.latke.servlet.annotation.RequestProcessing;
 import org.b3log.latke.servlet.annotation.RequestProcessor;
 import org.b3log.latke.servlet.renderer.freemarker.AbstractFreeMarkerRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
+import org.b3log.latke.util.Strings;
 import org.json.JSONObject;
 
 /**
@@ -61,8 +63,22 @@ public class UserProcessor {
         context.setRenderer(renderer);
         renderer.setTemplateName("/community/user-list.ftl");
 
+        String pageStr = request.getParameter("p");
+        if (Strings.isEmptyOrNull(pageStr)) {
+            pageStr = "1";
+        }
+        final int pageNum = Integer.valueOf(pageStr);
+
+        final String type = request.getParameter("type"); // teacher/student
+        
+            final JSONObject community = new JSONObject();
+        community.put("areaCode", "43676");
+        community.put("universityCode", "43762");
+        community.put("type", type);
+        final List<JSONObject> list = userService.getUserCards(community, pageNum);
+
         final Map<String, Object> dataModel = renderer.getDataModel();
-        dataModel.put("type", "student");
+        dataModel.put("type", type);
 
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);

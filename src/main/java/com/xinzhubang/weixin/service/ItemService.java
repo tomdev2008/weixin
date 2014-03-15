@@ -174,14 +174,12 @@ public class ItemService {
      *     "type": int // 项目类型：1：资料2：答疑3：授课4：公开课
      * }
      * </pre>
-     *
      * @param pageNum 指定的分页页号
      *
      * @return
      */
     public List<JSONObject> getSales(final JSONObject community, final int pageNum) {
         try {
-
             final String areaCode = community.getString("areaCode");
             final String universityCode = community.getString("universityCode");
             final String collegeCode = community.optString("collegeCode", "-1");

@@ -90,6 +90,38 @@ public class SaleProcessor {
     }
 
     /**
+     * 获取个人中心-我的信息-我的服务数据（AJAX 拉取分页）.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/admin/sale-list-ajax", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
+    public void getMySaleList(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final JSONRenderer renderer = new JSONRenderer();
+        context.setRenderer(renderer);
+        final JSONObject ret = new JSONObject();
+        renderer.setJSONObject(ret);
+
+        String pageStr = request.getParameter("p");
+        if (Strings.isEmptyOrNull(pageStr)) {
+            pageStr = "1";
+        }
+
+        final int pageNum = Integer.valueOf(pageStr);
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+
+        final List<JSONObject> list = itemService.getUserSales(user.optString("id"), pageNum);
+
+        ret.put("sales", (Object) list);
+        ret.put("pageNum", pageNum);
+        ret.put("type", "sale");
+    }
+
+    /**
      * 展示社区圈子出售页面.
      *
      * @param context the specified context

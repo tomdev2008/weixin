@@ -19,6 +19,7 @@ import com.xinzhubang.weixin.repository.UserCardRepository;
 import com.xinzhubang.weixin.repository.UserRepository;
 import com.xinzhubang.weixin.util.Sessions;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
@@ -59,6 +60,37 @@ public class UserService {
 
     @Inject
     private UserCardRepository userCardRepository;
+
+    /**
+     * 获取指定的社区圈子里指定类型（学生/老师）的名片列表。
+     *
+     * @param community 指定的社区圈子，例如：
+     * <pre>
+     * {
+     *     "areaCode": "",
+     *     "universityCode": "",
+     *     "collegeCode": "", // 可选的
+     *     "type": "" // 类型：teacher, student
+     * }
+     * </pre>
+     *
+     * @param pageNum
+     * @return
+     */
+    public List<JSONObject> getUserCards(final JSONObject community, final int pageNum) {
+        try {
+            final String areaCode = community.getString("areaCode");
+            final String universityCode = community.getString("universityCode");
+            final String collegeCode = community.optString("collegeCode", "-1");
+            final String type = community.getString("type");
+            
+            
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "获取社区圈子中的出售项目异常", e);
+
+            return Collections.emptyList();
+        }
+    }
 
     /**
      * 根据用户 id 与类型（老师或学生）获取用户名片。
@@ -132,7 +164,7 @@ public class UserService {
             return userRepository.get(userId);
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "获取当前登录用户异常", e);
-            
+
             return null;
         }
     }
