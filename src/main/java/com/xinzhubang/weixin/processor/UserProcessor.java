@@ -36,7 +36,7 @@ import org.json.JSONObject;
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.0.1, Mar 6, 2014
+ * @version 1.0.0.2, Mar 15, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -108,7 +108,7 @@ public class UserProcessor {
             return;
         }
 
-        final int userId = user.getInt("id");
+        final String userId = user.getString("id");
         final JSONObject card = userService.getUserCard(userId, type);
         if (null == card) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);

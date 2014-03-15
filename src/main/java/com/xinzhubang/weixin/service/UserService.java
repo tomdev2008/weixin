@@ -16,6 +16,7 @@
 package com.xinzhubang.weixin.service;
 
 import com.xinzhubang.weixin.repository.UserCardRepository;
+import com.xinzhubang.weixin.repository.UserInfoRepository;
 import com.xinzhubang.weixin.repository.UserRepository;
 import com.xinzhubang.weixin.util.Sessions;
 import java.util.ArrayList;
@@ -39,6 +40,10 @@ import org.b3log.latke.repository.annotation.Transactional;
 import org.b3log.latke.service.ServiceException;
 import org.b3log.latke.service.annotation.Service;
 import org.b3log.latke.util.Strings;
+<<<<<<< HEAD
+=======
+import org.json.JSONArray;
+>>>>>>> b8eca718bdf17f545a4a4902d5d2416f0d285207
 import org.json.JSONObject;
 
 /**
@@ -58,6 +63,62 @@ public class UserService {
 
     @Inject
     private UserCardRepository userCardRepository;
+
+    @Inject
+    private UserInfoRepository userInfoRepository;
+
+    /**
+     * 获取指定的社区圈子里指定类型（学生/老师）的名片列表。
+     *
+     * @param community 指定的社区圈子，例如：
+     * <pre>
+     * {
+     *     "areaCode": "",
+     *     "universityCode": "",
+     *     "collegeCode": "", // 可选的
+     *     "type": "" // 类型：teacher, student
+     * }
+     * </pre>
+     *
+     * @param pageNum
+     * @return
+     */
+    public List<JSONObject> getUserCards(final JSONObject community, final int pageNum) {
+        try {
+            final String areaCode = community.getString("areaCode");
+            final String universityCode = community.getString("universityCode");
+            final String collegeCode = community.optString("collegeCode", "-1");
+
+            final List<Filter> filters = new ArrayList<Filter>();
+            filters.add(new PropertyFilter("AreaCode", FilterOperator.EQUAL, areaCode));
+            filters.add(new PropertyFilter("UniversityCode", FilterOperator.EQUAL, universityCode));
+            filters.add(new PropertyFilter("CollegeCode", FilterOperator.EQUAL, collegeCode));
+
+            final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+            query.setCurrentPageNum(pageNum).setPageSize(50);
+            final JSONObject userInfoResult = userInfoRepository.get(query);
+
+            final JSONArray userInfos = userInfoResult.optJSONArray(Keys.RESULTS);
+
+            final String typeArg = "teacher".equals(community.optString("type", "teacher")) ? "t" : "s";
+            
+            final List<JSONObject> ret = new ArrayList<JSONObject>();
+
+            for (int i = 0; i < userInfos.length(); i++) {
+                final JSONObject userInfo = userInfos.optJSONObject(i);
+                final String memberId = userInfo.optString("MemberID");
+                final JSONObject userCard = getUserCard(memberId, typeArg);
+                
+                ret.add(userCard);
+            }
+
+            return ret;
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "获取社区圈子中的出售项目异常", e);
+
+            return Collections.emptyList();
+        }
+    }
 
     /**
      * 获取指定的社区圈子里指定类型（学生/老师）的名片列表。
@@ -98,9 +159,9 @@ public class UserService {
      * @return
      * @throws ServiceException
      */
-    public JSONObject getUserCard(final int userId, final String type) throws ServiceException {
+    public JSONObject getUserCard(final String userId, final String type) throws ServiceException {
         final List<Filter> filters = new ArrayList<Filter>();
-        filters.add(new PropertyFilter("t_user_id", FilterOperator.EQUAL, userId));
+        filters.add(new PropertyFilter("T_User_ID", FilterOperator.EQUAL, userId));
 
         int property;
         if ("t".equals(type)) {
@@ -141,6 +202,7 @@ public class UserService {
             return null;
         }
     }
+<<<<<<< HEAD
     public JSONObject getUserByEmailOrUsername(final String email,final String userName){
          final Query query = new Query().setFilter(new PropertyFilter("user_name", FilterOperator.EQUAL, userName)).setFilter(new PropertyFilter("email",FilterOperator.EQUAL,userName));
          try {
@@ -151,6 +213,9 @@ public class UserService {
         }
           return null;
     }
+=======
+
+>>>>>>> b8eca718bdf17f545a4a4902d5d2416f0d285207
     /**
      * Gets the current user.
      *
@@ -175,6 +240,7 @@ public class UserService {
             return null;
         }
     }
+<<<<<<< HEAD
     @Transactional
     public String addUser(final JSONObject user){
         String id = null;
@@ -187,6 +253,9 @@ public class UserService {
         }
         return id;
     }
+=======
+
+>>>>>>> b8eca718bdf17f545a4a4902d5d2416f0d285207
     /**
      * Tries to login with cookie.
      *
