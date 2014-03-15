@@ -19,6 +19,7 @@ package com.xinzhubang.weixin.processor;
 import com.xinzhubang.weixin.service.UserService;
 import com.xinzhubang.weixin.util.DESs;
 import com.xinzhubang.weixin.util.Filler;
+import com.xinzhubang.weixin.util.Sessions;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +34,6 @@ import org.b3log.latke.servlet.renderer.JSONRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.AbstractFreeMarkerRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
 import org.b3log.latke.util.Requests;
-import org.b3log.latke.util.Sessions;
 import org.json.JSONObject;
 
 /**
