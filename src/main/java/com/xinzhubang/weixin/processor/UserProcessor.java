@@ -70,8 +70,8 @@ public class UserProcessor {
         final int pageNum = Integer.valueOf(pageStr);
 
         final String type = request.getParameter("type"); // teacher/student
-        
-            final JSONObject community = new JSONObject();
+
+        final JSONObject community = new JSONObject();
         community.put("areaCode", "43676");
         community.put("universityCode", "43762");
         community.put("type", type);
