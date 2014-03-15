@@ -17,7 +17,6 @@ package com.xinzhubang.weixin.processor;
  */
 
 
-import com.xinzhubang.weixin.processor.*;
 import com.xinzhubang.weixin.util.Filler;
 import java.util.Map;
 import javax.inject.Inject;
@@ -31,7 +30,7 @@ import org.b3log.latke.servlet.renderer.freemarker.AbstractFreeMarkerRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
 
 /**
- * 提问处理器.
+ * 问题处理器.
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @version 1.0.0.0, Mar 5, 2014
@@ -44,7 +43,7 @@ public class QuestionProcessor {
     private Filler filler;
 
     /**
-     * 展示消息列表页面.
+     * 展示问题列表页面.
      *
      * @param context the specified context
      * @param request the specified request
@@ -59,7 +58,73 @@ public class QuestionProcessor {
         renderer.setTemplateName("/community/question-list.ftl");
         
         final Map<String, Object> dataModel = renderer.getDataModel();
-
+        
+        dataModel.put("type", "question");
+        dataModel.put("subType", "1");
+        filler.fillHeader(request, response, dataModel);
+        filler.fillFooter(dataModel);
+    }
+    /**
+     * 展示问题细节页面.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/question-details", method = HTTPRequestMethod.GET)
+    public void showDetails(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+        context.setRenderer(renderer);
+        renderer.setTemplateName("/community/question-details.ftl");
+        
+        final Map<String, Object> dataModel = renderer.getDataModel();
+        
+        dataModel.put("type", "question");
+        dataModel.put("subType", "1");
+        filler.fillHeader(request, response, dataModel);
+        filler.fillFooter(dataModel);
+    }
+    /**
+     * 展示发布问题页面.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/question-publish", method = HTTPRequestMethod.GET)
+    public void showPublish(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+        context.setRenderer(renderer);
+        renderer.setTemplateName("/community/question-publish.ftl");
+        
+        final Map<String, Object> dataModel = renderer.getDataModel();
+        
+        dataModel.put("type", "question");
+        filler.fillHeader(request, response, dataModel);
+        filler.fillFooter(dataModel);
+    }
+    /**
+     * 展示回复问题页面.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/question-answer", method = HTTPRequestMethod.GET)
+    public void showAnswer(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+        context.setRenderer(renderer);
+        renderer.setTemplateName("/community/question-answer.ftl");
+        
+        final Map<String, Object> dataModel = renderer.getDataModel();
+        
+        dataModel.put("type", "question");
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }

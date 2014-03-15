@@ -2,7 +2,7 @@
 <html>
     <head>
         <#include "../macro-meta.ftl">
-        <@meta title="圈子设置 - 新助邦"/>
+        <@meta title="回答 - 新助邦"/>
     </head>
     <body class="search">
         <nav>
