@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 {
     "description": "Description of repository structures, for generation (DDL: http://en.wikipedia.org/wiki/Data_Definition_Language) of the relational database table and persistence validation.",
     "version": "1.1.0.0, Mar 14, 2014",
@@ -457,4 +458,366 @@
         }
     ]
 >>>>>>> d0737e02ed5fb6a558a3e19cab8560a2a1664ee7
+=======
+{
+    "description": "Description of repository structures, for generation (DDL: http://en.wikipedia.org/wiki/Data_Definition_Language) of the relational database table and persistence validation.",
+    "version": "1.1.0.0, Mar 14, 2014",
+    "authors": ["Liang Ding"],
+    "since": "1.0.0",
+    "repositories": [
+        {
+            "name": "Users",
+            "keys": [
+                {
+                    "name": "id",
+                    "type": "int"
+                },
+                {
+                    "name": "group_id",
+                    "type": "int"
+                },
+                {
+                    "name": "user_name",
+                    "type": "String",
+                    "length": 100
+                },
+                {
+                    "name": "password",
+                    "type": "String",
+                    "length": 100
+                },
+                {
+                    "name": "email",
+                    "type": "String",
+                    "length": 50
+                },
+                {
+                    "name": "nick_name",
+                    "type": "String",
+                    "length": 100
+                },
+                {
+                    "name": "RealName",
+                    "type": "String",
+                    "length": 100
+                },
+                {
+                    "name": "avatar",
+                    "type": "String",
+                    "length": 255
+                },
+                {
+                    "name": "sex",
+                    "type": "String",
+                    "length": 20
+                }
+            ]
+        },
+        {
+            "name": "User_Property",
+            "keys": [
+                {
+                    "name": "id",
+                    "type": "int"
+                },
+                {
+                    "name": "t_user_id",
+                    "type": "int"
+                },
+                {
+                    "name": "Property",
+                    "type": "int"
+                },
+                {
+                    "name": "IsDefault",
+                    "type": "int",
+                    "length": 100
+                },
+                {
+                    "name": "CreateTime",
+                    "type": "Date"
+                },
+                {
+                    "name": "IdentificationFiles",
+                    "type": "String",
+                    "length": 500
+                },
+                {
+                    "name": "IdentificationStatus",
+                    "type": "int"
+                },
+                {
+                    "name": "IdentificationTime",
+                    "type": "Date"
+                },
+                {
+                    "name": "FavorableRate",
+                    "type": "Decimal",
+                    "length": 9,
+                    "precision": 2
+                },
+                {
+                    "name": "PropertyTitle",
+                    "type": "String",
+                    "length": 100
+                },
+                {
+                    "name": "PropertyRemark",
+                    "type": "String",
+                    "length": 500
+                },
+                {
+                    "name": "AuditingManage",
+                    "type": "int"
+                },
+                {
+                    "name": "AuditingTime",
+                    "type": "Date"
+                }
+            ]
+        },
+        {
+            "name": "OItemsInfo",
+            "keys": [
+                {
+                    "name": "ID",
+                    "type": "int"
+                },
+                {
+                    "name": "MemberID",
+                    "type": "int"
+                },
+                {
+                    "name": "DemandOrService",
+                    "type": "int"
+                },
+                {
+                    "name": "Name",
+                    "type": "String",
+                    "length": 100
+                },
+                {
+                    "name": "ItemType",
+                    "type": "int"
+                },
+                {
+                    "name": "IdentityRequirement",
+                    "type": "String",
+                    "length": 10,
+                    "nullable": true
+                },
+                {
+                    "name": "RealName",
+                    "type": "String",
+                    "length": 10
+                },
+                {
+                    "name": "Credit",
+                    "type": "String",
+                    "length": 10,
+                    "nullable": true
+                },
+                {
+                    "name": "Area",
+                    "type": "String",
+                    "length": 50,
+                    "nullable": true
+                },
+                {
+                    "name": "AreaCode",
+                    "type": "String",
+                    "length": 50,
+                    "nullable": true
+                },
+                {
+                    "name": "University",
+                    "type": "String",
+                    "length": 50,
+                    "nullable": true
+                },
+                {
+                    "name": "UniversityCode",
+                    "type": "String",
+                    "length": 50,
+                    "nullable": true
+                },
+                {
+                    "name": "College",
+                    "type": "String",
+                    "length": 50,
+                    "nullable": true
+                },
+                {
+                    "name": "CollegeCode",
+                    "type": "String",
+                    "length": 50,
+                    "nullable": true
+                },
+                {
+                    "name": "MainMajor",
+                    "type": "String",
+                    "length": 50,
+                    "nullable": true
+                },
+                {
+                    "name": "MainMajorCode",
+                    "type": "String",
+                    "length": 50,
+                    "nullable": true
+                },
+                {
+                    "name": "FirstMajor",
+                    "type": "String",
+                    "length": 50,
+                    "nullable": true
+                },
+                {
+                    "name": "FirstMajorCode",
+                    "type": "String",
+                    "length": 50,
+                    "nullable": true
+                },
+                {
+                    "name": "SecondMajor",
+                    "type": "String",
+                    "length": 50,
+                    "nullable": true
+                },
+                {
+                    "name": "SecondMajorCode",
+                    "type": "String",
+                    "length": 50,
+                    "nullable": true
+                },
+                {
+                    "name": "SchoolID",
+                    "type": "int",
+                    "nullable": true
+                },
+                {
+                    "name": "ItemContent",
+                    "type": "String",
+                    "length": "MAX",
+                    "nullable": true
+                },
+                {
+                    "name": "Thumbnail",
+                    "type": "String",
+                    "length": 200,
+                    "nullable": true
+                },
+                {
+                    "name": "AttachmentPaths",
+                    "type": "String",
+                    "length": "MAX",
+                    "nullable": true
+                },
+                {
+                    "name": "Price",
+                    "type": "Decimal",
+                    "length": 18,
+                    "precision": 2
+                },
+                {
+                    "name": "Remark",
+                    "type": "String",
+                    "length": "MAX",
+                    "nullable": true
+                },
+                {
+                    "name": "LinkMan",
+                    "type": "String",
+                    "length": 50
+                },
+                {
+                    "name": "QQ",
+                    "type": "String",
+                    "length": 50,
+                    "nullable": true
+                },
+                {
+                    "name": "Tel",
+                    "type": "String",
+                    "length": 50,
+                    "nullable": true
+                },
+                {
+                    "name": "Mobile",
+                    "type": "String",
+                    "length": 50,
+                    "nullable": true
+                },
+                {
+                    "name": "ClickCount",
+                    "type": "int",
+                    "nullable": true
+                },
+                {
+                    "name": "CreateTime",
+                    "type": "Datetime",
+                    "nullable": true
+                },
+                {
+                    "name": "Status",
+                    "type": "int",
+                    "nullable": true
+                },
+                {
+                    "name": "CloseReason",
+                    "type": "String",
+                    "length": "MAX",
+                    "nullable": true
+                },
+                {
+                    "name": "ValidityDate",
+                    "type": "Datetime",
+                    "nullable": true
+                },
+                {
+                    "name": "OrderBy",
+                    "type": "int",
+                    "nullable": true
+                },
+                {
+                    "name": "AuditStatus",
+                    "type": "int",
+                    "nullable": true
+                },
+                {
+                    "name": "Plat_fee",
+                    "type": "Decimal",
+                    "length": 18,
+                    "precision": 0,
+                    "nullable": true
+                },
+                {
+                    "name": "Items_Num",
+                    "type": "int",
+                    "nullable": true
+                },
+                {
+                    "name": "Email",
+                    "type": "String",
+                    "length": 128
+                },
+                {
+                    "name": "YY",
+                    "type": "String",
+                    "length": 50,
+                    "nullable": true
+                },
+                {
+                    "name": "ItemsID",
+                    "type": "int",
+                    "nullable": true
+                },
+                {
+                    "name": "IsDefault",
+                    "type": "int",
+                    "nullable": true
+                }
+            ]
+        }
+    ]
+>>>>>>> ab9cdef6e7b2f0479729a5a223d281c0d4450128
 }

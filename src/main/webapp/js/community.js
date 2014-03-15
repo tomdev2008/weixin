@@ -139,5 +139,46 @@ var community = {
     }
 };
 
+<<<<<<< HEAD
+=======
+var admin = {
+    userCardInit: function() {
+        $(".sub-nav a").click(function() {
+            $(".sub-nav a").removeClass("current");
+            $(this).addClass("current");
+        });
+    },
+    setUserCard: function() {
+        if ($.trim($("#title").val()).length === 0) {
+            tip.show("提交失败", "昵称不能为空");
+        } else if ($.trim($("#sign").val()).length === 0) {
+            tip.show("提交失败", "个性签名不能为空");
+        } else if ($.trim($("#details").val()).length === 0) {
+            tip.show("提交失败", "详细介绍不能为空");
+        } else {
+            var requestJSONObject = {
+                title: $("#title").val(),
+                sign: $("#sign").val(),
+                details: $("#details").val(),
+                type: $(".sub-nav a.current").data("type")
+            };
+
+            $.ajax({
+                url: "/setUserCard",
+                type: "POST",
+                cache: false,
+                data: JSON.stringify(requestJSONObject),
+                success: function(result, textStatus) {
+                    if (result.sc) {
+                        tip.show("提示", "设置成功");
+                    } else {
+                        tip.show("提示", result.msg);
+                    }
+                }
+            });
+        }
+    }
+};
+>>>>>>> ab9cdef6e7b2f0479729a5a223d281c0d4450128
 community.requirementPublishInit = community.salePublishInit;
 community.requirementDetailsInit = community.saleDetailsInit;
