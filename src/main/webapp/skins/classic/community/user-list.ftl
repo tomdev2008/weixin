@@ -5,91 +5,36 @@
         <@meta title="用户列表 - 新助邦"/>
     </head>
     <body>
-        <nav class="sub-nav">
-            <ul>
-                <li>
-                    <a class="current" href="/user-list?type=student">学生</a>
-                </li>
-                <li>
-                    <a href="/user-list?type=teacher">老师</a>
-                </li>
-                <li>
-                    <a href="/question-list">提问</a>
-                </li>
-                <li>
-                    <a href="/requirement-list">需求</a>
-                </li>
-                <li>
-                    <a href="/sale-list">出售</a>
-                </li>
-            </ul>
-        </nav>
+        <#include "../common/community-nav.ftl">
         <ul class="list">
+            <#list 1..4 as x>
             <li class="fn-clear">
                 <a href="/user-card">
                     <img class="list-view" src="/images/default-user-thumbnail.png"/>
-                    <div class="list-content">
-                        <span class="name">新助邦</span>
-                        <div class="ft-light-gray">
-                            XXXXXXXXXx学校 ZZZZZZZZZZZ学院 YYYYYY专业
-                            <br/>
-                            学科门类学科门类学科门类学科门类学科门类学科门类
-                        </div>
-                    </div>
                 </a>
-            </li>
-            <li class="fn-clear">
-                <a href="/user-card">
-                    <img class="list-view" src="/images/default-user-thumbnail.png"/>
-                    <div class="list-content">
-                        <span class="name">新助邦</span>
-                        <div class="ft-light-gray">
-                            XXXXXXXXXx学校 ZZZZZZZZZZZ学院 YYYYYY专业
-                            <br/>
-                            学科门类学科门类学科门类学科门类学科门类学科门类
+                <div class="list-content">
+                    <a href="/user-card">
+                        <div class="fn-clear">
+                            <span class="fn-left ft-dark">{sale.userName}</span>
+                            <span class="ico ico-cater"></span>
+                            <span class="ico ico-level1"></span>
                         </div>
-                    </div>
-                </a>
-            </li>
-            <li class="fn-clear">
-                <a href="/user-card">
-                    <img class="list-view" src="/images/default-user-thumbnail.png"/>
-                    <div class="list-content">
-                        <span class="name">新助邦</span>
-                        <div class="ft-light-gray">
-                            XXXXXXXXXx学校 ZZZZZZZZZZZ学院 YYYYYY专业
-                            <br/>
-                            学科门类学科门类学科门类学科门类学科门类学科门类
+                        <div class="ft-gray">
+                            一句话描述
                         </div>
-                    </div>
-                </a>
-            </li>
-            <li class="fn-clear">
-                <a href="/user-card">
-                    <img class="list-view" src="/images/default-user-thumbnail.png"/>
-                    <div class="list-content">
-                        <span class="name">新助邦</span>
-                        <div class="ft-light-gray">
-                            XXXXXXXXXx学校 ZZZZZZZZZZZ学院 YYYYYY专业
-                            <br/>
-                            学科门类学科门类学科门类学科门类学科门类学科门类
+                        <div class="ft-gray">
+                            圈子
                         </div>
-                    </div>
-                </a>
+                    </a>
+                    <span class="ft-green follow" onclick="community.follow(this)">关注</span>
+                </div>
+
             </li>
-            <li class="fn-clear last">
-                <a href="/user-card">
-                    <img class="list-view" src="/images/default-user-thumbnail.png"/>
-                    <div class="list-content">
-                        <span class="name">新助邦</span>
-                        <div class="ft-light-gray">
-                            XXXXXXXXXx学校 ZZZZZZZZZZZ学院 YYYYYY专业
-                            <br/>
-                            学科门类学科门类学科门类学科门类学科门类学科门类
-                        </div>
-                    </div>
-                </a>
-            </li>
+            </#list>
         </ul>
+        <#include "../common/tip.ftl">
+        <script src="/js/lib/jquery-2.1.0.min.js"></script>
+        <script src="/js/common.js"></script>
+        <script src="/js/community.js"></script>
     </body>
 </html>

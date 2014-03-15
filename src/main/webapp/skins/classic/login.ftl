@@ -13,7 +13,7 @@
                 </label>
                 <label>
                     密码：
-                    <input id="password" placeholder="请输入密码"/>
+                    <input id="password" type="password" placeholder="请输入密码"/>
                 </label>
             </div>
             <label class="ft-gray"><input type="checkbox" checked="checked"/> 记住登录状态</label>

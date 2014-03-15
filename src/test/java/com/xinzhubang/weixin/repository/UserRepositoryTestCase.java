@@ -33,7 +33,7 @@ import org.testng.annotations.Test;
  * 用户数据存取单元测试.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.0.0, Mar 9, 2014
+ * @version 1.1.0.0, Mar 14, 2014
  * @since 1.0.0
  */
 public class UserRepositoryTestCase {
@@ -57,10 +57,21 @@ public class UserRepositoryTestCase {
 
     @Test
     public void getUser() throws Exception {
+        System.out.println("getUser");
+        
         final Query query = new Query();
         query.setFilter(new PropertyFilter("user_name", FilterOperator.EQUAL, "88250"));
 
         final JSONObject result = userRepository.get(query);
+        System.out.println(result.toString());
+    }
+    
+     @Test
+    public void getUserById() throws Exception {
+         System.out.println("getUserById");
+        
+        final JSONObject result = userRepository.get("1475");
+        
         System.out.println(result.toString());
     }
 }

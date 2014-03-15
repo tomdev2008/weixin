@@ -9,17 +9,17 @@
             <ul class="fn-clear">
                 <li class="current">
                     <span>
-                        省份<span class="ico-arrow-down"></span>
+                        省份<span class="ico ico-arrow-down"></span>
                     </span>
                 </li>
                 <li>
                     <span>
-                        学校<span class="ico-arrow-down"></span>
+                        学校<span class="ico ico-arrow-down"></span>
                     </span>
                 </li> 
                 <li>
                     <span>
-                        学院<span class="ico-arrow-down"></span>
+                        学院<span class="ico ico-arrow-down"></span>
                     </span>
                 </li>
             </ul>

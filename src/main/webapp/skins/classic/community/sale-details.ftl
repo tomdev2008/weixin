@@ -2,7 +2,7 @@
 <html>
     <head>
         <#include "../common/macro-meta.ftl">
-        <@meta title="{title} - 新助邦"/>
+        <@meta title="出售详情 - 新助邦"/>
     </head>
     <body class="sale-details">
         <#include "../common/community-nav.ftl">
@@ -26,29 +26,29 @@
             <div class="fn-clear">
                 <img class="list-view" src="/images/default-user-thumbnail.png"/>
                 <div class="list-content">
-                    <div>一句话描述</div>
+                    <div>${sale.Name}</div>
                     <div class="ft-gray">
-                        细节细节细节细节细节细节细节细节细节细节细节细节细节细节细节细节细节细节细节细节细节细节细节细节细节细节细节细节细节细节细节细节细节细节细节细节细节
+                        ${sale.ItemContent}
                     </div>
                     <div class="ft-gray">
-                        北京-北京大学-计算机
+                        ${sale.Area}-${sale.University}<#if sale.CollegeCode != "-1">-${sale.College}</#if>
                     </div>
                     <div class="fn-clear">
-                        <span class="ft-gray fn-left">{userName}</span>
+                        <span class="ft-gray fn-left">${sale.userName}</span>
                         <span class="ico ico-cater"></span>
                         <span class="ico ico-level1"></span>
                     </div>
                     <div class="fn-clear">
                         <span class="ft-gray ft-small fn-left">
-                            2013-21-12 &nbsp; 浏览 200
+                            ${sale.CreateTime?string('yyyy-MM-dd')} &nbsp; 浏览：${sale.ClickCount}
                         </span>
-                        <span class="ft-green fn-right">￥200</span>
+                        <span class="ft-green fn-right">￥${sale.Price}</span>
                     </div>
                 </div>
             </div>
             <div class="fn-clear">
                 <button class="button fn-left" onclick="window.location='/whisper'">说悄悄话</button>
-                <button class="button fn-right" onclick='tip.show("温馨提示", "功能正在开发中，敬请期待");'>我要购买</button>
+                <button class="button fn-right" onclick='tip.show("温馨提示", "功能正在开发中，敬请期待");'>我要投标</button>
             </div>
         </div>
         <#include "../common/tip.ftl">

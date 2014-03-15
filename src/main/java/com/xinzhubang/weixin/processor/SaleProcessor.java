@@ -15,23 +15,33 @@ package com.xinzhubang.weixin.processor;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.xinzhubang.weixin.processor.advice.LoginCheck;
+import com.xinzhubang.weixin.service.ItemService;
 import com.xinzhubang.weixin.util.Filler;
+import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.b3log.latke.Keys;
 import org.b3log.latke.servlet.HTTPRequestContext;
 import org.b3log.latke.servlet.HTTPRequestMethod;
+import org.b3log.latke.servlet.annotation.Before;
 import org.b3log.latke.servlet.annotation.RequestProcessing;
 import org.b3log.latke.servlet.annotation.RequestProcessor;
+import org.b3log.latke.servlet.renderer.JSONRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.AbstractFreeMarkerRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
+import org.b3log.latke.util.Requests;
+import org.b3log.latke.util.Strings;
+import org.json.JSONObject;
 
 /**
  * 出售处理器.
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
- * @version 1.0.0.1, Mar 13, 2014
+ * @author <a href="http://88250.b3log.org">Liang Ding</a>
+ * @version 1.2.1.1, Mar 14, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -40,8 +50,79 @@ public class SaleProcessor {
     @Inject
     private Filler filler;
 
+    @Inject
+    private ItemService itemService;
+
     /**
-     * 展示出售页面.
+     * 展示个人中心-我的信息-我的服务页面.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/admin/sale-list", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
+    public void showMySaleList(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+        context.setRenderer(renderer);
+        renderer.setTemplateName("/admin/sale-list.ftl");
+
+        String pageStr = request.getParameter("p");
+        if (Strings.isEmptyOrNull(pageStr)) {
+            pageStr = "1";
+        }
+
+        final int pageNum = Integer.valueOf(pageStr);
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+
+        final Map<String, Object> dataModel = renderer.getDataModel();
+
+        final List<JSONObject> list = itemService.getUserSales(user.optString("id"), pageNum);
+
+        dataModel.put("sales", (Object) list);
+        dataModel.put("pageNum", pageNum);
+        dataModel.put("type", "sale");
+
+        filler.fillHeader(request, response, dataModel);
+        filler.fillFooter(dataModel);
+    }
+
+    /**
+     * 获取个人中心-我的信息-我的服务数据（AJAX 拉取分页）.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/admin/sale-list-ajax", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
+    public void getMySaleList(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final JSONRenderer renderer = new JSONRenderer();
+        context.setRenderer(renderer);
+        final JSONObject ret = new JSONObject();
+        renderer.setJSONObject(ret);
+
+        String pageStr = request.getParameter("p");
+        if (Strings.isEmptyOrNull(pageStr)) {
+            pageStr = "1";
+        }
+
+        final int pageNum = Integer.valueOf(pageStr);
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+
+        final List<JSONObject> list = itemService.getUserSales(user.optString("id"), pageNum);
+
+        ret.put("sales", (Object) list);
+        ret.put("pageNum", pageNum);
+        ret.put("type", "sale");
+    }
+
+    /**
+     * 展示社区圈子出售页面.
      *
      * @param context the specified context
      * @param request the specified request
@@ -49,18 +130,81 @@ public class SaleProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/sale-list", method = HTTPRequestMethod.GET)
-    public void showIndex(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+    public void showCommunitySaleList(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
         renderer.setTemplateName("/community/sale-list.ftl");
 
+        String pageStr = request.getParameter("p");
+        if (Strings.isEmptyOrNull(pageStr)) {
+            pageStr = "1";
+        }
+
+        String typeStr = request.getParameter("type");
+        if (Strings.isEmptyOrNull(typeStr)) {
+            typeStr = "1";
+        }
+
+        final int pageNum = Integer.valueOf(pageStr);
+        final int type = Integer.valueOf(typeStr);
+
         final Map<String, Object> dataModel = renderer.getDataModel();
 
+        final JSONObject community = new JSONObject();
+        community.put("areaCode", "43676");
+        community.put("universityCode", "43762");
+        community.put("type", type);
+        final List<JSONObject> list = itemService.getSales(community, pageNum);
+
+        dataModel.put("sales", (Object) list);
+        dataModel.put("pageNum", pageNum);
         dataModel.put("type", "sale");
+        dataModel.put("subType", typeStr);
 
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
+    }
+
+    /**
+     * 获取出售页面数据（AJAX 拉取分页）.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/sale-list-ajax", method = HTTPRequestMethod.GET)
+    public void getSaleList(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final JSONRenderer renderer = new JSONRenderer();
+        context.setRenderer(renderer);
+        final JSONObject ret = new JSONObject();
+        renderer.setJSONObject(ret);
+
+        String pageStr = request.getParameter("p");
+        if (Strings.isEmptyOrNull(pageStr)) {
+            pageStr = "1";
+        }
+
+        String typeStr = request.getParameter("type");
+        if (Strings.isEmptyOrNull(typeStr)) {
+            typeStr = "1";
+        }
+
+        final int pageNum = Integer.valueOf(pageStr);
+        final int type = Integer.valueOf(typeStr);
+
+        final JSONObject community = new JSONObject();
+        community.put("areaCode", "43676");
+        community.put("universityCode", "43762");
+        community.put("type", type);
+        final List<JSONObject> list = itemService.getSales(community, pageNum);
+
+        ret.put("sales", (Object) list);
+        ret.put("pageNum", pageNum);
+        ret.put("type", "sale");
+        ret.put("subType", typeStr);
     }
 
     /**
@@ -78,8 +222,14 @@ public class SaleProcessor {
         context.setRenderer(renderer);
         renderer.setTemplateName("/community/sale-details.ftl");
 
+        final String id = request.getParameter("id");
+
         final Map<String, Object> dataModel = renderer.getDataModel();
+
+        final JSONObject sale = itemService.getSale(id);
+        dataModel.put("sale", sale);
         dataModel.put("type", "sale");
+
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
@@ -101,8 +251,51 @@ public class SaleProcessor {
 
         final Map<String, Object> dataModel = renderer.getDataModel();
         dataModel.put("type", "sale");
-        
+
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
+    }
+
+    /**
+     * 发布出售.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/sale-publish", method = HTTPRequestMethod.POST)
+    @Before(adviceClass = LoginCheck.class)
+    public void publishSale(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final JSONRenderer renderer = new JSONRenderer();
+        context.setRenderer(renderer);
+        final JSONObject ret = new JSONObject();
+
+        final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
+
+        final String name = requestJSONObject.getString("name");
+        final int type = requestJSONObject.getInt("type");
+        final String desc = requestJSONObject.getString("desc");
+        final int price = requestJSONObject.getInt("price");
+
+        final JSONObject sale = new JSONObject();
+
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+
+        sale.put("Name", name);
+        sale.put("ItemType", type);
+        sale.put("MemberID", user.optInt("id"));
+        sale.put("ItemContent", desc);
+        sale.put("Price", price);
+
+        final boolean succ = itemService.publishSale(sale);
+
+        ret.put(Keys.STATUS_CODE, succ);
+        if (!succ) {
+            ret.put(Keys.MSG, "发布失败");
+        }
+
+        renderer.setJSONObject(ret);
     }
 }

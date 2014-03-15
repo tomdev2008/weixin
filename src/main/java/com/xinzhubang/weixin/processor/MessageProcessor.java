@@ -28,14 +28,14 @@ import org.b3log.latke.servlet.renderer.freemarker.AbstractFreeMarkerRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
 
 /**
- * 发送悄悄话处理器.
+ * 细节页面相关处理器.
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @version 1.0.0.0, Mar 5, 2014
  * @since 1.0.0
  */
 @RequestProcessor
-public class SendMessageProcessor {
+public class MessageProcessor {
     
     @Inject
     private Filler filler;
@@ -48,12 +48,54 @@ public class SendMessageProcessor {
      * @param response the specified response
      * @throws Exception exception
      */
-    @RequestProcessing(value = "/send-message", method = HTTPRequestMethod.GET)
+    @RequestProcessing(value = "/whisper", method = HTTPRequestMethod.GET)
     public void showIndex(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
-        renderer.setTemplateName("/admin/message-send.ftl");
+        renderer.setTemplateName("/community/whisper.ftl");
+        
+        final Map<String, Object> dataModel = renderer.getDataModel();
+
+        filler.fillHeader(request, response, dataModel);
+        filler.fillFooter(dataModel);
+    }
+    
+    /**
+     * 展示合作方列表页面.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/partner-list", method = HTTPRequestMethod.GET)
+    public void showPartnerList(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+        context.setRenderer(renderer);
+        renderer.setTemplateName("/community/partner-list.ftl");
+        
+        final Map<String, Object> dataModel = renderer.getDataModel();
+
+        filler.fillHeader(request, response, dataModel);
+        filler.fillFooter(dataModel);
+    }
+    
+    /**
+     * 展示系统推荐页面.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/pocoer", method = HTTPRequestMethod.GET)
+    public void showPocoer(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+        context.setRenderer(renderer);
+        renderer.setTemplateName("/community/pocoer.ftl");
         
         final Map<String, Object> dataModel = renderer.getDataModel();
 

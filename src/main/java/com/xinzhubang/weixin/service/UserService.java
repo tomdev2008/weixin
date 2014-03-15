@@ -17,9 +17,14 @@ package com.xinzhubang.weixin.service;
 
 import com.xinzhubang.weixin.repository.UserCardRepository;
 import com.xinzhubang.weixin.repository.UserRepository;
+import com.xinzhubang.weixin.util.Sessions;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.b3log.latke.Keys;
 import org.b3log.latke.logging.Level;
 import org.b3log.latke.logging.Logger;
@@ -33,6 +38,7 @@ import org.b3log.latke.repository.RepositoryException;
 import org.b3log.latke.repository.annotation.Transactional;
 import org.b3log.latke.service.ServiceException;
 import org.b3log.latke.service.annotation.Service;
+import org.b3log.latke.util.Strings;
 import org.json.JSONObject;
 
 /**
@@ -52,6 +58,37 @@ public class UserService {
 
     @Inject
     private UserCardRepository userCardRepository;
+
+    /**
+     * 获取指定的社区圈子里指定类型（学生/老师）的名片列表。
+     *
+     * @param community 指定的社区圈子，例如：
+     * <pre>
+     * {
+     *     "areaCode": "",
+     *     "universityCode": "",
+     *     "collegeCode": "", // 可选的
+     *     "type": "" // 类型：teacher, student
+     * }
+     * </pre>
+     *
+     * @param pageNum
+     * @return
+     */
+    public List<JSONObject> getUserCards(final JSONObject community, final int pageNum) {
+        try {
+            final String areaCode = community.getString("areaCode");
+            final String universityCode = community.getString("universityCode");
+            final String collegeCode = community.optString("collegeCode", "-1");
+            final String type = community.getString("type");
+            
+            return null;
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "获取社区圈子中的出售项目异常", e);
+
+            return Collections.emptyList();
+        }
+    }
 
     /**
      * 根据用户 id 与类型（老师或学生）获取用户名片。
@@ -104,6 +141,7 @@ public class UserService {
             return null;
         }
     }
+<<<<<<< HEAD
     public JSONObject getUserByEmailOrUsername(final String email,final String userName){
          final Query query = new Query().setFilter(new PropertyFilter("user_name", FilterOperator.EQUAL, userName)).setFilter(new PropertyFilter("email",FilterOperator.EQUAL,userName));
          try {
@@ -112,10 +150,34 @@ public class UserService {
             return result.getJSONArray(Keys.RESULTS).optJSONObject(0);
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "根据用户名和邮箱 [" + email + "][" + userName + "] 获取用户异常", e);
+=======
+
+    /**
+     * Gets the current user.
+     *
+     * @param request the specified request
+     * @return the current user, {@code null} if not found
+     * @throws ServiceException service exception
+     */
+    public JSONObject getCurrentUser(final HttpServletRequest request) throws ServiceException {
+        final JSONObject currentUser = Sessions.currentUser(request);
+
+        if (null == currentUser) {
+            return null;
+        }
+
+        final String userId = currentUser.optString("userId");
+
+        try {
+            return userRepository.get(userId);
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "获取当前登录用户异常", e);
+>>>>>>> d0737e02ed5fb6a558a3e19cab8560a2a1664ee7
 
             return null;
         }
     }
+<<<<<<< HEAD
     @Transactional
     public String addUser(final JSONObject user){
         String id = null;
@@ -127,5 +189,60 @@ public class UserService {
             return null;       
         }
         return id;
+=======
+
+    /**
+     * Tries to login with cookie.
+     *
+     * @param request the specified request
+     * @param response the specified response
+     * @return returns {@code true} if logged in, returns {@code false} otherwise
+     */
+    public boolean tryLogInWithCookie(final HttpServletRequest request, final HttpServletResponse response) {
+        final Cookie[] cookies = request.getCookies();
+        if (null == cookies || 0 == cookies.length) {
+            return false;
+        }
+
+        try {
+            for (final Cookie cookie : cookies) {
+                if (!"b3log-latke".equals(cookie.getName())) {
+                    continue;
+                }
+
+                final JSONObject cookieJSONObject = new JSONObject(cookie.getValue());
+
+                final String userId = cookieJSONObject.optString("userId");
+                if (Strings.isEmptyOrNull(userId)) {
+                    break;
+                }
+
+                final JSONObject user = userRepository.get(userId);
+                if (null == user) {
+                    break;
+                }
+
+                final int id = user.optInt("id");
+                final String userPassword = user.optString("password");
+                final String password = cookieJSONObject.optString("password");
+                if (userPassword.equals(password)) {
+                    Sessions.login(request, response, user);
+                    LOGGER.log(Level.DEBUG, "Logged in with cookie[id={0}]", userId);
+
+                    return true;
+                }
+            }
+        } catch (final Exception e) {
+            LOGGER.log(Level.WARN, "Parses cookie failed, clears the cookie[name=b3log-latke]", e);
+
+            final Cookie cookie = new Cookie("b3log-latke", null);
+            cookie.setMaxAge(0);
+            cookie.setPath("/");
+
+            response.addCookie(cookie);
+        }
+
+        return false;
+>>>>>>> d0737e02ed5fb6a558a3e19cab8560a2a1664ee7
     }
 }

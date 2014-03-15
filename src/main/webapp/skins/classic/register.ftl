@@ -12,16 +12,16 @@
                     <input id="email" placeholder="请输入邮箱"/>
                 </label>
                 <label>
-                    用户名：
-                    <input id="account" placeholder="请输入用户名"/>
+                    昵称：
+                    <input id="account" placeholder="请输入昵称"/>
                 </label>
                 <label>
                     密码：
-                    <input id="password" placeholder="请输入密码"/>
+                    <input id="password" type="password" placeholder="请输入密码"/>
                 </label>
                 <label>
                     确认密码：
-                    <input id="confirmPassword" placeholder="请再次输入密码"/>
+                    <input style="width: 66%" type="password" id="confirmPassword" placeholder="请再次输入密码"/>
                 </label>
             </div>
             <button class="button" onclick="login.register()">注 册</button>
