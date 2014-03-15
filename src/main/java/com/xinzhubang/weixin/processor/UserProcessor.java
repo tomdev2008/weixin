@@ -82,7 +82,6 @@ public class UserProcessor {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
         renderer.setTemplateName("/community/user-card.ftl");
-
         final String userName = request.getParameter("userName");
         final String type = request.getParameter("type"); // t:老师；s:学生；e：企业
 
@@ -104,7 +103,11 @@ public class UserProcessor {
         final Map<String, Object> dataModel = renderer.getDataModel();
         dataModel.put("userName", user.getString("user_name"));
         dataModel.put("cardTitle", card.getString("PropertyTitle"));
-
+        if (type.equals("t")) {
+            dataModel.put("type", "teacher");
+        } else if (type.equals("s")) {
+            dataModel.put("type", "student");
+        }
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
