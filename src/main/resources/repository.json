@@ -25,6 +25,11 @@
             ]
         },
         {
+            "name": "UserInfo",
+            "keys": [
+            ]
+        },
+        {
             "name": "User_Property",
             "keys": [
                 {

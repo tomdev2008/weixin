@@ -105,6 +105,8 @@ public class UserService {
                 final JSONObject userInfo = userInfos.optJSONObject(i);
                 final String memberId = userInfo.optString("MemberID");
                 final JSONObject userCard = getUserCard(memberId, typeArg);
+                final JSONObject user = userRepository.get(memberId);
+                userCard.put("userName", user.getString("user_name"));
 
                 ret.add(userCard);
             }
