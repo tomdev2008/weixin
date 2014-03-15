@@ -40,14 +40,7 @@ import org.b3log.latke.repository.annotation.Transactional;
 import org.b3log.latke.service.ServiceException;
 import org.b3log.latke.service.annotation.Service;
 import org.b3log.latke.util.Strings;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 import org.json.JSONArray;
->>>>>>> b8eca718bdf17f545a4a4902d5d2416f0d285207
-=======
-import org.json.JSONArray;
->>>>>>> 4a83ea778f6d49cfafb0b7a92a00b8cc5911f161
 import org.json.JSONObject;
 
 /**
@@ -105,14 +98,14 @@ public class UserService {
             final JSONArray userInfos = userInfoResult.optJSONArray(Keys.RESULTS);
 
             final String typeArg = "teacher".equals(community.optString("type", "teacher")) ? "t" : "s";
-            
+
             final List<JSONObject> ret = new ArrayList<JSONObject>();
 
             for (int i = 0; i < userInfos.length(); i++) {
                 final JSONObject userInfo = userInfos.optJSONObject(i);
                 final String memberId = userInfo.optString("MemberID");
                 final JSONObject userCard = getUserCard(memberId, typeArg);
-                
+
                 ret.add(userCard);
             }
 
@@ -124,40 +117,6 @@ public class UserService {
         }
     }
 
-<<<<<<< HEAD
-    /**
-     * 获取指定的社区圈子里指定类型（学生/老师）的名片列表。
-     *
-     * @param community 指定的社区圈子，例如：
-     * <pre>
-     * {
-     *     "areaCode": "",
-     *     "universityCode": "",
-     *     "collegeCode": "", // 可选的
-     *     "type": "" // 类型：teacher, student
-     * }
-     * </pre>
-     *
-     * @param pageNum
-     * @return
-     */
-    public List<JSONObject> getUserCards(final JSONObject community, final int pageNum) {
-        try {
-            final String areaCode = community.getString("areaCode");
-            final String universityCode = community.getString("universityCode");
-            final String collegeCode = community.optString("collegeCode", "-1");
-            final String type = community.getString("type");
-            
-            return null;
-        } catch (final Exception e) {
-            LOGGER.log(Level.ERROR, "获取社区圈子中的出售项目异常", e);
-
-            return Collections.emptyList();
-        }
-    }
-
-=======
->>>>>>> 4a83ea778f6d49cfafb0b7a92a00b8cc5911f161
     /**
      * 根据用户 id 与类型（老师或学生）获取用户名片。
      *
@@ -209,24 +168,18 @@ public class UserService {
             return null;
         }
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-    public JSONObject getUserByEmailOrUsername(final String email,final String userName){
-         final Query query = new Query().setFilter(new PropertyFilter("user_name", FilterOperator.EQUAL, userName)).setFilter(new PropertyFilter("email",FilterOperator.EQUAL,userName));
-         try {
+
+    public JSONObject getUserByEmailOrUsername(final String email, final String userName) {
+        final Query query = new Query().setFilter(new PropertyFilter("user_name", FilterOperator.EQUAL, userName)).setFilter(new PropertyFilter("email", FilterOperator.EQUAL, userName));
+        try {
             final JSONObject result = userRepository.get(query);
             return result;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "根据用户名和邮箱 [" + email + "][" + userName + "] 获取用户异常", e);
         }
-          return null;
+        return null;
     }
-=======
 
->>>>>>> b8eca718bdf17f545a4a4902d5d2416f0d285207
-=======
-
->>>>>>> 4a83ea778f6d49cfafb0b7a92a00b8cc5911f161
     /**
      * Gets the current user.
      *
@@ -251,26 +204,20 @@ public class UserService {
             return null;
         }
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
+
     @Transactional
-    public String addUser(final JSONObject user){
+    public String addUser(final JSONObject user) {
         String id = null;
         System.out.println(user.toString());
         try {
             id = userRepository.add(user);
         } catch (RepositoryException ex) {
             LOGGER.log(Level.ERROR, "保存用户出错！", ex);
-            return null;       
+            return null;
         }
         return id;
     }
-=======
 
->>>>>>> b8eca718bdf17f545a4a4902d5d2416f0d285207
-=======
-
->>>>>>> 4a83ea778f6d49cfafb0b7a92a00b8cc5911f161
     /**
      * Tries to login with cookie.
      *

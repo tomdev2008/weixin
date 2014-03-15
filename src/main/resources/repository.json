@@ -1,8 +1,6 @@
-<<<<<<< HEAD
 {
     "description": "Description of repository structures, for generation (DDL: http://en.wikipedia.org/wiki/Data_Definition_Language) of the relational database table and persistence validation.",
     "version": "1.1.0.0, Mar 14, 2014",
-<<<<<<< HEAD
     "authors": ["Liang Ding"],
     "since": "1.0.0",
     "repositories": [
@@ -23,127 +21,6 @@
                     "name": "email",
                     "type": "String",
                     "length": 50
-                }
-            ]
-        },
-        {
-            "name": "User_Property",
-            "keys": [
-                {
-                    "name": "id",
-                    "type": "int"
-                },
-                {
-                    "name": "t_user_id",
-                    "type": "int"
-                },
-                {
-                    "name": "Property",
-                    "type": "int"
-                },
-                {
-                    "name": "IsDefault",
-                    "type": "int",
-                    "length": 100
-                },
-                {
-                    "name": "CreateTime",
-                    "type": "Date"
-                },
-                {
-                    "name": "IdentificationFiles",
-                    "type": "String",
-                    "length": 500
-                },
-                {
-                    "name": "IdentificationStatus",
-                    "type": "int"
-                },
-                {
-                    "name": "IdentificationTime",
-                    "type": "Date"
-                },
-                {
-                    "name": "FavorableRate",
-                    "type": "decimal",
-                    "length": 9,
-                    "precision": 2
-                },
-                {
-                    "name": "PropertyTitle",
-                    "type": "String",
-                    "length": 100
-                },
-                {
-                    "name": "PropertyRemark",
-                    "type": "String",
-                    "length": 500
-                },
-                {
-                    "name": "AuditingManage",
-                    "type": "int"
-                },
-                {
-                    "name": "AuditingTime",
-                    "type": "Date"
-                }
-            ]
-        }
-    ]
-=======
-{
-    "description": "Description of repository structures, for generation (DDL: http://en.wikipedia.org/wiki/Data_Definition_Language) of the relational database table and persistence validation.",
-    "version": "1.1.0.0, Mar 14, 2014",
-=======
->>>>>>> 4a83ea778f6d49cfafb0b7a92a00b8cc5911f161
-    "authors": ["Liang Ding"],
-    "since": "1.0.0",
-    "repositories": [
-        {
-            "name": "Users",
-            "keys": [
-                {
-                    "name": "id",
-                    "type": "int"
-                },
-                {
-                    "name": "group_id",
-                    "type": "int"
-                },
-                {
-                    "name": "user_name",
-                    "type": "String",
-                    "length": 100
-                },
-                {
-                    "name": "password",
-                    "type": "String",
-                    "length": 100
-                },
-                {
-                    "name": "email",
-                    "type": "String",
-                    "length": 50
-                },
-                {
-                    "name": "nick_name",
-                    "type": "String",
-                    "length": 100
-                },
-                {
-                    "name": "RealName",
-                    "type": "String",
-                    "length": 100
-                },
-                {
-                    "name": "avatar",
-                    "type": "String",
-                    "length": 255
-                },
-                {
-                    "name": "sex",
-                    "type": "String",
-                    "length": 20
                 }
             ]
         },
@@ -453,5 +330,4 @@
             ]
         }
     ]
->>>>>>> b8eca718bdf17f545a4a4902d5d2416f0d285207
 }
