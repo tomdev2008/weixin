@@ -136,12 +136,12 @@ public class UserProcessor {
      * @param response the specified response
      * @throws Exception exception
      */
-    @RequestProcessing(value = "/user-card-settings", method = HTTPRequestMethod.GET)
+    @RequestProcessing(value = "/admin/user-card", method = HTTPRequestMethod.GET)
     public void showUserCardSettings(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
-        renderer.setTemplateName("/community/user-card.ftl");
+        renderer.setTemplateName("/admin/user-card.ftl");
 
         final Map<String, Object> dataModel = renderer.getDataModel();
 
