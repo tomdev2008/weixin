@@ -42,7 +42,7 @@ import org.json.JSONObject;
  * 项目服务.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.0.0, Mar 14, 2014
+ * @version 1.1.0.0, Mar 15, 2014
  * @since 1.0.0
  */
 @Service
@@ -101,6 +101,64 @@ public class ItemService {
             LOGGER.log(Level.ERROR, "发布出售 [" + sale.toString() + "] 异常", e);
 
             return false;
+        }
+    }
+
+    /**
+     * 获取指定的用户的服务项目.
+     *
+     * @param userId 指定的用户的 Id
+     * @param pageNum 指定的分页页号
+     *
+     * @return
+     */
+    public List<JSONObject> getUserServices(final String userId, final int pageNum) {
+        try {
+            final List<Filter> filters = new ArrayList<Filter>();
+            filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, userId));
+            filters.add(new PropertyFilter("DemandOrService", FilterOperator.EQUAL, 1));
+
+            final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+            query.setCurrentPageNum(pageNum).setPageSize(10);
+            final JSONObject result = itemRepository.get(query);
+
+            final JSONArray results = result.getJSONArray(Keys.RESULTS);
+            final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
+
+            return ret;
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "获取用户 [" + userId + "] 的服务项目异常", e);
+
+            return Collections.emptyList();
+        }
+    }
+    
+    /**
+     * 获取指定的用户的需求项目.
+     *
+     * @param userId 指定的用户的 Id
+     * @param pageNum 指定的分页页号
+     *
+     * @return
+     */
+    public List<JSONObject> getUserDemands(final String userId, final int pageNum) {
+        try {
+            final List<Filter> filters = new ArrayList<Filter>();
+            filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, userId));
+            filters.add(new PropertyFilter("DemandOrService", FilterOperator.EQUAL, 0));
+
+            final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+            query.setCurrentPageNum(pageNum).setPageSize(10);
+            final JSONObject result = itemRepository.get(query);
+
+            final JSONArray results = result.getJSONArray(Keys.RESULTS);
+            final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
+
+            return ret;
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "获取用户 [" + userId + "] 的需求项目异常", e);
+
+            return Collections.emptyList();
         }
     }
 
