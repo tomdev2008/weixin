@@ -411,7 +411,7 @@ footer {
 }
 /* end list */
 
-/* start sale-details */
+/* start sale */
 .sale-details .sub-nav li {
     width: 25%;
 }
@@ -425,6 +425,23 @@ footer {
 
 .sale-details .button {
     width: 48%;
+}
+
+.ico-qa,
+.ico-school,
+.ico-resource {
+    background-color: #3A94DA;
+    color: #FFFFFF;
+    font-size: 0.8em;
+    padding: 0.1em 0.2em;
+}
+
+.ico-school {
+    background-color: #ECA013;
+}
+
+.ico-qa {
+    background-color: #5F9200;
 }
 /* end sale-details */
 
