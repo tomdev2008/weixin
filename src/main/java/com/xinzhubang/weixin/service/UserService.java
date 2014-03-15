@@ -141,23 +141,16 @@ public class UserService {
             return null;
         }
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     public JSONObject getUserByEmailOrUsername(final String email,final String userName){
          final Query query = new Query().setFilter(new PropertyFilter("user_name", FilterOperator.EQUAL, userName)).setFilter(new PropertyFilter("email",FilterOperator.EQUAL,userName));
          try {
             final JSONObject result = userRepository.get(query);
-
-            return result.getJSONArray(Keys.RESULTS).optJSONObject(0);
+            return result;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "根据用户名和邮箱 [" + email + "][" + userName + "] 获取用户异常", e);
-=======
-=======
->>>>>>> d0737e02ed5fb6a558a3e19cab8560a2a1664ee7
-=======
->>>>>>> d0737e02ed5fb6a558a3e19cab8560a2a1664ee7
-
+        }
+          return null;
+    }
     /**
      * Gets the current user.
      *
@@ -178,20 +171,10 @@ public class UserService {
             return userRepository.get(userId);
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "获取当前登录用户异常", e);
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> d0737e02ed5fb6a558a3e19cab8560a2a1664ee7
-=======
->>>>>>> d0737e02ed5fb6a558a3e19cab8560a2a1664ee7
-=======
->>>>>>> d0737e02ed5fb6a558a3e19cab8560a2a1664ee7
 
             return null;
         }
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     @Transactional
     public String addUser(final JSONObject user){
         String id = null;
@@ -203,12 +186,7 @@ public class UserService {
             return null;       
         }
         return id;
-=======
-=======
->>>>>>> d0737e02ed5fb6a558a3e19cab8560a2a1664ee7
-=======
->>>>>>> d0737e02ed5fb6a558a3e19cab8560a2a1664ee7
-
+    }
     /**
      * Tries to login with cookie.
      *
@@ -261,12 +239,5 @@ public class UserService {
         }
 
         return false;
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> d0737e02ed5fb6a558a3e19cab8560a2a1664ee7
-=======
->>>>>>> d0737e02ed5fb6a558a3e19cab8560a2a1664ee7
-=======
->>>>>>> d0737e02ed5fb6a558a3e19cab8560a2a1664ee7
     }
 }
