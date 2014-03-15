@@ -20,9 +20,6 @@ import org.b3log.latke.Latkes;
 import org.b3log.latke.ioc.LatkeBeanManager;
 import org.b3log.latke.ioc.Lifecycle;
 import org.b3log.latke.ioc.config.Discoverer;
-import org.b3log.latke.repository.FilterOperator;
-import org.b3log.latke.repository.PropertyFilter;
-import org.b3log.latke.repository.Query;
 import org.b3log.latke.repository.jdbc.util.JdbcRepositories;
 import org.json.JSONObject;
 import org.testng.annotations.BeforeClass;
@@ -32,7 +29,7 @@ import org.testng.annotations.Test;
  * 用户服务存取单元测试.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.0.0, Mar 10, 2014
+ * @version 1.0.0.1, Mar 15, 2014
  * @since 1.0.0
  */
 public class UserServiceTestCase {
@@ -66,10 +63,10 @@ public class UserServiceTestCase {
     public void getUserCard() throws Exception {
         System.out.println("getUserCard");
 
-        JSONObject userCard = userService.getUserCard(1475, "s");
+        JSONObject userCard = userService.getUserCard("1475", "s");
         System.out.println(userCard);
 
-        userCard = userService.getUserCard(1475, "t");
+        userCard = userService.getUserCard("1475", "t");
         System.out.println(userCard);
     }
 }

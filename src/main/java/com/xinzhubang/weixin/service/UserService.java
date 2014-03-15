@@ -16,6 +16,7 @@
 package com.xinzhubang.weixin.service;
 
 import com.xinzhubang.weixin.repository.UserCardRepository;
+import com.xinzhubang.weixin.repository.UserInfoRepository;
 import com.xinzhubang.weixin.repository.UserRepository;
 import com.xinzhubang.weixin.util.Sessions;
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ import org.b3log.latke.repository.Query;
 import org.b3log.latke.service.ServiceException;
 import org.b3log.latke.service.annotation.Service;
 import org.b3log.latke.util.Strings;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -56,6 +58,9 @@ public class UserService {
 
     @Inject
     private UserCardRepository userCardRepository;
+
+    @Inject
+    private UserInfoRepository userInfoRepository;
 
     /**
      * 获取指定的社区圈子里指定类型（学生/老师）的名片列表。
@@ -78,9 +83,31 @@ public class UserService {
             final String areaCode = community.getString("areaCode");
             final String universityCode = community.getString("universityCode");
             final String collegeCode = community.optString("collegeCode", "-1");
-            final String type = community.getString("type");
+
+            final List<Filter> filters = new ArrayList<Filter>();
+            filters.add(new PropertyFilter("AreaCode", FilterOperator.EQUAL, areaCode));
+            filters.add(new PropertyFilter("UniversityCode", FilterOperator.EQUAL, universityCode));
+            filters.add(new PropertyFilter("CollegeCode", FilterOperator.EQUAL, collegeCode));
+
+            final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+            query.setCurrentPageNum(pageNum).setPageSize(50);
+            final JSONObject userInfoResult = userInfoRepository.get(query);
+
+            final JSONArray userInfos = userInfoResult.optJSONArray(Keys.RESULTS);
+
+            final String typeArg = "teacher".equals(community.optString("type", "teacher")) ? "t" : "s";
             
-            return null;
+            final List<JSONObject> ret = new ArrayList<JSONObject>();
+
+            for (int i = 0; i < userInfos.length(); i++) {
+                final JSONObject userInfo = userInfos.optJSONObject(i);
+                final String memberId = userInfo.optString("MemberID");
+                final JSONObject userCard = getUserCard(memberId, typeArg);
+                
+                ret.add(userCard);
+            }
+
+            return ret;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "获取社区圈子中的出售项目异常", e);
 
@@ -96,9 +123,9 @@ public class UserService {
      * @return
      * @throws ServiceException
      */
-    public JSONObject getUserCard(final int userId, final String type) throws ServiceException {
+    public JSONObject getUserCard(final String userId, final String type) throws ServiceException {
         final List<Filter> filters = new ArrayList<Filter>();
-        filters.add(new PropertyFilter("t_user_id", FilterOperator.EQUAL, userId));
+        filters.add(new PropertyFilter("T_User_ID", FilterOperator.EQUAL, userId));
 
         int property;
         if ("t".equals(type)) {
