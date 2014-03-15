@@ -150,6 +150,55 @@ var community = {
                 }
             }
         });
+    },
+    questionPublish: function() {
+        if ($.trim($("#content").val()).length === 0) {
+            tip.show("发送失败", "内容不能为空");
+        } else if ($.trim($("#keys").val()).length === 0) {
+            tip.show("发送失败", "关键字不能为空");
+        } else {
+            var requestJSONObject = {
+                content: $("#content").val(),
+                keys: $("#keys").val()
+            };
+
+            $.ajax({
+                url: "/question-publish",
+                type: "POST",
+                cache: false,
+                data: JSON.stringify(requestJSONObject),
+                success: function(result, textStatus) {
+                    if (result.sc) {
+                        window.location = '/question-list?type=1';
+                    } else {
+                        tip.show("提示", result.msg);
+                    }
+                }
+            });
+        }
+    },
+    questionAnswer: function() {
+        if ($.trim($(".textarea").val()).length === 0) {
+            tip.show("回答失败", "内容不能为空");
+        } else {
+            var requestJSONObject = {
+                title: $(".textarea").val()
+            };
+
+            $.ajax({
+                url: "/question-answer",
+                type: "POST",
+                cache: false,
+                data: JSON.stringify(requestJSONObject),
+                success: function(result, textStatus) {
+                    if (result.sc) {
+                        community.cancel();
+                    } else {
+                        tip.show("回答失败", result.msg);
+                    }
+                }
+            });
+        }
     }
 };
 
