@@ -28,18 +28,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.b3log.latke.Keys;
 import org.b3log.latke.logging.Level;
 import org.b3log.latke.logging.Logger;
-import org.b3log.latke.model.User;
 import org.b3log.latke.repository.CompositeFilter;
 import org.b3log.latke.repository.CompositeFilterOperator;
 import org.b3log.latke.repository.Filter;
 import org.b3log.latke.repository.FilterOperator;
 import org.b3log.latke.repository.PropertyFilter;
 import org.b3log.latke.repository.Query;
-import org.b3log.latke.repository.RepositoryException;
 import org.b3log.latke.service.ServiceException;
 import org.b3log.latke.service.annotation.Service;
-import org.b3log.latke.user.GeneralUser;
-import org.b3log.latke.user.UserServiceFactory;
 import org.b3log.latke.util.Strings;
 import org.json.JSONObject;
 
@@ -84,7 +80,7 @@ public class UserService {
             final String collegeCode = community.optString("collegeCode", "-1");
             final String type = community.getString("type");
             
-            
+            return null;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "获取社区圈子中的出售项目异常", e);
 
