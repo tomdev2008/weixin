@@ -203,8 +203,6 @@ public class SaleProcessor {
 
         ret.put("sales", (Object) list);
         ret.put("pageNum", pageNum);
-        ret.put("type", "sale");
-        ret.put("subType", typeStr);
     }
 
     /**

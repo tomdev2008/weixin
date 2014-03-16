@@ -409,6 +409,11 @@ footer {
     position: relative;
     width: 80%;
 }
+
+.list .loading {
+    text-align: center;
+    cursor: pointer;
+}
 /* end list */
 
 /* start sale */
