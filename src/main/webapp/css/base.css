@@ -460,7 +460,7 @@ footer {
 }
 
 .user-card-msg {
-      background-color: #F1F1F1;
+    background-color: #F1F1F1;
     border: 1px solid #B5B5B5;
     border-bottom-width: 0;
     bottom: 0;
@@ -471,6 +471,22 @@ footer {
     width: 100%;
 }
 /* end user */
+
+/* start question-list */
+.question-accept {
+    border: 1px solid #5F9200;
+    cursor: pointer;
+}
+
+.question .list-content {
+    width: 90%;
+}
+
+.question .list-view {
+    float: left;
+    width: 10%;
+}
+/* end question-list */
 
 /* start icon */
 .ico {
@@ -614,30 +630,3 @@ footer {
     padding: 0 6%;
 }
 /* end search */
-
-/* start question-list */
-.question-list .list-view {
-    height: 80px;
-    overflow: hidden;
-    text-align: center;
-    line-height: 40px;
-    color: #FFFFFF;
-}
-
-.question-list .num {
-    background-color: #5F9200;
-    height: 40px;
-}
-
-.question-list .text {
-    background-color: #333333;
-    height: 40px;
-}
-
-.question-list .name {
-    color: #333333;
-    display: block;
-    font-size: 1.1em;
-    margin: 3px 0 7px;
-}
-/* end question-list */

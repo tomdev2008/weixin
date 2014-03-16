@@ -7,7 +7,7 @@
             <a <#if type == "teacher">class="current" </#if>href="/user-list?type=teacher">老师</a>
         </li>
         <li>
-            <a href="/question-list">提问</a>
+            <a <#if type == "question">class="current" </#if>href="/question-list?type=1">提问</a>
         </li>
         <li>
             <a <#if type == "requirement">class="current" </#if>href="/requirement-list">需求</a>
