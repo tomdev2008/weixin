@@ -2,7 +2,7 @@
 <html>
     <head>
         <#include "../common/macro-meta.ftl">
-        <@meta title="出售列表 - 新助邦"/>
+        <@meta title="我的出售列表 - 新助邦"/>
     </head>
     <body>
         <#include "../common/admin-nav.ftl">

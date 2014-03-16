@@ -6,28 +6,6 @@
     </head>
     <body>
         <#include "../common/community-nav.ftl">
-        <div class="sub-nav">
-            <ul class="fn-clear">
-                <li>
-                    <a href="/question-list?type=1"
-                       <#if subType == "1">class="current"</#if>>最新问题</a>
-                </li>
-                <li>
-                    <a href="/question-list?type=2"
-                       <#if subType == "2">class="current"</#if>>已解决</a>
-                </li>
-                <li>
-                    <a href="/question-list?type=3"
-                       <#if subType == "3">class="current"</#if>>未解决</a>
-                </li>
-                <li>
-                    <a class="last" href="/question-publish">提问</a>
-                </li>
-                <li>
-                    <a class="last" href="/question-answer">回答</a>
-                </li>
-            </ul>
-        </div>
         <ul class="list">
             <li class="fn-clear">
                 <img class="list-view" src="/images/default-user-thumbnail.png"/>
@@ -52,7 +30,7 @@
                 </div>
             </li>
         </ul>
-        <ul class="list question">
+        <ul class="list question" style="margin-bottom: 3em;">
             <li class="fn-clear">
                 <img class="list-view" src="/images/default-user-thumbnail.png"/>
                 <div class="list-content">
@@ -73,6 +51,7 @@
                 </div>
             </li>
         </ul>
+        <a class="ft-green user-card-msg" href="/question-answer">回 答</a>
         <#include "../common/tip.ftl">
         <script src="/js/lib/jquery-2.1.0.min.js"></script>
         <script src="/js/common.js"></script>

@@ -39,6 +39,27 @@ public class RequirementProcessor {
 
     @Inject
     private Filler filler;
+    
+    /**
+     * 展示我的需求列表页面.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/admin/requirement-list", method = HTTPRequestMethod.GET)
+    public void showMyIndex(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+        context.setRenderer(renderer);
+        renderer.setTemplateName("/admin/requirement-list.ftl");
+
+        final Map<String, Object> dataModel = renderer.getDataModel();
+        dataModel.put("type", "requirement");
+        filler.fillHeader(request, response, dataModel);
+        filler.fillFooter(dataModel);
+    }
 
     /**
      * 展示需求列表页面.
