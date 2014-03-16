@@ -170,10 +170,18 @@ public class UserService {
     }
 
     public JSONObject getUserByEmailOrUsername(final String email, final String userName) {
-        final Query query = new Query().setFilter(new PropertyFilter("user_name", FilterOperator.EQUAL, userName)).setFilter(new PropertyFilter("email", FilterOperator.EQUAL, userName));
+       
+        final List<Filter> filters = new ArrayList<Filter>();
+        filters.add(new PropertyFilter("user_name", FilterOperator.EQUAL, userName));
+        filters.add(new PropertyFilter("email", FilterOperator.EQUAL, userName));
+        final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.OR, filters));
         try {
             final JSONObject result = userRepository.get(query);
-            return result;
+            if(result!=null){
+                 return result.getJSONArray(Keys.RESULTS).optJSONObject(0);
+            }else{
+                return null;
+            }  
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "根据用户名和邮箱 [" + email + "][" + userName + "] 获取用户异常", e);
         }
@@ -208,7 +216,7 @@ public class UserService {
     @Transactional
     public String addUser(final JSONObject user) {
         String id = null;
-        System.out.println(user.toString());
+        user.put("group_id", 1);
         try {
             id = userRepository.add(user);
         } catch (RepositoryException ex) {

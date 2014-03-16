@@ -72,7 +72,8 @@ var login = {
                 data: JSON.stringify(requestJSONObject),
                 success: function(result, textStatus) {
                     if (result.sc) {
-                        window.location.reload();
+                        tip.show("注册成功！", result.msg);
+                        $("#tipContent").next().text("GO").attr("onclick", "window.location='/login'");                       
                     } else {
                         tip.show("登录失败", result.msg);
                     }

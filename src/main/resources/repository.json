@@ -21,6 +21,10 @@
                     "name": "email",
                     "type": "String",
                     "length": 50
+                },
+                {
+                    "name": "group_id",
+                    "type": "int"
                 }
             ]
         },
