@@ -102,4 +102,48 @@ public class MessageProcessor {
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
+    
+    /**
+     * 展示我的消息列表页面.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/admin/message-list", method = HTTPRequestMethod.GET)
+    public void showMyMessage(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+        context.setRenderer(renderer);
+        renderer.setTemplateName("/admin/message-list.ftl");
+        
+        final Map<String, Object> dataModel = renderer.getDataModel();
+        
+        dataModel.put("type", "message");
+        filler.fillHeader(request, response, dataModel);
+        filler.fillFooter(dataModel);
+    }
+    
+    /**
+     * 展示我的消息列表页面.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/admin/message-details", method = HTTPRequestMethod.GET)
+    public void showMyMessageDetails(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+        context.setRenderer(renderer);
+        renderer.setTemplateName("/admin/message-details.ftl");
+        
+        final Map<String, Object> dataModel = renderer.getDataModel();
+        
+        dataModel.put("type", "message");
+        filler.fillHeader(request, response, dataModel);
+        filler.fillFooter(dataModel);
+    }
 }
