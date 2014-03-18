@@ -19,9 +19,9 @@ import com.xinzhubang.weixin.repository.ItemRepository;
 import com.xinzhubang.weixin.repository.UserCardRepository;
 import com.xinzhubang.weixin.repository.UserRepository;
 import com.xinzhubang.weixin.repository.WhisperRepository;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 import org.b3log.latke.Keys;
@@ -84,7 +84,7 @@ public class ItemService {
     public boolean sendWhisper(final JSONObject whisper) throws ServiceException {
         try {
             whisper.put("Category", 1);
-            whisper.put("CreateTime", new Date());
+            whisper.put("CreateTime", new Timestamp(System.currentTimeMillis()));
             
             whisperRepository.add(whisper);
 
