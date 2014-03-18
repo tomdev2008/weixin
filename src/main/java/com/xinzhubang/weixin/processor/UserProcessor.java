@@ -15,6 +15,7 @@
  */
 package com.xinzhubang.weixin.processor;
 
+import com.xinzhubang.weixin.service.ItemService;
 import com.xinzhubang.weixin.service.UserService;
 import com.xinzhubang.weixin.util.Filler;
 import java.util.List;
@@ -36,7 +37,7 @@ import org.json.JSONObject;
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.0.2, Mar 15, 2014
+ * @version 1.1.0.2, Mar 18, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -47,6 +48,9 @@ public class UserProcessor {
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private ItemService itemService;
 
     /**
      * 展示用户列表页面.
@@ -108,6 +112,13 @@ public class UserProcessor {
             type = "t";
         }
 
+        String pageStr = request.getParameter("p");
+        if (Strings.isEmptyOrNull(pageStr)) {
+            pageStr = "1";
+        }
+
+        final int pageNum = Integer.valueOf(pageStr);
+
         final JSONObject user = userService.getUserByName(userName);
         if (null == user) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -124,6 +135,15 @@ public class UserProcessor {
         }
 
         final Map<String, Object> dataModel = renderer.getDataModel();
+
+        if ("t".equals(type)) { // 我的服务列表
+            final List<JSONObject> sales = itemService.getUserSales(userId, pageNum);
+            dataModel.put("items", (Object) sales);
+        } else { // 我的需求列表
+            final List<JSONObject> demands = itemService.getUserDemands(userId, pageNum);
+            dataModel.put("items", (Object) demands);
+        }
+
         dataModel.put("userName", user.getString("user_name"));
         dataModel.put("cardTitle", card.getString("PropertyTitle"));
         if (type.equals("t")) {
@@ -131,7 +151,7 @@ public class UserProcessor {
         } else if (type.equals("s")) {
             dataModel.put("type", "student");
         }
-        
+
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
@@ -156,7 +176,7 @@ public class UserProcessor {
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
-    
+
     /**
      * 展示我关注的用户列表页面.
      *
