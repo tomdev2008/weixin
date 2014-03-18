@@ -18,8 +18,10 @@ package com.xinzhubang.weixin.service;
 import com.xinzhubang.weixin.repository.ItemRepository;
 import com.xinzhubang.weixin.repository.UserCardRepository;
 import com.xinzhubang.weixin.repository.UserRepository;
+import com.xinzhubang.weixin.repository.WhisperRepository;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 import org.b3log.latke.Keys;
@@ -42,7 +44,7 @@ import org.json.JSONObject;
  * 项目服务.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.0.0, Mar 15, 2014
+ * @version 1.2.0.0, Mar 18, 2014
  * @since 1.0.0
  */
 @Service
@@ -58,6 +60,41 @@ public class ItemService {
 
     @Inject
     private ItemRepository itemRepository;
+
+    @Inject
+    private WhisperRepository whisperRepository;
+
+    /**
+     * 发送指定的悄悄话.
+     *
+     * @param whisper 指定的悄悄话，例如：
+     * <pre>
+     * {
+     *     "KeyID": int,
+     *     "FromID": int,
+     *     "ToID": int,
+     *     "CONTENT": ""
+     * }
+     * </pre>
+     *
+     * @return
+     * @throws ServiceException
+     */
+    @Transactional
+    public boolean sendWhisper(final JSONObject whisper) throws ServiceException {
+        try {
+            whisper.put("Category", 1);
+            whisper.put("CreateTime", new Date());
+            
+            whisperRepository.add(whisper);
+
+            return true;
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "发悄悄话 [" + whisper.toString() + "] 异常", e);
+
+            return false;
+        }
+    }
 
     /**
      * 发布指定的服务.
@@ -132,7 +169,7 @@ public class ItemService {
             return Collections.emptyList();
         }
     }
-    
+
     /**
      * 获取指定的用户的需求项目.
      *
@@ -174,6 +211,7 @@ public class ItemService {
      *     "type": int // 项目类型：1：资料2：答疑3：授课4：公开课
      * }
      * </pre>
+     *
      * @param pageNum 指定的分页页号
      *
      * @return
