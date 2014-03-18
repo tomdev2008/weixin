@@ -17,17 +17,22 @@ package com.xinzhubang.weixin.processor;
  */
 
 
+import com.xinzhubang.weixin.service.QuestionService;
 import com.xinzhubang.weixin.util.Filler;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.b3log.latke.Keys;
 import org.b3log.latke.servlet.HTTPRequestContext;
 import org.b3log.latke.servlet.HTTPRequestMethod;
 import org.b3log.latke.servlet.annotation.RequestProcessing;
 import org.b3log.latke.servlet.annotation.RequestProcessor;
+import org.b3log.latke.servlet.renderer.JSONRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.AbstractFreeMarkerRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
+import org.b3log.latke.util.Requests;
+import org.json.JSONObject;
 
 /**
  * 问题处理器.
@@ -41,6 +46,8 @@ public class QuestionProcessor {
     
     @Inject
     private Filler filler;
+    @Inject
+    private QuestionService questionService;
 
     /**
      * 展示我的问题列表页面.
@@ -129,6 +136,28 @@ public class QuestionProcessor {
         dataModel.put("type", "question");
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
+    }
+     /**
+     * 发布问题提交保存
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/question-publish", method = HTTPRequestMethod.POST)
+    public void savePublish(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final JSONRenderer renderer = new JSONRenderer();
+        context.setRenderer(renderer);
+        final JSONObject ret = new JSONObject();
+        renderer.setJSONObject(ret);
+        final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
+        requestJSONObject.put("AddUserID", "9938");
+        String id = questionService.add(requestJSONObject);
+        System.out.print(id);
+        ret.put(Keys.STATUS_CODE, true);
+        ret.put(Keys.MSG, "提问保存成功！");
     }
     /**
      * 展示回复问题页面.
