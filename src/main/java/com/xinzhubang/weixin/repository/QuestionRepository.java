@@ -24,5 +24,4 @@ public class QuestionRepository extends AbstractRepository {
     public QuestionRepository(String name) {
         super("Questions");
     }
-
 }
