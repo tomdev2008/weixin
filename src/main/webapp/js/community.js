@@ -90,16 +90,18 @@ var community = {
     cancel: function() {
         history.back();
     },
-    sendWhisper: function() {
+    sendWhisper: function(itemID, toMemberID) {
         if ($.trim($(".textarea").val()).length === 0) {
             tip.show("发送失败", "内容不能为空");
         } else {
             var requestJSONObject = {
-                title: $(".textarea").val()
+                KeyID: itemID,
+                ToID: toMemberID,
+                CONTENT: $(".textarea").val()
             };
 
             $.ajax({
-                url: "/requirement-publish",
+                url: "/whisper",
                 type: "POST",
                 cache: false,
                 data: JSON.stringify(requestJSONObject),

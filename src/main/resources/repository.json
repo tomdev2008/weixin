@@ -56,6 +56,36 @@
             ]
         },
         {
+            "name": "Whisper",
+            "keys": [
+                {
+                    "name": "Category",
+                    "type": "int"
+                },
+                {
+                    "name": "KeyID",
+                    "type": "int"
+                },
+                {
+                    "name": "FromID",
+                    "type": "int"
+                },
+                {
+                    "name": "ToID",
+                    "type": "int"
+                },
+                {
+                    "name": "CONTENT",
+                    "type": "String",
+                    "length": 1024
+                },
+                {
+                    "name": "CreateTime",
+                    "type": "Datetime"
+                }
+            ]
+        },
+        {
             "name": "UserInfo",
             "keys": [
             ]
