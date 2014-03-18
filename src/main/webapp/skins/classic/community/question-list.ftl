@@ -26,7 +26,11 @@
             </ul>
         </div>
         <ul class="list">
-            <li class="fn-clear">
+            
+<#list questionList as q>
+${q.Content}-
+</#list>
+<li class="fn-clear">
                 <a href="/question-details">
                     <img class="list-view" src="/images/default-user-thumbnail.png"/>
                     <div class="list-content">
