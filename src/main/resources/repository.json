@@ -29,6 +29,25 @@
             ]
         },
         {
+            "name": "Questions",
+            "keys": [
+                {
+                    "name": "Content",
+                    "type": "String",
+                    "length": 100
+                },
+                {
+                    "name": "Keywords",
+                    "type": "String",
+                    "length": 100
+                },
+                {
+                    "name": "AddUserID",
+                    "type": "int"
+                }
+            ]
+        },
+        {
             "name": "UserInfo",
             "keys": [
             ]
