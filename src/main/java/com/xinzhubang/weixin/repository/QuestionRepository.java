@@ -15,30 +15,14 @@
  */
 package com.xinzhubang.weixin.repository;
 
-import org.b3log.latke.Keys;
-import org.b3log.latke.model.User;
 import org.b3log.latke.repository.AbstractRepository;
-import org.b3log.latke.repository.FilterOperator;
-import org.b3log.latke.repository.PropertyFilter;
-import org.b3log.latke.repository.Query;
-import org.b3log.latke.repository.RepositoryException;
 import org.b3log.latke.repository.annotation.Repository;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
-/**
- * 用户数据存取.
- *
- * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.0.2, Mar 9, 2014
- * @since 1.0.0
- */
 @Repository
-
-public class QuestionRepository extends AbstractRepository{
+public class QuestionRepository extends AbstractRepository {
 
     public QuestionRepository(String name) {
         super("Questions");
     }
-    
+
 }
