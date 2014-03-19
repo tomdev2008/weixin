@@ -42,7 +42,7 @@ import org.json.JSONObject;
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.0.2, Mar 18, 2014
+ * @version 1.2.0.2, Mar 18, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -197,16 +197,78 @@ public class UserProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/admin/user-card", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
     public void showUserCardSettings(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
         renderer.setTemplateName("/admin/user-card.ftl");
 
-        final Map<String, Object> dataModel = renderer.getDataModel();
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+        final String memberId = user.optString("id");
+        
+        String type = request.getParameter("type");
+        if (Strings.isEmptyOrNull(type)) {
+            type = "teacher";
+        }
 
+        JSONObject userCard = userService.getUserCard(memberId, type);
+
+        final Map<String, Object> dataModel = renderer.getDataModel();
+        if (null == userCard) {
+            userCard = new JSONObject();
+            
+            userCard.put("PropertyTitle", "请设置您的名片标题");
+            userCard.put("PropertyRemark", "请设置您个人详细介绍");
+        }
+
+        dataModel.put("userCard", userCard);
+
+        dataModel.put("type", type);
+        
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
+    }
+
+    /**
+     * 设置用户名片.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/admin/user-card", method = HTTPRequestMethod.POST)
+    @Before(adviceClass = LoginCheck.class)
+    public void setUserCard(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final JSONRenderer renderer = new JSONRenderer();
+        context.setRenderer(renderer);
+        final JSONObject ret = new JSONObject();
+        ret.put(Keys.STATUS_CODE, true);
+        renderer.setJSONObject(ret);
+
+        final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
+        final String title = requestJSONObject.optString("title");
+        final String details = requestJSONObject.optString("details");
+        final String type = requestJSONObject.optString("type");
+
+        final JSONObject userCard = new JSONObject();
+        userCard.put("PropertyTitle", title);
+        userCard.put("PropertyRemark", details);
+        userCard.put("Property", "teacher".equals(type) ? 1 : 0);
+
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+        final String memberId = user.optString("id");
+
+        userCard.put("T_User_ID", Integer.valueOf(memberId));
+
+        final boolean succ = userService.setUserCard(userCard);
+
+        ret.put(Keys.STATUS_CODE, succ);
+        if (!succ) {
+            ret.put(Keys.MSG, "更新失败");
+        }
     }
 
     /**

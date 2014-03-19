@@ -8,21 +8,19 @@
         <div class="sub-nav">
             <ul class="fn-clear">
                 <li style="width: 50%">
-                    <a data-type="student" class="current" href="#">学生</a>
+                    <a data-type="student" class="current" href="?type=student">学生</a>
                 </li>
                 <li style="width: 50%">
-                    <a data-type="teacher" href="#">老师</a>
+                    <a data-type="teacher" href="?type=teacher">老师</a>
                 </li>
             </ul>
         </div>
         <div class="wrap">
-            <input class="input" id="title" placeholder="请设置昵称"/>
-            <div class="ft-gray">最多不能超过5个字</div>
-            <input class="input" id="sign" placeholder="请设置您的个性签名"/>
+            <input class="input" id="title" placeholder="${userCard.PropertyTitle}"/>
             <div class="ft-gray">最多不能超过50个字</div>
-            <textarea class="textarea" id="details" placeholder="请设置您个人详细介绍"></textarea>
+            <textarea class="textarea" id="details" placeholder="${userCard.PropertyRemark}"></textarea>
             <div class="ft-gray">最多不能超过100个字</div>
-            <button class="button" onclick="admin.setUserCard()">确 定</button>
+            <button class="button" onclick="admin.setUserCard('${type}')">确 定</button>
         </div>
         <#include "../common/tip.ftl">
         <script src="/js/lib/jquery-2.1.0.min.js"></script>

@@ -145,7 +145,7 @@ public class UserService {
 
                 ret.add(userCard);
             }
-            
+
             return ret;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "获取用户关注列表异常", e);
@@ -203,6 +203,48 @@ public class UserService {
             LOGGER.log(Level.ERROR, "查询用户名片 [userId=" + userId + ", type=" + type + "] 异常", e);
 
             return null;
+        }
+    }
+
+    /**
+     * 设置用户名片。
+     *
+     * @param userCard
+     * <pre>
+     * {
+     *     "T_User_ID": int,
+     *     "Property": int,
+     *     "PropertyTitle": "",
+     *     "PropertyRemark": ""
+     * }
+     * </pre>
+     * 
+     * @return 
+     */
+    @Transactional
+    public boolean setUserCard(final JSONObject userCard) {
+        try {
+            final List<Filter> filters = new ArrayList<Filter>();
+            filters.add(new PropertyFilter("T_User_ID", FilterOperator.EQUAL, userCard.optInt("T_User_ID")));
+            filters.add(new PropertyFilter("Property", FilterOperator.EQUAL, userCard.optInt("Property")));
+
+            final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+            final JSONObject result = userCardRepository.get(query);
+            JSONObject property = result.optJSONArray(Keys.RESULTS).optJSONObject(0);
+
+            if (null == property) {
+                property = userCard;
+            } else {
+               userCardRepository.remove(property.optString("ID"));
+            }
+
+             userCardRepository.add(userCard);
+             
+            return true;
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "设置用户名片 [" + userCard + "] 异常", e);
+
+            return false;
         }
     }
 

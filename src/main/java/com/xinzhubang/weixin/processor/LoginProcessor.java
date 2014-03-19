@@ -91,8 +91,8 @@ public class LoginProcessor {
         renderer.setJSONObject(ret);
 
         final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
-        final String userName = requestJSONObject.getString("userName");
-        final String password = requestJSONObject.getString("password");
+        final String userName = requestJSONObject.optString("userName");
+        final String password = requestJSONObject.optString("password");
 
         final JSONObject user = userService.getUserByName(userName);
         if (null == user || !user.optString("password").equals(DESs.encrypt(password, "XHJY"))) {

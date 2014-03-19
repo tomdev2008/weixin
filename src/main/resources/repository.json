@@ -111,40 +111,12 @@
                     "type": "int"
                 },
                 {
-                    "name": "t_user_id",
+                    "name": "T_User_ID",
                     "type": "int"
                 },
                 {
                     "name": "Property",
                     "type": "int"
-                },
-                {
-                    "name": "IsDefault",
-                    "type": "int",
-                    "length": 100
-                },
-                {
-                    "name": "CreateTime",
-                    "type": "Date"
-                },
-                {
-                    "name": "IdentificationFiles",
-                    "type": "String",
-                    "length": 500
-                },
-                {
-                    "name": "IdentificationStatus",
-                    "type": "int"
-                },
-                {
-                    "name": "IdentificationTime",
-                    "type": "Date"
-                },
-                {
-                    "name": "FavorableRate",
-                    "type": "Decimal",
-                    "length": 9,
-                    "precision": 2
                 },
                 {
                     "name": "PropertyTitle",
@@ -155,14 +127,6 @@
                     "name": "PropertyRemark",
                     "type": "String",
                     "length": 500
-                },
-                {
-                    "name": "AuditingManage",
-                    "type": "int"
-                },
-                {
-                    "name": "AuditingTime",
-                    "type": "Date"
                 }
             ]
         },

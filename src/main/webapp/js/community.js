@@ -211,23 +211,20 @@ var admin = {
             $(this).addClass("current");
         });
     },
-    setUserCard: function() {
+    setUserCard: function(type) {
         if ($.trim($("#title").val()).length === 0) {
-            tip.show("提交失败", "昵称不能为空");
-        } else if ($.trim($("#sign").val()).length === 0) {
-            tip.show("提交失败", "个性签名不能为空");
+            tip.show("提交失败", "标题不能为空");
         } else if ($.trim($("#details").val()).length === 0) {
             tip.show("提交失败", "详细介绍不能为空");
         } else {
             var requestJSONObject = {
                 title: $("#title").val(),
-                sign: $("#sign").val(),
                 details: $("#details").val(),
-                type: $(".sub-nav a.current").data("type")
+                type: type
             };
 
             $.ajax({
-                url: "/setUserCard",
+                url: "/admin/user-card",
                 type: "POST",
                 cache: false,
                 data: JSON.stringify(requestJSONObject),
