@@ -171,7 +171,7 @@ var community = {
                 data: JSON.stringify(requestJSONObject),
                 success: function(result, textStatus) {
                     if (result.sc) {
-                        window.location = '/question-list?type=1';
+                        window.location = '/admin/question-list?type=1';
                     } else {
                         tip.show("提示", result.msg);
                     }
@@ -184,7 +184,8 @@ var community = {
             tip.show("回答失败", "内容不能为空");
         } else {
             var requestJSONObject = {
-                title: $(".textarea").val()
+                Content: $(".textarea").val(),
+                QID:$('#id').val()
             };
 
             $.ajax({
@@ -194,7 +195,9 @@ var community = {
                 data: JSON.stringify(requestJSONObject),
                 success: function(result, textStatus) {
                     if (result.sc) {
-                        community.cancel();
+                         tip.show("回答成功", result.msg);
+                         $("#tipContent").next().text("GO").attr("onclick", "window.location='/question-details?id="+result.id+"'");
+                        //window.location = '/question-details?id='+result.id;
                     } else {
                         tip.show("回答失败", result.msg);
                     }

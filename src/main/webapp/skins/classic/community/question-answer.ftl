@@ -7,6 +7,7 @@
     <body>
         <div class="wrap">
             <textarea class="textarea" placeholder="请填写回答的内容"></textarea>
+             <input type="hidden" id="id" value="${id}"/>
             <button class="button orange" onclick="community.questionAnswer()">回 答</button>
             <button class="button" onclick="community.cancel()">取 消</button>
         </div>

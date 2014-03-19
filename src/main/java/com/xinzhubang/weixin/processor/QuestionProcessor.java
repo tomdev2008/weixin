@@ -67,8 +67,7 @@ public class QuestionProcessor {
         context.setRenderer(renderer);
         renderer.setTemplateName("/community/question-list.ftl");    
         Map<String, Object> dataModel = renderer.getDataModel();
-        
-        System.out.println(questionService.questionList(null, 0).size());
+        //获取用户session,放入用户id
         dataModel.put("questionList", (Object)questionService.questionList(null, 0));
         dataModel.put("type", "question");
         dataModel.put("subType", "1");
@@ -93,9 +92,22 @@ public class QuestionProcessor {
         renderer.setTemplateName("/community/question-list.ftl");
         
         final Map<String, Object> dataModel = renderer.getDataModel();
-        
+        final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
+        String type = "1";
+        System.err.println( request.getParameter("type"));
+        if( request.getParameter("type")!=null){
+             type = request.getParameter("type");
+            if(type.equals("1")){//最新
+
+            }else if(type.equals("2")){//已解决
+
+            }else if(type.equals("3")){//未解决
+
+            }
+        }
+        dataModel.put("questionList", (Object)questionService.questionList(null, 0));
         dataModel.put("type", "question");
-        dataModel.put("subType", "1");
+        dataModel.put("subType", type);
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
@@ -115,7 +127,9 @@ public class QuestionProcessor {
         renderer.setTemplateName("/community/question-details.ftl");
         
         final Map<String, Object> dataModel = renderer.getDataModel();
-        
+        JSONObject question = questionService.getById(request.getParameter("id"));
+        dataModel.put("question", question);
+        dataModel.put("answers", questionService.queryAnswerByQuestionId(question.getInt("id")));
         dataModel.put("type", "question");
         dataModel.put("subType", "1");
         filler.fillHeader(request, response, dataModel);
@@ -158,11 +172,11 @@ public class QuestionProcessor {
         final JSONObject ret = new JSONObject();
         renderer.setJSONObject(ret);
         final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
+        //session获取用户id
         requestJSONObject.put("AddUserID", "9938");
         requestJSONObject.put("Title", requestJSONObject.get("Content"));
         requestJSONObject.put("AddTime", new Timestamp(System.currentTimeMillis()));
         String id = questionService.add(requestJSONObject);
-        System.out.print(id);
         ret.put(Keys.STATUS_CODE, true);
         ret.put(Keys.MSG, "提问保存成功！");
     }
@@ -184,21 +198,31 @@ public class QuestionProcessor {
         final Map<String, Object> dataModel = renderer.getDataModel();
         
         dataModel.put("type", "question");
+        dataModel.put("id", request.getParameter("id"));
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
-    
-    public Map<String, Object> renderFM(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response,String templateName) throws Exception{
-        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+    /**
+     * 保存回答
+     * @param context
+     * @param request
+     * @param response
+     * @throws Exception 
+     */
+     @RequestProcessing(value = "/question-answer", method = HTTPRequestMethod.POST)
+    public void saveAnswer(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final JSONRenderer renderer = new JSONRenderer();
         context.setRenderer(renderer);
-        renderer.setTemplateName("/community/question-list.ftl");
-        
-        Map<String, Object> dataModel = renderer.getDataModel();
-        
-        dataModel.put("type", "question");
-        dataModel.put("subType", "1");
-        filler.fillHeader(request, response, dataModel);
-        filler.fillFooter(dataModel);
-        return dataModel;
+        final JSONObject ret = new JSONObject();
+        renderer.setJSONObject(ret);
+        final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
+        //session获取用户id
+        requestJSONObject.put("AddUserID", "9938");
+        requestJSONObject.put("AddTime", new Timestamp(System.currentTimeMillis()));
+        questionService.addAnswer(requestJSONObject);
+        ret.put(Keys.STATUS_CODE, true);
+        ret.put(Keys.MSG, "回答成功！");
+        ret.put("id", requestJSONObject.get("QID"));
     }
 }

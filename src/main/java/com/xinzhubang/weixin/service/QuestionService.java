@@ -21,7 +21,9 @@
 
 package com.xinzhubang.weixin.service;
 
+import com.xinzhubang.weixin.repository.AnswerRepository;
 import com.xinzhubang.weixin.repository.QuestionRepository;
+import com.xinzhubang.weixin.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -41,6 +43,7 @@ import org.b3log.latke.repository.annotation.Transactional;
 import org.b3log.latke.service.annotation.Service;
 import org.b3log.latke.util.CollectionUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -55,7 +58,10 @@ public class QuestionService {
     private static final Logger LOGGER = Logger.getLogger(QuestionService.class);
     @Inject
     private QuestionRepository questionRepository;
-
+    @Inject
+    private UserRepository userRepository;
+     @Inject
+    private AnswerRepository answerRepository;
     /**
      * 添加提问
      * @param question
@@ -65,10 +71,26 @@ public class QuestionService {
     public String add(final JSONObject question) {
         String id = null;
         try {
-            System.out.println(questionRepository);
             id = questionRepository.add(question);
         } catch (RepositoryException ex) {
-            LOGGER.log(Level.ERROR, "保存用户出错！", ex);
+            LOGGER.log(Level.ERROR, "保存提问出错！", ex);
+            return null
+                    ;
+        }
+        return id;
+    }
+     /**
+     * 添加回答
+     * @param answer
+     * @return
+     */
+    @Transactional
+    public String addAnswer(final JSONObject answer) {
+        String id = null;
+        try {
+            id = answerRepository.add(answer);
+        } catch (RepositoryException ex) {
+            LOGGER.log(Level.ERROR, "保存回答出错！", ex);
             return null
                     ;
         }
@@ -92,12 +114,38 @@ public class QuestionService {
 
             final JSONArray results = result.getJSONArray(Keys.RESULTS);
             final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
-
+            for(JSONObject j:ret){
+                j.put("user", userRepository.get(j.getString("AddUserID")));
+            }
             return ret;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "获取提问列表出错", e);
 
             return Collections.emptyList();
         }
+    }
+    /**
+     * 根据ID获取
+     * @param id
+     * @return
+     * @throws RepositoryException 
+     * @throws org.json.JSONException 
+     */
+    public JSONObject getById(String id) throws RepositoryException, JSONException{
+       //根据id获取问题
+       JSONObject j = questionRepository.get(id);
+       //放入问题的用户
+       j.put("user", userRepository.get(j.getString("AddUserID")));
+       return j;
+    }
+    public List<JSONObject> queryAnswerByQuestionId(int id) throws RepositoryException, JSONException{
+       final Query query = new Query().setFilter(new PropertyFilter("QID", FilterOperator.EQUAL, id));
+       JSONObject answers = answerRepository.get(query);
+       final JSONArray answersArray = answers.getJSONArray(Keys.RESULTS);
+       final List<JSONObject> answersList = CollectionUtils.jsonArrayToList(answersArray);
+       for(JSONObject j:answersList){
+                j.put("user", userRepository.get(j.getString("AddUserID")));
+            }
+       return answersList;
     }
 }

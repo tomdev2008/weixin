@@ -56,6 +56,28 @@
             ]
         },
         {
+            "name": "Answer",
+            "keys": [
+                {
+                    "name": "Content",
+                    "type": "String",
+                    "length": 100
+                },
+                {
+                    "name": "AddUserID",
+                    "type": "int"
+                },
+                {
+                    "name": "AddTime",
+                    "type": "date"
+                },
+                {
+                    "name": "QID",
+                    "type": "int"
+                }
+            ]
+        },
+        {
             "name": "Whisper",
             "keys": [
                 {

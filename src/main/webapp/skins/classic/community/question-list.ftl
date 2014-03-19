@@ -26,34 +26,34 @@
             </ul>
         </div>
         <ul class="list">
-            
-<#list questionList as q>
-${q.Content}-
-</#list>
-<li class="fn-clear">
-                <a href="/question-details">
+         <#if  questionList??>  
+        <#list questionList as q>
+        <li class="fn-clear">
+                <a href="/question-details?id=${q.id}">
                     <img class="list-view" src="/images/default-user-thumbnail.png"/>
                     <div class="list-content">
                         <div class="fn-clear">
-                            <span class="fn-left ft-gray">{sale.userName}</span>
+                            <span class="fn-left ft-gray">${q.user.user_name}</span>
                             <span class="ico ico-cater"></span>
                             <span class="ico ico-level1"></span>
                         </div>
                         <div>
-                            <span class="ft-green">【待解决】</span>一句话描述
+                            <span class="ft-green">【待解决】</span>${q.Title}
                         </div>
                         <div class="ft-gray">
                             圈子
                         </div>
-                         <div class="fn-clear">
+                        <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">
-                                2012-23-23 &nbsp; 浏览{sale.ClickCount} &nbsp; 回应{sale.ClickCount}
+                                2012-23-23 &nbsp; 浏览${q.PV} &nbsp; 回应{sale.Points}
                             </span>
-                            <span class="ft-green fn-right">￥{sale.Price}</span>
+                            <span class="ft-green fn-right">￥${q.Points}</span>
                         </div>
                     </div>
                 </a>
             </li>
+        </#list>
+        </#if>
         </ul>
     </body>
 </html>
