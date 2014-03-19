@@ -112,6 +112,21 @@ public class UserProcessor {
         final List<JSONObject> userCards = userService.getUserCards(community, pageNum);
 
         final Map<String, Object> dataModel = renderer.getDataModel();
+
+        final JSONObject currUser = userService.getCurrentUser(request);
+        if (null != currUser) {
+            dataModel.put("user", currUser);
+        }
+
+        for (final JSONObject userCard : userCards) {
+            final String userId = userCard.optString("T_User_ID");
+            if (null != currUser) {
+                userCard.put("isFollow", userService.isFollow(currUser.optString("id"), userId));
+            } else {
+                userCard.put("isFollow", false);
+            }
+        }
+
         dataModel.put("type", type);
         dataModel.put("userCards", userCards);
 
@@ -206,7 +221,7 @@ public class UserProcessor {
 
         final JSONObject user = (JSONObject) request.getAttribute("user");
         final String memberId = user.optString("id");
-        
+
         String type = request.getParameter("type");
         if (Strings.isEmptyOrNull(type)) {
             type = "teacher";
@@ -217,7 +232,7 @@ public class UserProcessor {
         final Map<String, Object> dataModel = renderer.getDataModel();
         if (null == userCard) {
             userCard = new JSONObject();
-            
+
             userCard.put("PropertyTitle", "请设置您的名片标题");
             userCard.put("PropertyRemark", "请设置您个人详细介绍");
         }
@@ -225,7 +240,7 @@ public class UserProcessor {
         dataModel.put("userCard", userCard);
 
         dataModel.put("type", type);
-        
+
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }

@@ -109,8 +109,9 @@ public class UserService {
                 final JSONObject userInfo = userInfos.optJSONObject(i);
                 final String memberId = userInfo.optString("MemberID");
                 final JSONObject userCard = getUserCard(memberId, typeArg);
-
-                ret.add(userCard);
+                if (null != userCard) {
+                    ret.add(userCard);
+                }
             }
 
             return ret;
@@ -218,8 +219,8 @@ public class UserService {
      *     "PropertyRemark": ""
      * }
      * </pre>
-     * 
-     * @return 
+     *
+     * @return
      */
     @Transactional
     public boolean setUserCard(final JSONObject userCard) {
@@ -235,11 +236,11 @@ public class UserService {
             if (null == property) {
                 property = userCard;
             } else {
-               userCardRepository.remove(property.optString("ID"));
+                userCardRepository.remove(property.optString("ID"));
             }
 
-             userCardRepository.add(userCard);
-             
+            userCardRepository.add(userCard);
+
             return true;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "设置用户名片 [" + userCard + "] 异常", e);

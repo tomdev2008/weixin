@@ -9,7 +9,7 @@
         <ul class="list">
             <#list sales as sale>
             <li class="fn-clear">
-                <a href="/sale-details?id=${sale.id}">
+                <a href="/sale-details?id=${sale.ID?c}">
                     <img class="list-view" src="/images/default-user-thumbnail.png"/>
                     <div class="list-content">
                         <div>

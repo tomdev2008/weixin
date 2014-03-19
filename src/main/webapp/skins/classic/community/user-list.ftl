@@ -26,7 +26,7 @@
                             圈子
                         </div>
                     </a>
-                    <span class="ft-green follow" onclick=<#if isLoggedIn>"community.follow(${user.id?c}, this)"<#else>"window.location.href='/login'"</#if>><#if isFollow>取消关注<#else>关注</#if></span>
+                    <span class="ft-green follow" onclick=<#if isLoggedIn>"community.follow(${user.id?c}, this)"<#else>"window.location.href='/login'"</#if>><#if userCard.isFollow>取消关注<#else>关注</#if></span>
                 </div>
 
             </li>
