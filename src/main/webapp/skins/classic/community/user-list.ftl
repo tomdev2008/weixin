@@ -7,26 +7,26 @@
     <body>
         <#include "../common/community-nav.ftl">
         <ul class="list">
-            <#list 1..4 as x>
+            <#list userCards as userCard>
             <li class="fn-clear">
-                <a href="/user-card">
+                <a href="/user-card?type${type}&userName=${userCard.userName}">
                     <img class="list-view" src="/images/default-user-thumbnail.png"/>
                 </a>
                 <div class="list-content">
-                    <a href="/user-card">
+                    <a href="/user-card?type${type}&userName=${userCard.userName}">
                         <div class="fn-clear">
-                            <span class="fn-left ft-dark">{userCard.userName}</span>
+                            <span class="fn-left ft-dark">${userCard.userName}</span>
                             <span class="ico ico-cater"></span>
                             <span class="ico ico-level1"></span>
                         </div>
                         <div class="ft-gray">
-                            一句话描述
+                            ${userCard.PropertyTitle}
                         </div>
                         <div class="ft-gray">
                             圈子
                         </div>
                     </a>
-                    <span class="ft-green follow" onclick="community.follow(this)">关注</span>
+                    <span class="ft-green follow" onclick=<#if isLoggedIn>"community.follow(${user.id?c}, this)"<#else>"window.location.href='/login'"</#if>><#if isFollow>取消关注<#else>关注</#if></span>
                 </div>
 
             </li>

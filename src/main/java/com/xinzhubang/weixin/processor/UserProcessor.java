@@ -105,8 +105,9 @@ public class UserProcessor {
         }
 
         final JSONObject community = new JSONObject();
-        community.put("areaCode", "43676");
-        community.put("universityCode", "43762");
+        community.put("areaCode", "47206");
+        community.put("universityCode", "47242");
+        community.put("collegeCode", "47391");
         community.put("type", type);
         final List<JSONObject> userCards = userService.getUserCards(community, pageNum);
 
@@ -135,7 +136,7 @@ public class UserProcessor {
         final String userName = request.getParameter("userName");
         String type = request.getParameter("type"); // t:老师；s:学生；e：企业
         if (Strings.isEmptyOrNull(type)) {
-            type = "t";
+            type = "teacher";
         }
 
         String pageStr = request.getParameter("p");
@@ -162,7 +163,7 @@ public class UserProcessor {
 
         final Map<String, Object> dataModel = renderer.getDataModel();
 
-        if ("t".equals(type)) { // 我的服务列表
+        if ("teacher".equals(type)) { // 我的服务列表
             final List<JSONObject> sales = itemService.getUserSales(userId, pageNum);
             dataModel.put("items", (Object) sales);
         } else { // 我的需求列表
@@ -173,19 +174,15 @@ public class UserProcessor {
         user.put("cardTitle", card.getString("PropertyTitle"));
 
         dataModel.put("user", user);
-        
+
         dataModel.put("isFollow", false);
-        
+
         final JSONObject currUser = userService.getCurrentUser(request);
-        if (null!= currUser) {
-            dataModel.put("isFollow", userService.isFollow(currUser.optInt("id"), Integer.valueOf(userId)));
+        if (null != currUser) {
+            dataModel.put("isFollow", userService.isFollow(currUser.optString("id"), userId));
         }
 
-        if (type.equals("t")) {
-            dataModel.put("type", "teacher");
-        } else if (type.equals("s")) {
-            dataModel.put("type", "student");
-        }
+        dataModel.put("type", type);
 
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
@@ -221,13 +218,33 @@ public class UserProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/admin/follow-list", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
     public void showMyUserList(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
         renderer.setTemplateName("/admin/follow-list.ftl");
 
+        String pageStr = request.getParameter("p");
+        if (Strings.isEmptyOrNull(pageStr)) {
+            pageStr = "1";
+        }
+
+        final int pageNum = Integer.valueOf(pageStr);
+
         final Map<String, Object> dataModel = renderer.getDataModel();
+
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+        final String memberId = user.optString("id");
+
+        final List<JSONObject> followers = userService.getFollowers(memberId, pageNum);
+        for (final JSONObject follower : followers) {
+            final String followerId = follower.optString("T_User_ID");
+            dataModel.put("isFollow", userService.isFollow(memberId, followerId));
+        }
+
+        dataModel.put("followers", (Object) followers);
+
         dataModel.put("type", "follow");
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);

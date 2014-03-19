@@ -101,7 +101,7 @@ public class UserService {
 
             final JSONArray userInfos = userInfoResult.optJSONArray(Keys.RESULTS);
 
-            final String typeArg = "teacher".equals(community.optString("type", "teacher")) ? "t" : "s";
+            final String typeArg = "teacher".equals(community.optString("type", "teacher")) ? "teacher" : "student";
 
             final List<JSONObject> ret = new ArrayList<JSONObject>();
 
@@ -109,8 +109,6 @@ public class UserService {
                 final JSONObject userInfo = userInfos.optJSONObject(i);
                 final String memberId = userInfo.optString("MemberID");
                 final JSONObject userCard = getUserCard(memberId, typeArg);
-                final JSONObject user = userRepository.get(memberId);
-                userCard.put("userName", user.getString("user_name"));
 
                 ret.add(userCard);
             }
@@ -124,10 +122,43 @@ public class UserService {
     }
 
     /**
+     * 获取指定的用户 id 的关注列表.
+     *
+     * @param userId 指定的用户 id
+     * @return
+     */
+    public List<JSONObject> getFollowers(final String userId, final int pageNum) {
+        try {
+            final Query query = new Query().setFilter(new PropertyFilter("MemberID", FilterOperator.EQUAL, userId));
+            query.setCurrentPageNum(pageNum).setPageSize(10);
+
+            final JSONObject result = userAttentionRepository.get(query);
+
+            final List<JSONObject> ret = new ArrayList<JSONObject>();
+
+            final JSONArray attentions = result.optJSONArray(Keys.RESULTS);
+            for (int i = 0; i < attentions.length(); i++) {
+                final JSONObject attention = attentions.optJSONObject(i);
+                final String followerId = attention.optString("AttentionMemberID");
+
+                final JSONObject userCard = getUserCard(followerId, "a");
+
+                ret.add(userCard);
+            }
+            
+            return ret;
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "获取用户关注列表异常", e);
+
+            return Collections.emptyList();
+        }
+    }
+
+    /**
      * 根据用户 id 与类型（老师或学生）获取用户名片。
      *
      * @param userId 用户 id
-     * @param type 类型，老师：t；学生：s；e：企业，其他情况默认老师
+     * @param type 类型，老师：teacher；学生：student；e：企业；a：不区分，其他情况默认老师
      * @return
      * @throws ServiceException
      */
@@ -136,24 +167,38 @@ public class UserService {
         filters.add(new PropertyFilter("T_User_ID", FilterOperator.EQUAL, userId));
 
         int property;
-        if ("t".equals(type)) {
+        if ("a".equals(type)) {
+            property = -1;
+        } else if ("teacher".equals(type)) {
             property = 1;
-        } else if ("s".equals(type)) {
+        } else if ("student".equals(type)) {
             property = 0;
         } else if ("e".equals(type)) {
             property = 2;
         } else {
-            property = 0;
+            property = 1;
         }
 
-        filters.add(new PropertyFilter("property", FilterOperator.EQUAL, property));
+        if (-1 != property) {
+            filters.add(new PropertyFilter("property", FilterOperator.EQUAL, property));
+        } else {
+            filters.add(new PropertyFilter("property", FilterOperator.NOT_EQUAL, property));
+        }
 
         final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
 
         try {
             final JSONObject result = userCardRepository.get(query);
 
-            return result.getJSONArray(Keys.RESULTS).optJSONObject(0);
+            final JSONObject ret = result.getJSONArray(Keys.RESULTS).optJSONObject(0);
+            if (null == ret) {
+                return null;
+            }
+
+            final JSONObject user = userRepository.get(userId);
+            ret.put("userName", user.getString("user_name"));
+
+            return ret;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "查询用户名片 [userId=" + userId + ", type=" + type + "] 异常", e);
 
@@ -232,7 +277,7 @@ public class UserService {
         return id;
     }
 
-    public boolean isFollow(final int memberId, final int attentionMemberId) {
+    public boolean isFollow(final String memberId, final String attentionMemberId) {
         try {
             final List<Filter> filters = new ArrayList<Filter>();
             filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, memberId));
@@ -241,10 +286,10 @@ public class UserService {
             final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
 
             final JSONObject result = userAttentionRepository.get(query);
-            
+
             return null != result.optJSONArray(Keys.RESULTS).optJSONObject(0);
         } catch (final RepositoryException e) {
-             LOGGER.log(Level.ERROR, "查询用户关注 [memberId=" + memberId + ", attentionMemberId=" + attentionMemberId + "] 异常", e);
+            LOGGER.log(Level.ERROR, "查询用户关注 [memberId=" + memberId + ", attentionMemberId=" + attentionMemberId + "] 异常", e);
 
             return false;
         }
