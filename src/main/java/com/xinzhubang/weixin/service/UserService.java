@@ -15,6 +15,7 @@
  */
 package com.xinzhubang.weixin.service;
 
+import com.xinzhubang.weixin.repository.UserAttentionRepository;
 import com.xinzhubang.weixin.repository.UserCardRepository;
 import com.xinzhubang.weixin.repository.UserInfoRepository;
 import com.xinzhubang.weixin.repository.UserRepository;
@@ -47,7 +48,7 @@ import org.json.JSONObject;
  * 用户服务.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.0.0, Mar 6, 2014
+ * @version 1.1.0.0, Mar 18, 2014
  * @since 1.0.0
  */
 @Service
@@ -63,6 +64,9 @@ public class UserService {
 
     @Inject
     private UserInfoRepository userInfoRepository;
+
+    @Inject
+    private UserAttentionRepository userAttentionRepository;
 
     /**
      * 获取指定的社区圈子里指定类型（学生/老师）的名片列表。
@@ -172,18 +176,18 @@ public class UserService {
     }
 
     public JSONObject getUserByEmailOrUsername(final String email, final String userName) {
-       
+
         final List<Filter> filters = new ArrayList<Filter>();
         filters.add(new PropertyFilter("user_name", FilterOperator.EQUAL, userName));
         filters.add(new PropertyFilter("email", FilterOperator.EQUAL, userName));
         final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.OR, filters));
         try {
             final JSONObject result = userRepository.get(query);
-            if(result!=null){
-                 return result.getJSONArray(Keys.RESULTS).optJSONObject(0);
-            }else{
+            if (result != null) {
+                return result.getJSONArray(Keys.RESULTS).optJSONObject(0);
+            } else {
                 return null;
-            }  
+            }
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "根据用户名和邮箱 [" + email + "][" + userName + "] 获取用户异常", e);
         }
@@ -226,6 +230,59 @@ public class UserService {
             return null;
         }
         return id;
+    }
+
+    public boolean isFollow(final int memberId, final int attentionMemberId) {
+        try {
+            final List<Filter> filters = new ArrayList<Filter>();
+            filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, memberId));
+            filters.add(new PropertyFilter("AttentionMemberID", FilterOperator.EQUAL, attentionMemberId));
+
+            final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+
+            final JSONObject result = userAttentionRepository.get(query);
+            
+            return null != result.optJSONArray(Keys.RESULTS).optJSONObject(0);
+        } catch (final RepositoryException e) {
+             LOGGER.log(Level.ERROR, "查询用户关注 [memberId=" + memberId + ", attentionMemberId=" + attentionMemberId + "] 异常", e);
+
+            return false;
+        }
+    }
+
+    @Transactional
+    public boolean addUserAttention(final JSONObject userAttention) {
+        try {
+            userAttentionRepository.add(userAttention);
+
+            return true;
+        } catch (final RepositoryException e) {
+            LOGGER.log(Level.ERROR, "添加用户关注 [" + userAttention.toString() + "] 异常", e);
+
+            return false;
+        }
+    }
+
+    @Transactional
+    public boolean removeUserAttention(final int memberId, final int attentionMemberId) {
+        try {
+            final List<Filter> filters = new ArrayList<Filter>();
+            filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, memberId));
+            filters.add(new PropertyFilter("AttentionMemberID", FilterOperator.EQUAL, attentionMemberId));
+
+            final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+
+            final JSONObject result = userAttentionRepository.get(query);
+            final JSONObject attention = result.optJSONArray(Keys.RESULTS).optJSONObject(0);
+
+            userAttentionRepository.remove(attention.optString("ID"));
+
+            return true;
+        } catch (final RepositoryException e) {
+            LOGGER.log(Level.ERROR, "移除用户关注 [memberId=" + memberId + ", attentionMemberId=" + attentionMemberId + "] 异常", e);
+
+            return false;
+        }
     }
 
     /**

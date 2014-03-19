@@ -2,7 +2,7 @@
 <html>
     <head>
         <#include "../common/macro-meta.ftl">
-        <@meta title="${cardTitle} - 新助邦"/>
+        <@meta title="${user.cardTitle} - 新助邦"/>
     </head>
     <body>
         <#include "../common/community-nav.ftl">
@@ -11,14 +11,14 @@
                 <img class="list-view" src="/images/default-user-thumbnail.png"/>
                 <div class="list-content">
                     <div class="fn-clear">
-                        <span class="fn-left ft-dark">{sale.userName}</span>
+                        <span class="fn-left ft-dark">${user.user_name}</span>
                         <span class="ico ico-cater"></span>
                         <span class="ico ico-level1"></span>
                     </div>
                     <div class="ft-gray">
-                        一句话描述
+                        ${user.cardTitle}
                     </div>
-                    <span class="ft-green follow" onclick="community.follow(this)">关注</span>
+                    <span class="ft-green follow" onclick=<#if isLoggedIn>"community.follow(${user.id?c}, this)"<#else>"window.location.href='/login'"</#if>><#if isFollow>取消关注<#else>关注</#if></span>
                 </div>
             </li>
             <li class="ft-gray">

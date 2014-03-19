@@ -43,8 +43,6 @@ import org.json.JSONObject;
  * @version 1.0.1.0, Mar 18, 2014
  * @since 1.0.0
  */
-
-
 @RequestProcessor
 public class LoginProcessor {
 
@@ -95,7 +93,7 @@ public class LoginProcessor {
         final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
         final String userName = requestJSONObject.getString("userName");
         final String password = requestJSONObject.getString("password");
-        
+
         final JSONObject user = userService.getUserByName(userName);
         if (null == user || !user.optString("password").equals(DESs.encrypt(password, "XHJY"))) {
             ret.put(Keys.STATUS_CODE, false);

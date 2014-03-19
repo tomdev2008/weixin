@@ -15,6 +15,7 @@
  */
 package com.xinzhubang.weixin.processor;
 
+import com.xinzhubang.weixin.processor.advice.LoginCheck;
 import com.xinzhubang.weixin.service.ItemService;
 import com.xinzhubang.weixin.service.UserService;
 import com.xinzhubang.weixin.util.Filler;
@@ -26,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.b3log.latke.Keys;
 import org.b3log.latke.servlet.HTTPRequestContext;
 import org.b3log.latke.servlet.HTTPRequestMethod;
+import org.b3log.latke.servlet.annotation.Before;
 import org.b3log.latke.servlet.annotation.RequestProcessing;
 import org.b3log.latke.servlet.annotation.RequestProcessor;
 import org.b3log.latke.servlet.renderer.JSONRenderer;
@@ -168,8 +170,17 @@ public class UserProcessor {
             dataModel.put("items", (Object) demands);
         }
 
-        dataModel.put("userName", user.getString("user_name"));
-        dataModel.put("cardTitle", card.getString("PropertyTitle"));
+        user.put("cardTitle", card.getString("PropertyTitle"));
+
+        dataModel.put("user", user);
+        
+        dataModel.put("isFollow", false);
+        
+        final JSONObject currUser = userService.getCurrentUser(request);
+        if (null!= currUser) {
+            dataModel.put("isFollow", userService.isFollow(currUser.optInt("id"), Integer.valueOf(userId)));
+        }
+
         if (type.equals("t")) {
             dataModel.put("type", "teacher");
         } else if (type.equals("s")) {
@@ -220,5 +231,71 @@ public class UserProcessor {
         dataModel.put("type", "follow");
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
+    }
+
+    /**
+     * 关注用户.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/follow/user", method = HTTPRequestMethod.POST)
+    @Before(adviceClass = LoginCheck.class)
+    public void followUser(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final JSONRenderer renderer = new JSONRenderer();
+        context.setRenderer(renderer);
+        final JSONObject ret = new JSONObject();
+        ret.put(Keys.STATUS_CODE, true);
+        renderer.setJSONObject(ret);
+
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+        final String memberId = user.optString("id");
+
+        final String attentionMemberId = request.getParameter("id");
+
+        final JSONObject userAttention = new JSONObject();
+        userAttention.put("MemberID", Integer.valueOf(memberId));
+        userAttention.put("AttentionMemberID", Integer.valueOf(attentionMemberId));
+
+        final boolean succ = userService.addUserAttention(userAttention);
+
+        ret.put(Keys.STATUS_CODE, succ);
+        if (!succ) {
+            ret.put(Keys.MSG, "发布失败");
+        }
+    }
+
+    /**
+     * 取消关注用户.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/unfollow/user", method = HTTPRequestMethod.POST)
+    @Before(adviceClass = LoginCheck.class)
+    public void unfollowUser(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final JSONRenderer renderer = new JSONRenderer();
+        context.setRenderer(renderer);
+        final JSONObject ret = new JSONObject();
+        ret.put(Keys.STATUS_CODE, true);
+        renderer.setJSONObject(ret);
+
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+        final String memberId = user.optString("id");
+
+        final String attentionMemberId = request.getParameter("id");
+
+        final boolean succ = userService.removeUserAttention(Integer.valueOf(memberId), Integer.valueOf(attentionMemberId));
+
+        ret.put(Keys.STATUS_CODE, succ);
+        if (!succ) {
+            ret.put(Keys.MSG, "发布失败");
+        }
     }
 }

@@ -15,6 +15,7 @@
  */
 package com.xinzhubang.weixin.util;
 
+import com.xinzhubang.weixin.service.UserService;
 import java.util.Calendar;
 import java.util.Map;
 import javax.inject.Inject;
@@ -24,12 +25,13 @@ import org.b3log.latke.Latkes;
 import org.b3log.latke.logging.Logger;
 import org.b3log.latke.service.LangPropsService;
 import org.b3log.latke.service.annotation.Service;
+import org.json.JSONObject;
 
 /**
  * Filler utilities.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.0.0, Mar 5, 2014
+ * @version 1.1.0.0, Mar 18, 2014
  * @since 1.0.0
  */
 @Service
@@ -39,11 +41,15 @@ public class Filler {
      * Logger.
      */
     private static final Logger LOGGER = Logger.getLogger(Filler.class.getName());
+    
     /**
      * Language service.
      */
     @Inject
     private LangPropsService langPropsService;
+    
+    @Inject
+    private UserService userService;
 
     /**
      * Fills header.
@@ -57,6 +63,9 @@ public class Filler {
                            final Map<String, Object> dataModel) throws Exception {
         fillMinified(dataModel);
         dataModel.put("staticResourceVersion", Latkes.getStaticResourceVersion());
+        
+        final JSONObject user = userService.getCurrentUser(request);
+        dataModel.put("isLoggedIn", null != user);
 
         fillLangs(dataModel);
     }

@@ -115,11 +115,11 @@ var community = {
             });
         }
     },
-    follow: function(it) {
+    follow: function(userId, it) {
         var $it = $(it),
-                url = "/follow";
+                url = "/follow/user?id=" + userId;
         if ($it.text() !== "关注") {
-            url = "/unfollow";
+            url = "/unfollow/user?id=" + userId;
         }
 
         $.ajax({

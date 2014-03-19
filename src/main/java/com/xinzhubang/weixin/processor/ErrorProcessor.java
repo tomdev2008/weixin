@@ -67,7 +67,7 @@ public class ErrorProcessor {
      * @param statusCode the specified status code
      * @throws Exception exception
      */
-    @RequestProcessing(value = "/error/{statusCode}", method = HTTPRequestMethod.GET)
+    @RequestProcessing(value = "/error/{statusCode}", method = {HTTPRequestMethod.GET, HTTPRequestMethod.POST})
     public void showErrorPage(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response,
             final String statusCode) throws Exception {
         final String templateName = statusCode + ".ftl";

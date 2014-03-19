@@ -86,6 +86,19 @@
             ]
         },
         {
+            "name": "UserAttention",
+            "keys": [
+                {
+                    "name": "MemberID",
+                    "type": "int"
+                },
+                {
+                    "name": "AttentionMemberID",
+                    "type": "int"
+                }
+            ]
+        },
+        {
             "name": "UserInfo",
             "keys": [
             ]
