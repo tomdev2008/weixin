@@ -52,10 +52,12 @@
             </li>
             </#list>
         </ul>
+        <!--
         <a class="ft-green user-card-msg" href="/whisper">
           给他/她留言
         </a>
         <script src="/js/lib/jquery-2.1.0.min.js"></script>
         <script src="/js/community.js"></script>
+        -->
     </body>
 </html>
