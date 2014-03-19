@@ -5,7 +5,8 @@
         <@meta title="我的提问列表 - 新助邦"/>
     </head>
     <body>
-        <#include "../common/admin-nav.ftl">
+        <#include "../common/admin-nav.ftl">???
+
         <ul class="list">
             <li class="fn-clear">
                 <a href="/question-details">

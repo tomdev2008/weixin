@@ -22,6 +22,6 @@ import org.b3log.latke.repository.annotation.Repository;
 public class QuestionRepository extends AbstractRepository {
 
     public QuestionRepository() {
-        super("Questions");
+        super("Question");
     }
 }

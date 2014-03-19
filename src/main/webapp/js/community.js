@@ -160,8 +160,8 @@ var community = {
             tip.show("发送失败", "关键字不能为空");
         } else {
             var requestJSONObject = {
-                content: $("#content").val(),
-                keys: $("#keys").val()
+                Content: $("#content").val(),
+                Keywords: $("#keys").val()
             };
 
             $.ajax({

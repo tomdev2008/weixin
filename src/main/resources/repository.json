@@ -29,7 +29,7 @@
             ]
         },
         {
-            "name": "Questions",
+            "name": "Question",
             "keys": [
                 {
                     "name": "Content",
@@ -44,6 +44,14 @@
                 {
                     "name": "AddUserID",
                     "type": "int"
+                },
+                {
+                    "name": "Title",
+                    "type": "String"
+                },
+                {
+                    "name": "AddTime",
+                    "type": "Date"
                 }
             ]
         },

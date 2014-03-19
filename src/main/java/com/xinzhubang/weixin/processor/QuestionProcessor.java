@@ -19,6 +19,9 @@ package com.xinzhubang.weixin.processor;
 
 import com.xinzhubang.weixin.service.QuestionService;
 import com.xinzhubang.weixin.util.Filler;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -59,15 +62,17 @@ public class QuestionProcessor {
      */
     @RequestProcessing(value = "/admin/question-list", method = HTTPRequestMethod.GET)
     public void showMyIndex(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
-            throws Exception {
-        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+            throws Exception {   
+         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
-        renderer.setTemplateName("/admin/question-list.ftl");
+        renderer.setTemplateName("/community/question-list.ftl");    
+        Map<String, Object> dataModel = renderer.getDataModel();
         
-        final Map<String, Object> dataModel = renderer.getDataModel();
-        
+        System.out.println(questionService.questionList(null, 0).size());
+        dataModel.put("questionList", (Object)questionService.questionList(null, 0));
         dataModel.put("type", "question");
         dataModel.put("subType", "1");
+
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
@@ -154,6 +159,8 @@ public class QuestionProcessor {
         renderer.setJSONObject(ret);
         final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
         requestJSONObject.put("AddUserID", "9938");
+        requestJSONObject.put("Title", requestJSONObject.get("Content"));
+        requestJSONObject.put("AddTime", new Timestamp(System.currentTimeMillis()));
         String id = questionService.add(requestJSONObject);
         System.out.print(id);
         ret.put(Keys.STATUS_CODE, true);
@@ -179,5 +186,19 @@ public class QuestionProcessor {
         dataModel.put("type", "question");
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
+    }
+    
+    public Map<String, Object> renderFM(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response,String templateName) throws Exception{
+        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+        context.setRenderer(renderer);
+        renderer.setTemplateName("/community/question-list.ftl");
+        
+        Map<String, Object> dataModel = renderer.getDataModel();
+        
+        dataModel.put("type", "question");
+        dataModel.put("subType", "1");
+        filler.fillHeader(request, response, dataModel);
+        filler.fillFooter(dataModel);
+        return dataModel;
     }
 }
