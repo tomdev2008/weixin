@@ -25,7 +25,7 @@
                 个人信息介绍
             </li>
         </ul>
-        <div class="user-card-sub">该学生的<#if type == "student">需求<#else>出售</#if>列表</div>
+        <div class="user-card-sub">Ta 的<#if type == "student">需求<#else>服务</#if>列表</div>
         <ul class="list" style="margin-bottom: 3em;">
             <#list items as item>
             <li class="fn-clear">
