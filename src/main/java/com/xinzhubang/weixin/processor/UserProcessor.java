@@ -56,6 +56,27 @@ public class UserProcessor {
     private ItemService itemService;
 
     /**
+     * 展示圈子设置页面.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/admin/set-community", method = HTTPRequestMethod.GET)
+    public void showIndex(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+        context.setRenderer(renderer);
+        renderer.setTemplateName("/admin/set-community.ftl");
+
+        final Map<String, Object> dataModel = renderer.getDataModel();
+
+        filler.fillHeader(request, response, dataModel);
+        filler.fillFooter(dataModel);
+    }
+
+    /**
      * 展示用户列表页面.
      *
      * @param context the specified context
