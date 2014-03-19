@@ -48,7 +48,7 @@
             </div>
             <div class="fn-clear">
                 <button class="button fn-left" onclick="window.location='/whisper'">说悄悄话</button>
-                <button class="button fn-right" onclick='tip.show("温馨提示", "功能正在开发中，敬请期待");'>我要购买</button>
+                <button class="button fn-right" onclick='tip.show("温馨提示", "功能正在开发中，敬请期待");'>我要投标</button>
             </div>
         </div>
         <#include "../common/tip.ftl">
