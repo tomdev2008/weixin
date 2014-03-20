@@ -94,7 +94,6 @@ public class QuestionProcessor {
         final Map<String, Object> dataModel = renderer.getDataModel();
         final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
         String type = "1";
-        System.err.println( request.getParameter("type"));
         if( request.getParameter("type")!=null){
              type = request.getParameter("type");
             if(type.equals("1")){//最新

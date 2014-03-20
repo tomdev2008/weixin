@@ -7,17 +7,17 @@
     <body class="search">
         <nav>
             <ul class="fn-clear">
-                <li class="current">
+                <li <#if type==0>class="current"</#if> >
                     <span>
                         省份<span class="ico ico-arrow-down"></span>
                     </span>
                 </li>
-                <li>
+                <li <#if type==1>class="current"</#if>>
                     <span>
                         学校<span class="ico ico-arrow-down"></span>
                     </span>
                 </li> 
-                <li>
+                <li <#if type==2>class="current"</#if>>
                     <span>
                         学院<span class="ico ico-arrow-down"></span>
                     </span>
@@ -25,18 +25,13 @@
             </ul>
         </nav>
         <ul class="list">
+            <#if  provinces??>  
+            <#list provinces as p>
             <li>
-                学科门类学科门类学科门类
+               <a href='/admin/set-community?<#if type==0>province_id=${p.Did}</#if><#if type==1>province_id=${provinceId}&school_id=${p.Did}</#if><#if type==2>province_id=${provinceId}&school_id=${schoolId}&college_id=${p.Did}</#if>'> ${p.Name}</a>
             </li>
-            <li>
-                学科门类学科门类学科门类
-            </li>
-            <li>
-                学科门类学科门类学科门类
-            </li>
-            <li>
-                学科门类学科门类学科门类
-            </li>
+            </#list>
+            </#if>
         </ul>
     </body>
 </html>

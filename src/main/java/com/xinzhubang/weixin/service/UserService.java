@@ -15,6 +15,8 @@
  */
 package com.xinzhubang.weixin.service;
 
+import com.xinzhubang.weixin.repository.BProvinceRepository;
+import com.xinzhubang.weixin.repository.SchoolRepository;
 import com.xinzhubang.weixin.repository.UserAttentionRepository;
 import com.xinzhubang.weixin.repository.UserCardRepository;
 import com.xinzhubang.weixin.repository.UserInfoRepository;
@@ -27,6 +29,7 @@ import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.lang.StringUtils;
 import org.b3log.latke.Keys;
 import org.b3log.latke.logging.Level;
 import org.b3log.latke.logging.Logger;
@@ -40,8 +43,10 @@ import org.b3log.latke.repository.RepositoryException;
 import org.b3log.latke.repository.annotation.Transactional;
 import org.b3log.latke.service.ServiceException;
 import org.b3log.latke.service.annotation.Service;
+import org.b3log.latke.util.CollectionUtils;
 import org.b3log.latke.util.Strings;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -67,6 +72,8 @@ public class UserService {
 
     @Inject
     private UserAttentionRepository userAttentionRepository;
+    @Inject
+    private SchoolRepository schoolRepository;
 
     /**
      * 获取指定的社区圈子里指定类型（学生/老师）的名片列表。
@@ -425,5 +432,68 @@ public class UserService {
         }
 
         return false;
+    }
+    /**
+     * 获得学校学科
+     *
+     * @param pid
+     * @return
+     * @throws org.json.JSONException
+     */
+    public List<JSONObject> getSchool(String pid) throws JSONException {
+        try {
+            final Query query = new Query();
+            if(StringUtils.isNotEmpty(pid)){
+               query.setFilter(new PropertyFilter("ParentID", FilterOperator.EQUAL, Integer.parseInt(pid)));
+            }else{
+                query.setFilter(new PropertyFilter("Type", FilterOperator.EQUAL, 1));
+            }
+            final JSONObject result = schoolRepository.get(query);
+
+           final JSONArray results = result.getJSONArray(Keys.RESULTS);
+            final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
+            return ret;
+        } catch (final RepositoryException e) {
+            LOGGER.log(Level.ERROR, "获取用户关注列表异常", e);
+            return Collections.emptyList();
+        }
+    }
+    /**
+     * 添加或修改圈子
+     * @param userId
+     * @param provinceId
+     * @param schoolId
+     * @param collegId 
+     * @throws org.b3log.latke.repository.RepositoryException 
+     */
+    @Transactional
+    public void saveOrUpdateUserInfo(String userId,String provinceId,String schoolId,String collegId) throws RepositoryException, JSONException{
+        final JSONObject province = schoolRepository.get(new Query().setFilter(new PropertyFilter("Did", FilterOperator.EQUAL, Integer.parseInt(provinceId))));
+        final JSONObject school = schoolRepository.get(new Query().setFilter(new PropertyFilter("Did", FilterOperator.EQUAL, Integer.parseInt(schoolId))));
+        final JSONObject colleg = schoolRepository.get(new Query().setFilter(new PropertyFilter("Did", FilterOperator.EQUAL, Integer.parseInt(collegId))));
+        
+        final Query query = new Query();
+        query.setFilter(new PropertyFilter("MemberID", FilterOperator.EQUAL, Integer.parseInt(userId)));
+        JSONObject userInfo = userRepository.get(query);
+        if(CollectionUtils.jsonArrayToList(userInfo.getJSONArray(Keys.RESULTS)).isEmpty()){
+            userInfo = new JSONObject();
+            userInfo.put("MemberID", userId);
+            userInfo.put("Area", province.get("Name"));
+            userInfo.put("AreaCode", province.get("Did"));
+            userInfo.put("University", school.get("Name"));
+            userInfo.put("UniversityCode", school.get("Did"));
+            userInfo.put("College", colleg.get("Name"));
+            userInfo.put("CollegeCode", colleg.get("Did"));
+            userRepository.add(userInfo);
+        }else{
+            userInfo.put("MemberID", userId);
+            userInfo.put("Area", province.get("Name"));
+            userInfo.put("AreaCode", province.get("Did"));
+            userInfo.put("University", school.get("Name"));
+            userInfo.put("UniversityCode", school.get("Did"));
+            userInfo.put("College", colleg.get("Name"));
+            userInfo.put("CollegeCode", colleg.get("Did"));
+            userRepository.update(userInfo.getString("ID"), userInfo);
+        }
     }
 }

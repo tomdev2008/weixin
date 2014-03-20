@@ -78,6 +78,24 @@
             ]
         },
         {
+            "name": "BProvince",
+            "keys": [
+                {
+                    "name": "name",
+                    "type": "String"
+                }
+            ]
+        },
+        {
+            "name": "School",
+            "keys": [
+                {
+                    "name": "Name",
+                    "type": "String"
+                }
+            ]
+        },
+        {
             "name": "Whisper",
             "keys": [
                 {
@@ -123,6 +141,42 @@
         {
             "name": "UserInfo",
             "keys": [
+                {
+                    "name": "MemberID",
+                    "type": "int"
+                },
+                {
+                    "name": "Area",
+                    "type": "String"
+                },
+                {
+                    "name": "AreaCode",
+                    "type": "String"
+                },
+                {
+                    "name": "University",
+                    "type": "String"
+                },
+                {
+                    "name": "UniversityCode",
+                    "type": "String"
+                },
+                {
+                    "name": "College",
+                    "type": "String"
+                },
+                {
+                    "name": "CollegeCode",
+                    "type": "String"
+                },
+                {
+                    "name": "Major",
+                    "type": "String"
+                },
+                {
+                    "name": "MajorCode",
+                    "type": "String"
+                }
             ]
         },
         {
