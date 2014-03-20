@@ -15,23 +15,33 @@ package com.xinzhubang.weixin.processor;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.xinzhubang.weixin.processor.advice.LoginCheck;
+import com.xinzhubang.weixin.service.ItemService;
 import com.xinzhubang.weixin.util.Filler;
+import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.b3log.latke.Keys;
 import org.b3log.latke.servlet.HTTPRequestContext;
 import org.b3log.latke.servlet.HTTPRequestMethod;
+import org.b3log.latke.servlet.annotation.Before;
 import org.b3log.latke.servlet.annotation.RequestProcessing;
 import org.b3log.latke.servlet.annotation.RequestProcessor;
+import org.b3log.latke.servlet.renderer.JSONRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.AbstractFreeMarkerRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
+import org.b3log.latke.util.Requests;
+import org.b3log.latke.util.Strings;
+import org.json.JSONObject;
 
 /**
  * 需求处理器.
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
- * @version 1.0.1.0, Mar 14, 2014
+ * @author <a href="http://88250.b3log.org">Liang Ding</a>
+ * @version 1.0.1.0, Mar 20, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -39,7 +49,10 @@ public class RequirementProcessor {
 
     @Inject
     private Filler filler;
-    
+
+    @Inject
+    private ItemService itemService;
+
     /**
      * 展示我的需求列表页面.
      *
@@ -49,20 +62,35 @@ public class RequirementProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/admin/requirement-list", method = HTTPRequestMethod.GET)
-    public void showMyIndex(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+    @Before(adviceClass = LoginCheck.class)
+    public void showMyRequirementList(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
         renderer.setTemplateName("/admin/requirement-list.ftl");
 
+        String pageStr = request.getParameter("p");
+        if (Strings.isEmptyOrNull(pageStr)) {
+            pageStr = "1";
+        }
+
+        final int pageNum = Integer.valueOf(pageStr);
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+
         final Map<String, Object> dataModel = renderer.getDataModel();
+
+        final List<JSONObject> list = itemService.getUserDemands(user.optString("id"), pageNum);
+
+        dataModel.put("requirements", (Object) list);
+        dataModel.put("pageNum", pageNum);
+
         dataModel.put("type", "requirement");
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
 
     /**
-     * 展示需求列表页面.
+     * 展示社区圈子需求列表页面.
      *
      * @param context the specified context
      * @param request the specified request
@@ -70,15 +98,65 @@ public class RequirementProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/requirement-list", method = HTTPRequestMethod.GET)
-    public void showIndex(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+    public void showCommunityRequirementList(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
         renderer.setTemplateName("/community/requirement-list.ftl");
 
+        String pageStr = request.getParameter("p");
+        if (Strings.isEmptyOrNull(pageStr)) {
+            pageStr = "1";
+        }
+
+        String typeStr = request.getParameter("type");
+        if (Strings.isEmptyOrNull(typeStr)) {
+            typeStr = "1";
+        }
+
+        final int pageNum = Integer.valueOf(pageStr);
+        final int type = Integer.valueOf(typeStr);
+
         final Map<String, Object> dataModel = renderer.getDataModel();
+
+        final JSONObject community = new JSONObject();
+        community.put("areaCode", "43676");
+        community.put("universityCode", "43762");
+        community.put("type", type);
+        final List<JSONObject> list = itemService.getDemands(community, pageNum);
+
+        dataModel.put("requirements", (Object) list);
+        dataModel.put("pageNum", pageNum);
         dataModel.put("type", "requirement");
-        dataModel.put("subType", "1");
+        dataModel.put("subType", typeStr);
+
+        filler.fillHeader(request, response, dataModel);
+        filler.fillFooter(dataModel);
+    }
+
+    /**
+     * 展示需求细节页面.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/requirement-details", method = HTTPRequestMethod.GET)
+    public void showDetails(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+        context.setRenderer(renderer);
+        renderer.setTemplateName("/community/requirement-details.ftl");
+
+        final String id = request.getParameter("id");
+
+        final Map<String, Object> dataModel = renderer.getDataModel();
+
+        final JSONObject requirement = itemService.getDemand(id);
+        dataModel.put("requirement", requirement);
+
+        dataModel.put("type", "requirement");
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
@@ -106,23 +184,45 @@ public class RequirementProcessor {
     }
 
     /**
-     * 展示需求细节页面.
+     * 发布需求.
      *
      * @param context the specified context
      * @param request the specified request
      * @param response the specified response
      * @throws Exception exception
      */
-    @RequestProcessing(value = "/requirement-details", method = HTTPRequestMethod.GET)
-    public void showDetails(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+    @RequestProcessing(value = "/requirement-publish", method = HTTPRequestMethod.POST)
+    @Before(adviceClass = LoginCheck.class)
+    public void publishRequirement(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
-        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+        final JSONRenderer renderer = new JSONRenderer();
         context.setRenderer(renderer);
-        renderer.setTemplateName("/community/requirement-details.ftl");
+        final JSONObject ret = new JSONObject();
 
-        final Map<String, Object> dataModel = renderer.getDataModel();
-        dataModel.put("type", "requirement");
-        filler.fillHeader(request, response, dataModel);
-        filler.fillFooter(dataModel);
+        final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
+
+        final String name = requestJSONObject.getString("name");
+        final int type = requestJSONObject.getInt("type");
+        final String desc = requestJSONObject.getString("desc");
+        final int price = requestJSONObject.getInt("price");
+
+        final JSONObject requirement = new JSONObject();
+
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+
+        requirement.put("Name", name);
+        requirement.put("ItemType", type);
+        requirement.put("MemberID", user.optInt("id"));
+        requirement.put("ItemContent", desc);
+        requirement.put("Price", price);
+
+        final boolean succ = itemService.publishDemand(requirement);
+
+        ret.put(Keys.STATUS_CODE, succ);
+        if (!succ) {
+            ret.put(Keys.MSG, "发布失败");
+        }
+
+        renderer.setJSONObject(ret);
     }
 }

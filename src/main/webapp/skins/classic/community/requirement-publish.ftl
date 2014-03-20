@@ -16,7 +16,7 @@
                 <input class="input" id="title" placeholder="请填写标题名称"/>
                 <textarea class="textarea" id="details" placeholder="亲，请填写具体描述..."></textarea>
                 <div>50</div>
-                <input class="input" id="price" placeholder="请填写愿意支付的价格"/>
+                <input class="input" id="money" placeholder="请填写愿意支付的价格"/>
                 <div>￥(元)</div>
             </div>
             <button class="button" onclick="community.requirementPublish()">提 交</button>

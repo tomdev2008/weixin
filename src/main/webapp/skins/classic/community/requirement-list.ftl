@@ -8,25 +8,25 @@
         <#include "../common/community-nav.ftl">
         <#include "../common/community-sub-nav.ftl">
         <ul class="list">
-            <#list 1..3 as i>
+            <#list requirements as requirement>
             <li class="fn-clear">
-                <a href="/requirement-details">
+                <a href="/requirement-details?id=${requirement.ID}">
                     <img class="list-view" src="/images/default-user-thumbnail.png"/>
                     <div class="list-content">
                         <div class="fn-clear">
-                            <span class="ft-gray fn-left">{userName}</span>
+                            <span class="ft-gray fn-left">${requirement.userName}</span>
                             <span class="ico ico-cater"></span>
                             <span class="ico ico-level1"></span>
                         </div>
-                        <div>一句话描述</div>
+                        <div>${sale.Name}</div>
                         <div class="ft-gray">
-                            北京-北京大学-计算机
+                            ${requirement.Area}-${requirement.University}<#if requirement.CollegeCode != "-1">-${requirement.College}</#if>
                         </div>
                         <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">
-                                2013-21-12 &nbsp; 浏览200
+                                 ${requirement.CreateTime?string('yyyy-MM-dd')} &nbsp; 浏览${requirement.ClickCount}
                             </span>
-                            <span class="ft-green fn-right">￥200</span>
+                            <span class="ft-green fn-right">￥${requirement.Price}</span>
                         </div>
                     </div>
                 </a>

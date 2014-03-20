@@ -7,23 +7,34 @@
     <body>
         <#include "../common/admin-nav.ftl">
         <ul class="list">
+            <#list requirements as requirement>
             <li class="fn-clear">
-                <a href="/requirement-details">
+                <a href="/requirement-details?id=${requirement.ID?c}">
                     <img class="list-view" src="/images/default-user-thumbnail.png"/>
                     <div class="list-content">
-                        <div><span class="ico-resource">资料</span>一句话描述</div>
+                        <div>
+                            <#if requirement.ItemType == 1>
+                            <span class="ico-resource">资料</span>
+                            <#elseif requirement.ItemType == 2>
+                            <span class="ico-qa">答疑</span>
+                            <#elseif requirement.ItemType == 3>
+                            <span class="ico-school">授课</span>
+                            </#if>
+                            ${requirement.Name}
+                        </div>
                         <div class="ft-gray">
-                            北京-北京大学-计算机
+                            ${requirement.Area}-${requirement.University}<#if requirement.CollegeCode != "-1">-${requirement.College}</#if>
                         </div>
                         <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">
-                                2013-21-12 &nbsp; 浏览200
+                                ${requirement.CreateTime?string('yyyy-MM-dd')} &nbsp; 浏览 ${requirement.ClickCount}
                             </span>
-                            <span class="ft-green fn-right">￥200</span>
+                            <span class="ft-green fn-right">￥${requirement.Price}</span>
                         </div>
                     </div>
                 </a>
             </li>
+            </#list>
         </ul>
     </body>
 </html>

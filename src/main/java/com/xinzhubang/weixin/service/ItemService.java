@@ -44,7 +44,7 @@ import org.json.JSONObject;
  * 项目服务.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.2.0.0, Mar 18, 2014
+ * @version 1.3.0.0, Mar 20, 2014
  * @since 1.0.0
  */
 @Service
@@ -85,7 +85,7 @@ public class ItemService {
         try {
             whisper.put("Category", 1);
             whisper.put("CreateTime", new Timestamp(System.currentTimeMillis()));
-            
+
             whisperRepository.add(whisper);
 
             return true;
@@ -116,7 +116,7 @@ public class ItemService {
     @Transactional
     public boolean publishSale(final JSONObject sale) throws ServiceException {
         try {
-            sale.put("DemandOrService", 1);
+            sale.put("DemandOrService", 1); // 服务
 
             final String userId = sale.getString("MemberID");
 
@@ -136,6 +136,51 @@ public class ItemService {
             return true;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "发布出售 [" + sale.toString() + "] 异常", e);
+
+            return false;
+        }
+    }
+
+    /**
+     * 发布指定的需求.
+     *
+     * @param demand 指定的需求，例如：
+     * <pre>
+     * {
+     *     "Name": "",
+     *     "ItemType": int,
+     *     "MemberID": int,
+     *     "ItemContent": "",
+     *     "Price": int
+     * }
+     * </pre>
+     *
+     * @return
+     * @throws ServiceException
+     */
+    @Transactional
+    public boolean publishDemand(final JSONObject demand) throws ServiceException {
+        try {
+            demand.put("DemandOrService", 0); // 需求
+
+            final String userId = demand.getString("MemberID");
+
+            final JSONObject user = userRepository.get(userId);
+
+            final String realName = user.optString("RealName");
+            final String mobile = user.optString("mobile");
+            final String email = user.optString("email");
+
+            demand.put("RealName", realName);
+            demand.put("Email", email);
+            demand.put("LinkMan", realName);
+            demand.put("Mobile", mobile);
+
+            itemRepository.add(demand);
+
+            return true;
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "发布需求 [" + demand.toString() + "] 异常", e);
 
             return false;
         }
@@ -228,6 +273,7 @@ public class ItemService {
             filters.add(new PropertyFilter("UniversityCode", FilterOperator.EQUAL, universityCode));
             filters.add(new PropertyFilter("CollegeCode", FilterOperator.EQUAL, collegeCode));
             filters.add(new PropertyFilter("ItemType", FilterOperator.EQUAL, type));
+            filters.add(new PropertyFilter("DemandOrService", FilterOperator.EQUAL, 1)); // 服务
 
             final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
             query.setCurrentPageNum(pageNum).setPageSize(10);
@@ -245,6 +291,58 @@ public class ItemService {
             return ret;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "获取社区圈子中的出售项目异常", e);
+
+            return Collections.emptyList();
+        }
+    }
+
+    /**
+     * 获取指定的社区圈子中的需求项目.
+     *
+     * @param community 指定的社区圈子，例如：
+     * <pre>
+     * {
+     *     "areaCode": "",
+     *     "universityCode": "",
+     *     "collegeCode": "", // 可选的
+     *     "type": int // 项目类型：1：资料2：答疑3：授课4：公开课
+     * }
+     * </pre>
+     *
+     * @param pageNum 指定的分页页号
+     *
+     * @return
+     */
+    public List<JSONObject> getDemands(final JSONObject community, final int pageNum) {
+        try {
+            final String areaCode = community.getString("areaCode");
+            final String universityCode = community.getString("universityCode");
+            final String collegeCode = community.optString("collegeCode", "-1");
+            final int type = community.getInt("type");
+
+            final List<Filter> filters = new ArrayList<Filter>();
+            filters.add(new PropertyFilter("AreaCode", FilterOperator.EQUAL, areaCode));
+            filters.add(new PropertyFilter("UniversityCode", FilterOperator.EQUAL, universityCode));
+            filters.add(new PropertyFilter("CollegeCode", FilterOperator.EQUAL, collegeCode));
+            filters.add(new PropertyFilter("ItemType", FilterOperator.EQUAL, type));
+            filters.add(new PropertyFilter("DemandOrService", FilterOperator.EQUAL, 0)); // 需求
+
+            final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+            query.setCurrentPageNum(pageNum).setPageSize(10);
+            final JSONObject result = itemRepository.get(query);
+
+            final JSONArray results = result.getJSONArray(Keys.RESULTS);
+            final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
+
+            for (final JSONObject sale : ret) {
+                final String userId = sale.getString("MemberID");
+                final JSONObject user = userRepository.get(userId);
+                sale.put("userName", user.getString("user_name"));
+            }
+
+            return ret;
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "获取社区圈子中的需求项目异常", e);
 
             return Collections.emptyList();
         }
@@ -273,4 +371,26 @@ public class ItemService {
         }
     }
 
+    /**
+     * 获取指定的 Id 的需求项目.
+     *
+     * @param id 指定的 Id
+     *
+     * @return
+     */
+    public JSONObject getDemand(final String id) {
+        try {
+            final JSONObject ret = itemRepository.get(id);
+
+            final String userId = ret.getString("MemberID");
+            final JSONObject user = userRepository.get(userId);
+            ret.put("userName", user.getString("user_name"));
+
+            return ret;
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "获取需求项目 [id=" + id + "] 异常", e);
+
+            return null;
+        }
+    }
 }

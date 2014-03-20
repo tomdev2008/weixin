@@ -66,9 +66,10 @@ var community = {
             tip.show("提交失败", "价格不能为空");
         } else {
             var requestJSONObject = {
-                title: $("#title").val(),
-                details: $("#details").val(),
-                money: $("#money").val()
+                name: $("#title").val(),
+                desc: $("#details").val(),
+                price: $("#money").val(),
+                type: $(".sub-nav i.ico-radio-checked").data("type")
             };
 
             $.ajax({
