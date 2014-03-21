@@ -15,11 +15,14 @@
  */
 package com.xinzhubang.weixin.processor;
 
+import com.xinzhubang.weixin.service.MajorService;
 import com.xinzhubang.weixin.util.Filler;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.lang.StringUtils;
+import static org.apache.xalan.xsltc.compiler.util.Type.Int;
 import org.b3log.latke.servlet.HTTPRequestContext;
 import org.b3log.latke.servlet.HTTPRequestMethod;
 import org.b3log.latke.servlet.annotation.RequestProcessing;
@@ -39,6 +42,8 @@ public class SearchProcessor {
     
     @Inject
     private Filler filler;
+    @Inject
+    private MajorService majorService;
 
     /**
      * 展示首页.
@@ -54,9 +59,16 @@ public class SearchProcessor {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
         renderer.setTemplateName("/search/course.ftl");
-        
+        String id = request.getParameter("id");
+        String typeS = request.getParameter("type");
+        int type = 0;
+        if(StringUtils.isNotEmpty(typeS)){
+            type = Integer.parseInt(typeS);
+        }
         final Map<String, Object> dataModel = renderer.getDataModel();
-
+        System.err.println(majorService.seach(id, type));
+        dataModel.put("list",  majorService.seach(id, type));
+        dataModel.put("type",  ++type);
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
