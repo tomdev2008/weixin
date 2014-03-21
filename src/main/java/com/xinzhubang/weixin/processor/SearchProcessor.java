@@ -66,7 +66,6 @@ public class SearchProcessor {
             type = Integer.parseInt(typeS);
         }
         final Map<String, Object> dataModel = renderer.getDataModel();
-        System.err.println(majorService.seach(id, type));
         dataModel.put("list",  majorService.seach(id, type));
         dataModel.put("type",  ++type);
         filler.fillHeader(request, response, dataModel);
