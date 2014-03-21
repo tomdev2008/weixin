@@ -33,11 +33,13 @@ import org.b3log.latke.repository.Filter;
 import org.b3log.latke.repository.FilterOperator;
 import org.b3log.latke.repository.PropertyFilter;
 import org.b3log.latke.repository.Query;
+import org.b3log.latke.repository.RepositoryException;
 import org.b3log.latke.repository.annotation.Transactional;
 import org.b3log.latke.service.ServiceException;
 import org.b3log.latke.service.annotation.Service;
 import org.b3log.latke.util.CollectionUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -95,7 +97,32 @@ public class ItemService {
             return false;
         }
     }
-
+    public List<JSONObject> queryWhisperByUserId(int userId) throws RepositoryException, JSONException{
+        Query q = new Query().setFilter(new PropertyFilter("ToID", FilterOperator.EQUAL, userId));
+        final JSONObject result = whisperRepository.get(q);
+        final JSONArray results = result.getJSONArray(Keys.RESULTS);
+        final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
+        for(JSONObject j:ret){
+            j.put("toUser", userRepository.get(j.getString("ToID")));
+            j.put("fromUser", userRepository.get(j.getString("FromID")));
+        }
+        return ret;
+    }
+    public JSONObject queryWhisperById(int id) throws RepositoryException, JSONException{
+        Query q = new Query().setFilter(new PropertyFilter("ID", FilterOperator.EQUAL, id));
+        final JSONObject result = whisperRepository.get(q);
+        final JSONObject subResult = whisperRepository.get(q);
+        subResult.put("toUser", userRepository.get(subResult.getString("ToID")));
+        subResult.put("fromUser", userRepository.get(subResult.getString("FromID")));
+        final JSONArray results = subResult.getJSONArray(Keys.RESULTS);
+        final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
+        result.put("list", ret);
+        for(JSONObject j:ret){
+            j.put("toUser", userRepository.get(j.getString("ToID")));
+            j.put("fromUser", userRepository.get(j.getString("FromID")));
+        }
+        return result;
+    }
     /**
      * 发布指定的服务.
      *

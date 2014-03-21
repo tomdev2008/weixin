@@ -7,7 +7,8 @@
     <body>
         <div class="wrap">
             <textarea class="textarea" placeholder="请填写要发送的内容"></textarea>
-            <button class="button orange" onclick="community.sendWhisper(${itemID}, ${toMemberID})">发 送</button>
+            <!--{itemID}, {toMemberID}-->
+            <button class="button orange" onclick="community.sendWhisper(9938, 9938)">发 送</button>
             <button class="button" onclick="community.cancel()">取 消</button>
         </div>
         <#include "../common/tip.ftl">

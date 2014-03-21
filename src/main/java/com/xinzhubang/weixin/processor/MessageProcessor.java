@@ -22,6 +22,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.lang.StringUtils;
 import org.b3log.latke.Keys;
 import org.b3log.latke.servlet.HTTPRequestContext;
 import org.b3log.latke.servlet.HTTPRequestMethod;
@@ -52,7 +53,7 @@ public class MessageProcessor {
     private ItemService itemService;
 
     /**
-     * 展示发送悄悄话页面.
+     * 展示发送悄悄话页面.  ok
      *
      * @param context the specified context
      * @param request the specified request
@@ -76,7 +77,7 @@ public class MessageProcessor {
     }
 
     /**
-     * 发悄悄话.
+     * 发悄悄话. ok
      *
      * @param context the specified context
      * @param request the specified request
@@ -87,12 +88,12 @@ public class MessageProcessor {
     @Before(adviceClass = LoginCheck.class)
     public void sendWhisper(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
-        final JSONRenderer renderer = new JSONRenderer();
+       final JSONRenderer renderer = new JSONRenderer();
         context.setRenderer(renderer);
         final JSONObject ret = new JSONObject();
-
+        renderer.setJSONObject(ret);
         final JSONObject whisper = Requests.parseRequestJSONObject(request, response);
-
+        System.err.println(whisper);
         final JSONObject user = (JSONObject) request.getAttribute("user");
         whisper.put("FromID", user.optInt("id"));
 
@@ -164,7 +165,7 @@ public class MessageProcessor {
         renderer.setTemplateName("/admin/message-list.ftl");
 
         final Map<String, Object> dataModel = renderer.getDataModel();
-
+        dataModel.put("list", itemService.queryWhisperByUserId(9938));
         dataModel.put("type", "message");
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
@@ -186,7 +187,10 @@ public class MessageProcessor {
         renderer.setTemplateName("/admin/message-details.ftl");
 
         final Map<String, Object> dataModel = renderer.getDataModel();
-
+        String id = request.getParameter("id");
+        if(StringUtils.isNotEmpty(id)){
+            dataModel.put("message",itemService.queryWhisperById(Integer.parseInt(id)));
+        }
         dataModel.put("type", "message");
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
