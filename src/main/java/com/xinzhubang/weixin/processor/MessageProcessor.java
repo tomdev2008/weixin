@@ -161,6 +161,7 @@ public class MessageProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/admin/message-list", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
     public void showMyMessage(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
@@ -168,14 +169,15 @@ public class MessageProcessor {
         renderer.setTemplateName("/admin/message-list.ftl");
 
         final Map<String, Object> dataModel = renderer.getDataModel();
-        dataModel.put("list", itemService.queryWhisperByUserId(9938));
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+        dataModel.put("list", itemService.queryWhisperByUserId(user.optInt("id")));
         dataModel.put("type", "message");
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
 
     /**
-     * 展示我的消息列表页面.
+     * 展示我的消息详情
      *
      * @param context the specified context
      * @param request the specified request
