@@ -97,27 +97,47 @@ public class ItemService {
             return false;
         }
     }
+    /**
+     * 根据用户ID获取用户的消息
+     * @param userId
+     * @return
+     * @throws RepositoryException
+     * @throws JSONException 
+     */
     public List<JSONObject> queryWhisperByUserId(int userId) throws RepositoryException, JSONException{
-        Query q = new Query().setFilter(new PropertyFilter("ToID", FilterOperator.EQUAL, userId));
+        List<Filter> filters = new ArrayList<Filter>();
+        filters.add(new PropertyFilter("ToID", FilterOperator.EQUAL, userId));
+        filters.add(new PropertyFilter("KeyID", FilterOperator.EQUAL, 0));
+        final Query q = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
         final JSONObject result = whisperRepository.get(q);
         final JSONArray results = result.getJSONArray(Keys.RESULTS);
         final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
         for(JSONObject j:ret){
             j.put("toUser", userRepository.get(j.getString("ToID")));
             j.put("fromUser", userRepository.get(j.getString("FromID")));
+            final JSONObject subResult = whisperRepository.get(new Query().setFilter(new PropertyFilter("KeyID", FilterOperator.EQUAL, j.getInt("ID"))));
+            j.put("count", subResult.getJSONArray(Keys.RESULTS).length());
         }
+        
         return ret;
     }
+    /**
+     * 根据消息ID获取消息详情
+     * @param id
+     * @return
+     * @throws RepositoryException
+     * @throws JSONException 
+     */
     public JSONObject queryWhisperById(int id) throws RepositoryException, JSONException{
-        Query q = new Query().setFilter(new PropertyFilter("ID", FilterOperator.EQUAL, id));
-        final JSONObject result = whisperRepository.get(q);
-        final JSONObject subResult = whisperRepository.get(q);
-        subResult.put("toUser", userRepository.get(subResult.getString("ToID")));
-        subResult.put("fromUser", userRepository.get(subResult.getString("FromID")));
+        final JSONObject result = whisperRepository.get(""+id);
+        final JSONObject subResult = whisperRepository.get(new Query().setFilter(new PropertyFilter("KeyID", FilterOperator.EQUAL, id)));
+        result.put("toUser", userRepository.get(result.getString("ToID")));
+        result.put("fromUser", userRepository.get(result.getString("FromID")));
         final JSONArray results = subResult.getJSONArray(Keys.RESULTS);
         final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
         result.put("list", ret);
-        for(JSONObject j:ret){
+        for(int i=0;i<ret.size();i++){
+            JSONObject j = ret.get(i);
             j.put("toUser", userRepository.get(j.getString("ToID")));
             j.put("fromUser", userRepository.get(j.getString("FromID")));
         }

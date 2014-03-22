@@ -18,6 +18,7 @@ package com.xinzhubang.weixin.processor;
 import com.xinzhubang.weixin.processor.advice.LoginCheck;
 import com.xinzhubang.weixin.service.ItemService;
 import com.xinzhubang.weixin.util.Filler;
+import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +33,9 @@ import org.b3log.latke.servlet.annotation.RequestProcessor;
 import org.b3log.latke.servlet.renderer.JSONRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.AbstractFreeMarkerRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
+import org.b3log.latke.util.CollectionUtils;
 import org.b3log.latke.util.Requests;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -71,7 +74,7 @@ public class MessageProcessor {
 
         dataModel.put("itemID", request.getParameter("itemID"));
         dataModel.put("toMemberID", request.getParameter("toMemberID"));
-
+        System.out.println(dataModel);
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
@@ -96,7 +99,7 @@ public class MessageProcessor {
         System.err.println(whisper);
         final JSONObject user = (JSONObject) request.getAttribute("user");
         whisper.put("FromID", user.optInt("id"));
-
+        whisper.put("ToID", whisper.getString("ToID").replace(",", ""));
         final boolean succ = itemService.sendWhisper(whisper);
 
         ret.put(Keys.STATUS_CODE, succ);
@@ -189,7 +192,10 @@ public class MessageProcessor {
         final Map<String, Object> dataModel = renderer.getDataModel();
         String id = request.getParameter("id");
         if(StringUtils.isNotEmpty(id)){
-            dataModel.put("message",itemService.queryWhisperById(Integer.parseInt(id)));
+            JSONObject message = itemService.queryWhisperById(Integer.parseInt(id));
+            JSONArray sublist = message.getJSONArray("list");
+            dataModel.put("message",message);
+            dataModel.put("list",CollectionUtils.jsonArrayToList(sublist));
         }
         dataModel.put("type", "message");
         filler.fillHeader(request, response, dataModel);

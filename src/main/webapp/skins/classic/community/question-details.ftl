@@ -23,7 +23,7 @@
                     </div>
                     <div class="fn-clear">
                         <span class="ft-gray ft-small fn-left">
-                            2012-23-23 &nbsp; 浏览${question.PV} &nbsp; 回应{sale.ClickCount}
+                            2012-23-23 &nbsp; 浏览${question.PV} &nbsp; 回应${question.count}
                         </span>
                         <span class="ft-green fn-right">￥${question.Points}</span>
                     </div>
@@ -48,7 +48,12 @@
                         <span class="ft-gray ft-small fn-left">
                              ${a.AddTime?string('yyyy-MM-dd')}
                         </span>
-                        <span onclick="community.questionAccept()" class="ft-green fn-right question-accept">采纳</span>
+                        <#if a.Agree==0>
+                        <span onclick="community.questionAccept(${question.id},${a.id})" class="ft-green fn-right question-accept">采纳</span>
+                        </#if>
+                        <#if a.Agree!=0>
+                            <span class="ft-green fn-right question-accept">已采纳</span>
+                        </#if>
                     </div>
                 </div>
             </li>

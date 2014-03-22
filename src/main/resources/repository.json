@@ -75,6 +75,11 @@
                     "name": "QID",
                     "type": "int"
                 }
+                ,
+                {
+                    "name": "Agree",
+                    "type": "int"
+                }
             ]
         },
         {

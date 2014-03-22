@@ -140,14 +140,20 @@ var community = {
             }
         });
     },
-    questionAccept: function() {
+    questionAccept: function(qid,id) {
+        var requestJSONObject = {
+                id: id,
+                qid:qid
+            };
         $.ajax({
-            url: "/accept",
+            url: "/accept?=id"+id,
             type: "POST",
             cache: false,
+            data: JSON.stringify(requestJSONObject),
             success: function(result, textStatus) {
                 if (result.sc) {
-                    window.location.reload();
+                   tip.show("答案采纳成功！");
+                   $("#tipContent").next().text("GO").attr("onclick", "window.location='question-details?id="+sc.qid+"'");
                 } else {
                     tip.show("提示", result.msg);
                 }

@@ -17,11 +17,13 @@ package com.xinzhubang.weixin.processor;
  */
 
 
+import com.xinzhubang.weixin.processor.advice.LoginCheck;
 import com.xinzhubang.weixin.service.QuestionService;
 import com.xinzhubang.weixin.util.Filler;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.b3log.latke.Keys;
 import org.b3log.latke.servlet.HTTPRequestContext;
 import org.b3log.latke.servlet.HTTPRequestMethod;
+import org.b3log.latke.servlet.annotation.Before;
 import org.b3log.latke.servlet.annotation.RequestProcessing;
 import org.b3log.latke.servlet.annotation.RequestProcessor;
 import org.b3log.latke.servlet.renderer.JSONRenderer;
@@ -61,6 +64,7 @@ public class QuestionProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/admin/question-list", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
     public void showMyIndex(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {   
          final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
@@ -68,7 +72,8 @@ public class QuestionProcessor {
         renderer.setTemplateName("/community/question-list.ftl");    
         Map<String, Object> dataModel = renderer.getDataModel();
         //获取用户session,放入用户id
-        dataModel.put("questionList", (Object)questionService.questionList(null, 0));
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+        dataModel.put("questionList", (Object)questionService.questionList(user.optInt("id"), 0));
         dataModel.put("type", "question");
         dataModel.put("subType", "1");
 
@@ -104,7 +109,7 @@ public class QuestionProcessor {
 
             }
         }
-        dataModel.put("questionList", (Object)questionService.questionList(null, 0));
+        dataModel.put("questionList", (Object)questionService.questionList(0, 0));
         dataModel.put("type", "question");
         dataModel.put("subType", type);
         filler.fillHeader(request, response, dataModel);
@@ -127,8 +132,10 @@ public class QuestionProcessor {
         
         final Map<String, Object> dataModel = renderer.getDataModel();
         JSONObject question = questionService.getById(request.getParameter("id"));
+        List<JSONObject> answers = questionService.queryAnswerByQuestionId(question.getInt("id"));
+        question.put("count", answers.size());
         dataModel.put("question", question);
-        dataModel.put("answers", questionService.queryAnswerByQuestionId(question.getInt("id")));
+        dataModel.put("answers", answers);
         dataModel.put("type", "question");
         dataModel.put("subType", "1");
         filler.fillHeader(request, response, dataModel);
@@ -164,6 +171,7 @@ public class QuestionProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/question-publish", method = HTTPRequestMethod.POST)
+    @Before(adviceClass = LoginCheck.class)
     public void savePublish(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final JSONRenderer renderer = new JSONRenderer();
@@ -171,8 +179,8 @@ public class QuestionProcessor {
         final JSONObject ret = new JSONObject();
         renderer.setJSONObject(ret);
         final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
-        //session获取用户id
-        requestJSONObject.put("AddUserID", "9938");
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+        requestJSONObject.put("AddUserID", user.optInt("id"));
         requestJSONObject.put("Title", requestJSONObject.get("Content"));
         requestJSONObject.put("AddTime", new Timestamp(System.currentTimeMillis()));
         String id = questionService.add(requestJSONObject);
@@ -209,6 +217,7 @@ public class QuestionProcessor {
      * @throws Exception 
      */
      @RequestProcessing(value = "/question-answer", method = HTTPRequestMethod.POST)
+     @Before(adviceClass = LoginCheck.class)
     public void saveAnswer(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final JSONRenderer renderer = new JSONRenderer();
@@ -216,12 +225,33 @@ public class QuestionProcessor {
         final JSONObject ret = new JSONObject();
         renderer.setJSONObject(ret);
         final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
-        //session获取用户id
-        requestJSONObject.put("AddUserID", "9938");
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+        requestJSONObject.put("AddUserID", user.optInt("id"));
         requestJSONObject.put("AddTime", new Timestamp(System.currentTimeMillis()));
         questionService.addAnswer(requestJSONObject);
         ret.put(Keys.STATUS_CODE, true);
         ret.put(Keys.MSG, "回答成功！");
         ret.put("id", requestJSONObject.get("QID"));
+    }
+     /**
+     * 采纳答案
+     * @param context
+     * @param request
+     * @param response
+     * @throws Exception 
+     */
+     @RequestProcessing(value = "/accept", method = HTTPRequestMethod.POST)
+     @Before(adviceClass = LoginCheck.class)
+    public void acceptAnswer(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final JSONRenderer renderer = new JSONRenderer();
+        context.setRenderer(renderer);
+        final JSONObject ret = new JSONObject();
+        renderer.setJSONObject(ret);
+        final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
+        questionService.acceptAnswer(requestJSONObject.getInt("id"));
+        ret.put(Keys.STATUS_CODE, true);
+        ret.put(Keys.MSG, "采纳成功！");
+        ret.put("qid", requestJSONObject.getInt("qid"));
     }
 }

@@ -45,7 +45,7 @@
                         </div>
                         <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">
-                                2012-23-23 &nbsp; 浏览${q.PV} &nbsp; 回应{sale.Points}
+                                2012-23-23 &nbsp; 浏览${q.PV} &nbsp; 回应${q.count}
                             </span>
                             <span class="ft-green fn-right">￥${q.Points}</span>
                         </div>

@@ -24,8 +24,8 @@
                                 <span class="ft-gray ft-small fn-left">
                                     2012-23-23 12:12
                                 </span>
-                                <a href="/whisper?itemID=${l.ID}&toMemberID=9938" class="fn-right">回复</a>
-                                <a href="/admin/message-details" class="fn-right">n条信息 &nbsp; &nbsp;</a>
+                                <a href="/whisper?itemID=${l.ID?c}&toMemberID=${l.FromID?c}" class="fn-right">回复</a>
+                                <a href="/admin/message-details?id=${l.ID}" class="fn-right">${l.count}条信息 &nbsp; &nbsp;</a>
                             </div>
                         </div>
                     </li>
