@@ -10,7 +10,7 @@
         <ul class="list">
             <#list requirements as requirement>
             <li class="fn-clear">
-                <a href="/requirement-details?id=${requirement.ID}">
+                <a href="/requirement-details?id=${requirement.ID?c}">
                     <img class="list-view" src="/images/default-user-thumbnail.png"/>
                     <div class="list-content">
                         <div class="fn-clear">
@@ -18,7 +18,7 @@
                             <span class="ico ico-cater"></span>
                             <span class="ico ico-level1"></span>
                         </div>
-                        <div>${sale.Name}</div>
+                        <div>${requirement.Name}</div>
                         <div class="ft-gray">
                             ${requirement.Area}-${requirement.University}<#if requirement.CollegeCode != "-1">-${requirement.College}</#if>
                         </div>

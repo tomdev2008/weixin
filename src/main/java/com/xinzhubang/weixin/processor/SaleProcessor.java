@@ -17,6 +17,7 @@ package com.xinzhubang.weixin.processor;
  */
 import com.xinzhubang.weixin.processor.advice.LoginCheck;
 import com.xinzhubang.weixin.service.ItemService;
+import com.xinzhubang.weixin.service.UserService;
 import com.xinzhubang.weixin.util.Filler;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +53,9 @@ public class SaleProcessor {
 
     @Inject
     private ItemService itemService;
+
+    @Inject
+    private UserService userService;
 
     /**
      * 展示个人中心-我的信息-我的服务页面.
@@ -151,9 +155,10 @@ public class SaleProcessor {
 
         final Map<String, Object> dataModel = renderer.getDataModel();
 
-        final JSONObject community = new JSONObject();
-        community.put("areaCode", "43676");
-        community.put("universityCode", "43762");
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+        final String userId = user.optString("id");
+
+        final JSONObject community = userService.getUserInfo(userId);
         community.put("type", type);
         final List<JSONObject> list = itemService.getSales(community, pageNum);
 

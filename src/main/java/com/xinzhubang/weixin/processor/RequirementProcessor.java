@@ -17,6 +17,7 @@ package com.xinzhubang.weixin.processor;
  */
 import com.xinzhubang.weixin.processor.advice.LoginCheck;
 import com.xinzhubang.weixin.service.ItemService;
+import com.xinzhubang.weixin.service.UserService;
 import com.xinzhubang.weixin.util.Filler;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,7 @@ import org.json.JSONObject;
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.1.0, Mar 20, 2014
+ * @version 1.1.1.0, Mar 23, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -52,6 +53,9 @@ public class RequirementProcessor {
 
     @Inject
     private ItemService itemService;
+
+    @Inject
+    private UserService userService;
 
     /**
      * 展示我的需求列表页面.
@@ -98,6 +102,7 @@ public class RequirementProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/requirement-list", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
     public void showCommunityRequirementList(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
@@ -119,9 +124,10 @@ public class RequirementProcessor {
 
         final Map<String, Object> dataModel = renderer.getDataModel();
 
-        final JSONObject community = new JSONObject();
-        community.put("areaCode", "43676");
-        community.put("universityCode", "43762");
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+        final String userId = user.optString("id");
+
+        final JSONObject community = userService.getUserInfo(userId);
         community.put("type", type);
         final List<JSONObject> list = itemService.getDemands(community, pageNum);
 
