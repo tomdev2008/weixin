@@ -15,7 +15,6 @@
  */
 package com.xinzhubang.weixin.processor;
 
-import com.xinzhubang.weixin.service.MajorService;
 import com.xinzhubang.weixin.service.UserService;
 import com.xinzhubang.weixin.util.DESs;
 import com.xinzhubang.weixin.util.Filler;
