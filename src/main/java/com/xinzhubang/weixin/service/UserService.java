@@ -52,7 +52,7 @@ import org.json.JSONObject;
  * 用户服务.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.0.0, Mar 18, 2014
+ * @version 1.1.1.0, Mar 23, 2014
  * @since 1.0.0
  */
 @Service
@@ -504,8 +504,9 @@ public class UserService {
         final Query query = new Query();
         query.setFilter(new PropertyFilter("MemberID", FilterOperator.EQUAL, Integer.parseInt(userId)));
         JSONObject userInfo = userInfoRepository.get(query);
+        userInfo = userInfo.getJSONArray(Keys.RESULTS).optJSONObject(0);
 
-        if (CollectionUtils.jsonArrayToList(userInfo.getJSONArray(Keys.RESULTS)).isEmpty()) {
+        if (null == userInfo) {
             userInfo = new JSONObject();
             userInfo.put("MemberID", userId);
             userInfo.put("Area", province.get("Name"));
@@ -526,7 +527,9 @@ public class UserService {
             userInfo.put("UniversityCode", school.get("Did"));
             userInfo.put("College", colleg.get("Name"));
             userInfo.put("CollegeCode", colleg.get("Did"));
-
+            
+            userInfo.remove("rownum");
+            
             userInfoRepository.update(userInfo.getString("ID"), userInfo);
         }
     }
