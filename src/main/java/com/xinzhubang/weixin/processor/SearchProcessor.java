@@ -38,9 +38,10 @@ import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
  */
 @RequestProcessor
 public class SearchProcessor {
-    
+
     @Inject
     private Filler filler;
+
     @Inject
     private MajorService majorService;
 
@@ -61,12 +62,12 @@ public class SearchProcessor {
         String id = request.getParameter("id");
         String typeS = request.getParameter("type");
         int type = 0;
-        if(StringUtils.isNotEmpty(typeS)){
+        if (StringUtils.isNotEmpty(typeS)) {
             type = Integer.parseInt(typeS);
         }
         final Map<String, Object> dataModel = renderer.getDataModel();
-        dataModel.put("list",  majorService.seach(id, type));
-        dataModel.put("type",  ++type);
+        dataModel.put("list", majorService.seach(id, type));
+        dataModel.put("type", ++type);
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
