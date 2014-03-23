@@ -17,6 +17,7 @@ package com.xinzhubang.weixin.processor;
  */
 import com.xinzhubang.weixin.processor.advice.LoginCheck;
 import com.xinzhubang.weixin.service.ItemService;
+import com.xinzhubang.weixin.service.UserService;
 import com.xinzhubang.weixin.util.Filler;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,7 @@ import org.json.JSONObject;
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.2.1.1, Mar 14, 2014
+ * @version 1.2.2.1, Mar 23, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -52,6 +53,9 @@ public class SaleProcessor {
 
     @Inject
     private ItemService itemService;
+
+    @Inject
+    private UserService userService;
 
     /**
      * 展示个人中心-我的信息-我的服务页面.
@@ -151,9 +155,10 @@ public class SaleProcessor {
 
         final Map<String, Object> dataModel = renderer.getDataModel();
 
-        final JSONObject community = new JSONObject();
-        community.put("areaCode", "43676");
-        community.put("universityCode", "43762");
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+        final String userId = user.optString("id");
+
+        final JSONObject community = userService.getUserInfo(userId);
         community.put("type", type);
         final List<JSONObject> list = itemService.getSales(community, pageNum);
 
@@ -241,6 +246,7 @@ public class SaleProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/sale-publish", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
     public void showPublish(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
@@ -286,6 +292,17 @@ public class SaleProcessor {
         sale.put("MemberID", user.optInt("id"));
         sale.put("ItemContent", desc);
         sale.put("Price", price);
+
+        final String userId = user.optString("id");
+
+        final JSONObject community = userService.getUserInfo(userId);
+
+        sale.put("Area", community.optString("Area"));
+        sale.put("AreaCode", community.optString("AreaCode"));
+        sale.put("University", community.optString("University"));
+        sale.put("UniversityCode", community.optString("UniversityCode"));
+        sale.put("College", community.optString("College"));
+        sale.put("CollegeCode", community.optString("CollegeCode"));
 
         final boolean succ = itemService.publishSale(sale);
 

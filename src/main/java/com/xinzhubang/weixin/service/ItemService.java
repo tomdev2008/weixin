@@ -153,7 +153,13 @@ public class ItemService {
      *     "ItemType": int,
      *     "MemberID": int,
      *     "ItemContent": "",
-     *     "Price": int
+     *     "Price": int,
+     *     "Area": "",
+     *     "AreaCode": "",
+     *     "University": "",
+     *     "UniversityCode": "",
+     *     "College": "",
+     *     "CollegeCode": ""
      * }
      * </pre>
      *
@@ -198,7 +204,13 @@ public class ItemService {
      *     "ItemType": int,
      *     "MemberID": int,
      *     "ItemContent": "",
-     *     "Price": int
+     *     "Price": int,
+     *     "Area": "",
+     *     "AreaCode": "",
+     *     "University": "",
+     *     "UniversityCode": "",
+     *     "College": "",
+     *     "CollegeCode": ""
      * }
      * </pre>
      *
@@ -297,9 +309,9 @@ public class ItemService {
      * @param community 指定的社区圈子，例如：
      * <pre>
      * {
-     *     "areaCode": "",
-     *     "universityCode": "",
-     *     "collegeCode": "", // 可选的
+     *     "AreaCode": "",
+     *     "UniversityCode": "",
+     *     "CollegeCode": "", // 可选的
      *     "type": int // 项目类型：1：资料2：答疑3：授课4：公开课
      * }
      * </pre>
@@ -310,9 +322,9 @@ public class ItemService {
      */
     public List<JSONObject> getSales(final JSONObject community, final int pageNum) {
         try {
-            final String areaCode = community.getString("areaCode");
-            final String universityCode = community.getString("universityCode");
-            final String collegeCode = community.optString("collegeCode", "-1");
+            final String areaCode = community.getString("AreaCode");
+            final String universityCode = community.getString("UniversityCode");
+            final String collegeCode = community.optString("CollegeCode", "-1");
             final int type = community.getInt("type");
 
             final List<Filter> filters = new ArrayList<Filter>();
@@ -349,9 +361,9 @@ public class ItemService {
      * @param community 指定的社区圈子，例如：
      * <pre>
      * {
-     *     "areaCode": "",
-     *     "universityCode": "",
-     *     "collegeCode": "", // 可选的
+     *     "AreaCode": "",
+     *     "UniversityCode": "",
+     *     "CollegeCode": "", // 可选的
      *     "type": int // 项目类型：1：资料2：答疑3：授课4：公开课
      * }
      * </pre>
@@ -362,9 +374,9 @@ public class ItemService {
      */
     public List<JSONObject> getDemands(final JSONObject community, final int pageNum) {
         try {
-            final String areaCode = community.getString("areaCode");
-            final String universityCode = community.getString("universityCode");
-            final String collegeCode = community.optString("collegeCode", "-1");
+            final String areaCode = community.getString("AreaCode");
+            final String universityCode = community.getString("UniversityCode");
+            final String collegeCode = community.optString("CollegeCode", "-1");
             final int type = community.getInt("type");
 
             final List<Filter> filters = new ArrayList<Filter>();

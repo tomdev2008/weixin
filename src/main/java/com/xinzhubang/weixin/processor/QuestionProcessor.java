@@ -15,15 +15,11 @@ package com.xinzhubang.weixin.processor;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 import com.xinzhubang.weixin.processor.advice.LoginCheck;
 import com.xinzhubang.weixin.service.QuestionService;
 import com.xinzhubang.weixin.service.UserService;
 import com.xinzhubang.weixin.util.Filler;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -50,9 +46,10 @@ import org.json.JSONObject;
  */
 @RequestProcessor
 public class QuestionProcessor {
-    
+
     @Inject
     private Filler filler;
+
     @Inject
     private QuestionService questionService;
     @Inject
@@ -69,10 +66,10 @@ public class QuestionProcessor {
     @RequestProcessing(value = "/admin/question-list", method = HTTPRequestMethod.GET)
     @Before(adviceClass = LoginCheck.class)
     public void showMyIndex(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
-            throws Exception {   
-         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+            throws Exception {
+        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
-        renderer.setTemplateName("/community/question-list.ftl");    
+        renderer.setTemplateName("/community/question-list.ftl");
         Map<String, Object> dataModel = renderer.getDataModel();
         //获取用户session,放入用户id
         final JSONObject user = (JSONObject) request.getAttribute("user");
@@ -83,7 +80,7 @@ public class QuestionProcessor {
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
-    
+
     /**
      * 展示问题列表页面.
      *
@@ -99,17 +96,17 @@ public class QuestionProcessor {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
         renderer.setTemplateName("/community/question-list.ftl");
-        
+
         final Map<String, Object> dataModel = renderer.getDataModel();
         final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
         String type = "1";
-        if( request.getParameter("type")!=null){
-             type = request.getParameter("type");
-            if(type.equals("1")){//最新
+        if (request.getParameter("type") != null) {
+            type = request.getParameter("type");
+            if (type.equals("1")) {//最新
 
-            }else if(type.equals("2")){//已解决
+            } else if (type.equals("2")) {//已解决
 
-            }else if(type.equals("3")){//未解决
+            } else if (type.equals("3")) {//未解决
 
             }
         }
@@ -121,6 +118,7 @@ public class QuestionProcessor {
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
+
     /**
      * 展示问题细节页面.
      *
@@ -135,7 +133,7 @@ public class QuestionProcessor {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
         renderer.setTemplateName("/community/question-details.ftl");
-        
+
         final Map<String, Object> dataModel = renderer.getDataModel();
         JSONObject question = questionService.getById(request.getParameter("id"));
         List<JSONObject> answers = questionService.queryAnswerByQuestionId(question.getInt("id"));
@@ -147,6 +145,7 @@ public class QuestionProcessor {
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
+
     /**
      * 展示发布问题页面.
      *
@@ -161,14 +160,15 @@ public class QuestionProcessor {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
         renderer.setTemplateName("/community/question-publish.ftl");
-        
+
         final Map<String, Object> dataModel = renderer.getDataModel();
-        
+
         dataModel.put("type", "question");
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
-     /**
+
+    /**
      * 发布问题提交保存
      *
      * @param context the specified context
@@ -195,6 +195,7 @@ public class QuestionProcessor {
         ret.put(Keys.STATUS_CODE, true);
         ret.put(Keys.MSG, "提问保存成功！");
     }
+
     /**
      * 展示回复问题页面.
      *
@@ -209,23 +210,25 @@ public class QuestionProcessor {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
         renderer.setTemplateName("/community/question-answer.ftl");
-        
+
         final Map<String, Object> dataModel = renderer.getDataModel();
-        
+
         dataModel.put("type", "question");
         dataModel.put("id", request.getParameter("id"));
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
+
     /**
      * 保存回答
+     *
      * @param context
      * @param request
      * @param response
-     * @throws Exception 
+     * @throws Exception
      */
-     @RequestProcessing(value = "/question-answer", method = HTTPRequestMethod.POST)
-     @Before(adviceClass = LoginCheck.class)
+    @RequestProcessing(value = "/question-answer", method = HTTPRequestMethod.POST)
+    @Before(adviceClass = LoginCheck.class)
     public void saveAnswer(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final JSONRenderer renderer = new JSONRenderer();
@@ -241,15 +244,17 @@ public class QuestionProcessor {
         ret.put(Keys.MSG, "回答成功！");
         ret.put("id", requestJSONObject.get("QID"));
     }
-     /**
+
+    /**
      * 采纳答案
+     *
      * @param context
      * @param request
      * @param response
-     * @throws Exception 
+     * @throws Exception
      */
-     @RequestProcessing(value = "/accept", method = HTTPRequestMethod.POST)
-     @Before(adviceClass = LoginCheck.class)
+    @RequestProcessing(value = "/accept", method = HTTPRequestMethod.POST)
+    @Before(adviceClass = LoginCheck.class)
     public void acceptAnswer(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final JSONRenderer renderer = new JSONRenderer();
