@@ -81,9 +81,9 @@ public class UserService {
      * @param community 指定的社区圈子，例如：
      * <pre>
      * {
-     *     "areaCode": "",
-     *     "universityCode": "",
-     *     "collegeCode": "", // 可选的
+     *     "AreaCode": "",
+     *     "UniversityCode": "",
+     *     "CollegeCode": "", // 可选的
      *     "type": "" // 类型：teacher, student
      * }
      * </pre>
@@ -93,9 +93,9 @@ public class UserService {
      */
     public List<JSONObject> getUserCards(final JSONObject community, final int pageNum) {
         try {
-            final String areaCode = community.getString("areaCode");
-            final String universityCode = community.getString("universityCode");
-            final String collegeCode = community.optString("collegeCode", "-1");
+            final String areaCode = community.getString("AreaCode");
+            final String universityCode = community.getString("UniversityCode");
+            final String collegeCode = community.optString("CollegeCode", "-1");
 
             final List<Filter> filters = new ArrayList<Filter>();
             filters.add(new PropertyFilter("AreaCode", FilterOperator.EQUAL, areaCode));

@@ -112,7 +112,7 @@ public class UserProcessor {
             final String memberId = user.optString("id");
 
             userService.saveOrUpdateUserInfo(memberId, provinceId, schoolId, collegId);
-            
+
             response.sendRedirect("/user-list");
         }
 
@@ -127,6 +127,7 @@ public class UserProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/user-list", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
     public void showUserList(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
@@ -144,11 +145,12 @@ public class UserProcessor {
             type = "teacher";
         }
 
-        final JSONObject community = new JSONObject();
-        community.put("areaCode", "47206");
-        community.put("universityCode", "47242");
-        community.put("collegeCode", "47391");
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+        final String userId = user.optString("id");
+        
+        final JSONObject community = userService.getUserInfo(userId);
         community.put("type", type);
+        
         final List<JSONObject> userCards = userService.getUserCards(community, pageNum);
 
         final Map<String, Object> dataModel = renderer.getDataModel();
@@ -159,9 +161,9 @@ public class UserProcessor {
         }
 
         for (final JSONObject userCard : userCards) {
-            final String userId = userCard.optString("T_User_ID");
+            final String uId = userCard.optString("T_User_ID");
             if (null != currUser) {
-                userCard.put("isFollow", userService.isFollow(currUser.optString("id"), userId));
+                userCard.put("isFollow", userService.isFollow(currUser.optString("id"), uId));
             } else {
                 userCard.put("isFollow", false);
             }
