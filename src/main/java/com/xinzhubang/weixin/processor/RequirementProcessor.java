@@ -176,6 +176,7 @@ public class RequirementProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/requirement-publish", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
     public void showPublish(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
@@ -221,6 +222,17 @@ public class RequirementProcessor {
         requirement.put("MemberID", user.optInt("id"));
         requirement.put("ItemContent", desc);
         requirement.put("Price", price);
+
+        final String userId = user.optString("id");
+        
+        final JSONObject community = userService.getUserInfo(userId);
+        
+        requirement.put("Area", community.optString("Area"));
+        requirement.put("AreaCode", community.optString("AreaCode"));
+        requirement.put("University", community.optString("University"));
+        requirement.put("UniversityCode", community.optString("UniversityCode"));
+        requirement.put("College", community.optString("College"));
+        requirement.put("CollegeCode", community.optString("CollegeCode"));
 
         final boolean succ = itemService.publishDemand(requirement);
 

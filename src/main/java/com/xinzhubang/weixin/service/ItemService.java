@@ -153,7 +153,13 @@ public class ItemService {
      *     "ItemType": int,
      *     "MemberID": int,
      *     "ItemContent": "",
-     *     "Price": int
+     *     "Price": int,
+     *     "Area": "",
+     *     "AreaCode": "",
+     *     "University": "",
+     *     "UniversityCode": "",
+     *     "College": "",
+     *     "CollegeCode": ""
      * }
      * </pre>
      *
@@ -198,7 +204,13 @@ public class ItemService {
      *     "ItemType": int,
      *     "MemberID": int,
      *     "ItemContent": "",
-     *     "Price": int
+     *     "Price": int,
+     *     "Area": "",
+     *     "AreaCode": "",
+     *     "University": "",
+     *     "UniversityCode": "",
+     *     "College": "",
+     *     "CollegeCode": ""
      * }
      * </pre>
      *
