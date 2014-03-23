@@ -19,6 +19,7 @@ package com.xinzhubang.weixin.processor;
 
 import com.xinzhubang.weixin.processor.advice.LoginCheck;
 import com.xinzhubang.weixin.service.QuestionService;
+import com.xinzhubang.weixin.service.UserService;
 import com.xinzhubang.weixin.util.Filler;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -54,6 +55,8 @@ public class QuestionProcessor {
     private Filler filler;
     @Inject
     private QuestionService questionService;
+    @Inject
+    private UserService userService;
 
     /**
      * 展示我的问题列表页面.
@@ -73,7 +76,7 @@ public class QuestionProcessor {
         Map<String, Object> dataModel = renderer.getDataModel();
         //获取用户session,放入用户id
         final JSONObject user = (JSONObject) request.getAttribute("user");
-        dataModel.put("questionList", (Object)questionService.questionList(user.optInt("id"), 0));
+        dataModel.put("questionList", (Object)questionService.questionList(user.optInt("id"), 0,null));
         dataModel.put("type", "question");
         dataModel.put("subType", "1");
 
@@ -90,6 +93,7 @@ public class QuestionProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/question-list", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
     public void showIndex(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
@@ -109,7 +113,9 @@ public class QuestionProcessor {
 
             }
         }
-        dataModel.put("questionList", (Object)questionService.questionList(0, 0));
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+        JSONObject userInfo = userService.getUserInfo(user.optString("id"));
+        dataModel.put("questionList", (Object)questionService.questionList(0, 0,userInfo.getString("CollegeCode")));
         dataModel.put("type", "question");
         dataModel.put("subType", type);
         filler.fillHeader(request, response, dataModel);
@@ -180,9 +186,11 @@ public class QuestionProcessor {
         renderer.setJSONObject(ret);
         final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
         final JSONObject user = (JSONObject) request.getAttribute("user");
+        JSONObject userInfo = userService.getUserInfo(user.optString("id"));
         requestJSONObject.put("AddUserID", user.optInt("id"));
         requestJSONObject.put("Title", requestJSONObject.get("Content"));
         requestJSONObject.put("AddTime", new Timestamp(System.currentTimeMillis()));
+        requestJSONObject.put("CollegeCode", userInfo.optString("CollegeCode"));
         String id = questionService.add(requestJSONObject);
         ret.put(Keys.STATUS_CODE, true);
         ret.put(Keys.MSG, "提问保存成功！");

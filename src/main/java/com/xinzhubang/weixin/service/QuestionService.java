@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
+import org.apache.commons.lang.StringUtils;
 import org.b3log.latke.Keys;
 import org.b3log.latke.logging.Level;
 import org.b3log.latke.logging.Logger;
@@ -124,17 +125,16 @@ public class QuestionService {
      * @param pageNum
      * @return 
      */
-    public List<JSONObject> questionList(final int userId,final int pageNum){
+    public List<JSONObject> questionList(final int userId,final int pageNum,String collegeCode){
          try {
-//            final List<Filter> filters = new ArrayList<Filter>();
-            /**filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, userId));
-            filters.add(new PropertyFilter("DemandOrService", FilterOperator.EQUAL, 1));
-
-            final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));**/
-            final Query query = new Query();
+            final List<Filter> filters = new ArrayList<Filter>();            
             if(userId!=0){
-                 query.setFilter(new PropertyFilter("AddUserID", FilterOperator.EQUAL, userId));   
+                 filters.add(new PropertyFilter("AddUserID", FilterOperator.EQUAL, userId));
              } 
+            if(StringUtils.isNotEmpty(collegeCode)){
+                 filters.add(new PropertyFilter("CollegeCode", FilterOperator.EQUAL, collegeCode));
+             } 
+            final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
             final JSONObject result = questionRepository.get(query);
             final JSONArray results = result.getJSONArray(Keys.RESULTS);
             final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
