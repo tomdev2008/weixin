@@ -18,7 +18,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.xinzhubang.weixin.service;
 
 import com.xinzhubang.weixin.repository.AnswerRepository;
@@ -55,15 +54,21 @@ import org.json.JSONObject;
  */
 @Service
 public class QuestionService {
+
     private static final Logger LOGGER = Logger.getLogger(QuestionService.class);
+
     @Inject
     private QuestionRepository questionRepository;
+
     @Inject
     private UserRepository userRepository;
-     @Inject
+
+    @Inject
     private AnswerRepository answerRepository;
+
     /**
      * 添加提问
+     *
      * @param question
      * @return
      */
@@ -74,13 +79,14 @@ public class QuestionService {
             id = questionRepository.add(question);
         } catch (RepositoryException ex) {
             LOGGER.log(Level.ERROR, "保存提问出错！", ex);
-            return null
-                    ;
+            return null;
         }
         return id;
     }
-     /**
+
+    /**
      * 添加回答
+     *
      * @param answer
      * @return
      */
@@ -92,53 +98,58 @@ public class QuestionService {
             id = answerRepository.add(answer);
         } catch (RepositoryException ex) {
             LOGGER.log(Level.ERROR, "保存回答出错！", ex);
-            return null
-                    ;
+            return null;
         }
         return id;
     }
+
     /**
      * 采纳答案
+     *
      * @param answer
      * @return
      */
     @Transactional
     public void acceptAnswer(int id) throws RepositoryException, JSONException {
-         try {
-            JSONObject answer = answerRepository.get(id+"");
+        try {
+            JSONObject answer = answerRepository.get(id + "");
             JSONObject answer2 = new JSONObject();
             answer2.put("Content", answer.get("Content"));
             answer2.put("AddUserID", answer.getInt("AddUserID"));
             answer2.put("AddTime", answer.get("AddTime"));
             answer2.put("QID", answer.getInt("QID"));
             answer2.put("Agree", 1);
-            answerRepository.update(id+"",answer2 );
+            answerRepository.update(id + "", answer2);
         } catch (RepositoryException ex) {
             LOGGER.log(Level.ERROR, "保存回答出错！", ex);
-                    ;
+            ;
         }
     }
+
     /**
      * 查询最新提问
+     *
      * @param userId
      * @param pageNum
-     * @return 
+     * @return
      */
-    public List<JSONObject> questionList(final int userId,final int pageNum){
-         try {
+    public List<JSONObject> questionList(final int userId, final int pageNum) {
+        try {
 //            final List<Filter> filters = new ArrayList<Filter>();
-            /**filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, userId));
-            filters.add(new PropertyFilter("DemandOrService", FilterOperator.EQUAL, 1));
-
-            final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));**/
+            /**
+             * filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, userId));
+             * filters.add(new PropertyFilter("DemandOrService", FilterOperator.EQUAL, 1));
+             *
+             * final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));*
+             */
             final Query query = new Query();
-            if(userId!=0){
-                 query.setFilter(new PropertyFilter("AddUserID", FilterOperator.EQUAL, userId));   
-             } 
+            if (userId != 0) {
+                query.setFilter(new PropertyFilter("AddUserID", FilterOperator.EQUAL, userId));
+            }
             final JSONObject result = questionRepository.get(query);
             final JSONArray results = result.getJSONArray(Keys.RESULTS);
             final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
-            for(JSONObject j:ret){
+            for (JSONObject j : ret) {
                 j.put("user", userRepository.get(j.getString("AddUserID")));
                 final JSONObject subResult = answerRepository.get(new Query().setFilter(new PropertyFilter("QID", FilterOperator.EQUAL, j.getInt("id"))));
                 j.put("count", subResult.getJSONArray(Keys.RESULTS).length());
@@ -150,28 +161,31 @@ public class QuestionService {
             return Collections.emptyList();
         }
     }
+
     /**
      * 根据ID获取
+     *
      * @param id
      * @return
-     * @throws RepositoryException 
-     * @throws org.json.JSONException 
+     * @throws RepositoryException
+     * @throws org.json.JSONException
      */
-    public JSONObject getById(String id) throws RepositoryException, JSONException{
-       //根据id获取问题
-       JSONObject j = questionRepository.get(id);
-       //放入问题的用户
-       j.put("user", userRepository.get(j.getString("AddUserID")));
-       return j;
+    public JSONObject getById(String id) throws RepositoryException, JSONException {
+        //根据id获取问题
+        JSONObject j = questionRepository.get(id);
+        //放入问题的用户
+        j.put("user", userRepository.get(j.getString("AddUserID")));
+        return j;
     }
-    public List<JSONObject> queryAnswerByQuestionId(int id) throws RepositoryException, JSONException{
-       final Query query = new Query().setFilter(new PropertyFilter("QID", FilterOperator.EQUAL, id));
-       JSONObject answers = answerRepository.get(query);
-       final JSONArray answersArray = answers.getJSONArray(Keys.RESULTS);
-       final List<JSONObject> answersList = CollectionUtils.jsonArrayToList(answersArray);
-       for(JSONObject j:answersList){
-                j.put("user", userRepository.get(j.getString("AddUserID")));
-       }
-       return answersList;
+
+    public List<JSONObject> queryAnswerByQuestionId(int id) throws RepositoryException, JSONException {
+        final Query query = new Query().setFilter(new PropertyFilter("QID", FilterOperator.EQUAL, id));
+        JSONObject answers = answerRepository.get(query);
+        final JSONArray answersArray = answers.getJSONArray(Keys.RESULTS);
+        final List<JSONObject> answersList = CollectionUtils.jsonArrayToList(answersArray);
+        for (JSONObject j : answersList) {
+            j.put("user", userRepository.get(j.getString("AddUserID")));
+        }
+        return answersList;
     }
 }
