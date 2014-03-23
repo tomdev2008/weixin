@@ -67,50 +67,55 @@ public class UserProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/admin/set-community", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
     public void showIndex(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
-        
+
         String id = null;
         int type = 0;
         String provinceId = request.getParameter("province_id");
         String schoolId = request.getParameter("school_id");
         String collegId = request.getParameter("college_id");
-        
-        if(StringUtils.isNotEmpty(provinceId)){
+
+        if (StringUtils.isNotEmpty(provinceId)) {
             id = provinceId;
             type = 1;
         }
-        if(StringUtils.isNotEmpty(schoolId)){
+        if (StringUtils.isNotEmpty(schoolId)) {
             id = schoolId;
             type = 2;
         }
-        if(StringUtils.isNotEmpty(collegId)){
+        if (StringUtils.isNotEmpty(collegId)) {
             id = collegId;
             type = 3;
         }
-        if(type<=2){
-           context.setRenderer(renderer);
-           renderer.setTemplateName("/admin/set-community.ftl");
-           final Map<String, Object> dataModel = renderer.getDataModel();
-           dataModel.put("provinces", userService.getSchool(id));
-           dataModel.put("type", type);
-           dataModel.put("provinceId", provinceId);
-           dataModel.put("schoolId", schoolId);
-           filler.fillHeader(request, response, dataModel);
-           filler.fillFooter(dataModel); 
-        }else{
+        if (type <= 2) {
+            context.setRenderer(renderer);
+            renderer.setTemplateName("/admin/set-community.ftl");
+            final Map<String, Object> dataModel = renderer.getDataModel();
+            dataModel.put("provinces", userService.getSchool(id));
+            dataModel.put("type", type);
+            dataModel.put("provinceId", provinceId);
+            dataModel.put("schoolId", schoolId);
+            filler.fillHeader(request, response, dataModel);
+            filler.fillFooter(dataModel);
+        } else {
             //保存圈子设置
-           context.setRenderer(renderer);
-           renderer.setTemplateName("/admin/set-community-success.ftl");
-           final Map<String, Object> dataModel = renderer.getDataModel();
-           filler.fillHeader(request, response, dataModel);
-           filler.fillFooter(dataModel); 
-           //替换登陆用户sessionId
-           userService.saveOrUpdateUserInfo("9938",provinceId,schoolId,collegId);
-           dataModel.put("mssage", "圈子设置成功！");
+            context.setRenderer(renderer);
+            renderer.setTemplateName("/admin/set-community-success.ftl");
+            final Map<String, Object> dataModel = renderer.getDataModel();
+            filler.fillHeader(request, response, dataModel);
+            filler.fillFooter(dataModel);
+
+            final JSONObject user = (JSONObject) request.getAttribute("user");
+            final String memberId = user.optString("id");
+
+            userService.saveOrUpdateUserInfo(memberId, provinceId, schoolId, collegId);
+            
+            response.sendRedirect("/user-list");
         }
-        
+
     }
 
     /**

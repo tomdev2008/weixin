@@ -17,7 +17,7 @@
                 </label>
             </div>
             <label class="ft-gray"><input type="checkbox" checked="checked"/> 记住登录状态</label>
-            <button class="button" onclick="login.login()">登 录</button>
+            <button class="button" onclick="login.login('${go}')">登 录</button>
             <div class="fn-clear">
                 <a class="fn-left" href="/register">立即注册>></a>
                 <a class="fn-right" href="/forget-password">忘记密码？</a>

@@ -18,10 +18,10 @@
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.0.1, Mar 8, 2014
+ * @version 1.1.0.1, Mar 23, 2014
  */
 var login = {
-    login: function() {
+    login: function(go) {
         if ($.trim($("#account").val()).length === 0) {
             tip.show("登录失败", "帐号不能为空");
         } else if ($.trim($("#password").val()).length === 0) {
@@ -33,13 +33,13 @@ var login = {
             };
 
             $.ajax({
-                url: "/login",
+                url: "/login?go=" + go,
                 type: "POST",
                 cache: false,
                 data: JSON.stringify(requestJSONObject),
                 success: function(result, textStatus) {
                     if (result.sc) {
-                        window.location.reload();
+                        window.location.href = result.go;
                     } else {
                         tip.show("登录失败", result.msg);
                     }

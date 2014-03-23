@@ -15,6 +15,7 @@
  */
 package com.xinzhubang.weixin.processor;
 
+import com.xinzhubang.weixin.service.MajorService;
 import com.xinzhubang.weixin.service.UserService;
 import com.xinzhubang.weixin.util.DESs;
 import com.xinzhubang.weixin.util.Filler;
@@ -33,6 +34,7 @@ import org.b3log.latke.servlet.renderer.JSONRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.AbstractFreeMarkerRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
 import org.b3log.latke.util.Requests;
+import org.b3log.latke.util.Strings;
 import org.json.JSONObject;
 
 /**
@@ -40,7 +42,7 @@ import org.json.JSONObject;
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.1.0, Mar 18, 2014
+ * @version 1.1.1.0, Mar 23, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -51,7 +53,7 @@ public class LoginProcessor {
 
     @Inject
     private UserService userService;
-
+    
     /**
      * 展示登录页面.
      *
@@ -66,8 +68,15 @@ public class LoginProcessor {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
         renderer.setTemplateName("/login.ftl");
+        
+        String go = request.getParameter("go");
+        if (Strings.isEmptyOrNull(go)) {
+            go = "/user-list";
+        }
 
         final Map<String, Object> dataModel = renderer.getDataModel();
+        
+        dataModel.put("go", go);
 
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
@@ -107,6 +116,14 @@ public class LoginProcessor {
         user.put("userId", user.optString("id"));
 
         Sessions.login(request, response, user);
+        
+        // 查询用户是否已经设置过圈子
+        final JSONObject community = userService.getUserInfo( user.optString("id"));
+        if (null == community) {
+             ret.put("go", "/admin/set-community");
+        } else {
+            ret.put("go", "/user-list");
+        }
     }
 
     /**

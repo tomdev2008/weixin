@@ -15,7 +15,6 @@
  */
 package com.xinzhubang.weixin.service;
 
-import com.xinzhubang.weixin.repository.BProvinceRepository;
 import com.xinzhubang.weixin.repository.SchoolRepository;
 import com.xinzhubang.weixin.repository.UserAttentionRepository;
 import com.xinzhubang.weixin.repository.UserCardRepository;
@@ -72,6 +71,7 @@ public class UserService {
 
     @Inject
     private UserAttentionRepository userAttentionRepository;
+
     @Inject
     private SchoolRepository schoolRepository;
 
@@ -433,6 +433,7 @@ public class UserService {
 
         return false;
     }
+
     /**
      * 获得学校学科
      *
@@ -443,14 +444,14 @@ public class UserService {
     public List<JSONObject> getSchool(String pid) throws JSONException {
         try {
             final Query query = new Query();
-            if(StringUtils.isNotEmpty(pid)){
-               query.setFilter(new PropertyFilter("ParentID", FilterOperator.EQUAL, Integer.parseInt(pid)));
-            }else{
+            if (StringUtils.isNotEmpty(pid)) {
+                query.setFilter(new PropertyFilter("ParentID", FilterOperator.EQUAL, Integer.parseInt(pid)));
+            } else {
                 query.setFilter(new PropertyFilter("Type", FilterOperator.EQUAL, 1));
             }
             final JSONObject result = schoolRepository.get(query);
 
-           final JSONArray results = result.getJSONArray(Keys.RESULTS);
+            final JSONArray results = result.getJSONArray(Keys.RESULTS);
             final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
             return ret;
         } catch (final RepositoryException e) {
@@ -458,24 +459,53 @@ public class UserService {
             return Collections.emptyList();
         }
     }
+
+    /**
+     * 获取指定用户 id 的用户扩展信息（圈子）。
+     *
+     * @param userId 指定用户 id
+     * @return
+     */
+    public JSONObject getUserInfo(final String userId) {
+        final Query query = new Query();
+        query.setFilter(new PropertyFilter("MemberID", FilterOperator.EQUAL, Integer.parseInt(userId)));
+
+        try {
+            final JSONObject result = userInfoRepository.get(query);
+
+            return result.optJSONArray(Keys.RESULTS).optJSONObject(0);
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "获取用户 [userId=" + userId + "] 圈子异常", e);
+
+            return null;
+        }
+    }
+
     /**
      * 添加或修改圈子
+     *
      * @param userId
      * @param provinceId
      * @param schoolId
-     * @param collegId 
-     * @throws org.b3log.latke.repository.RepositoryException 
+     * @param collegId
+     * @throws org.b3log.latke.repository.RepositoryException
      */
     @Transactional
-    public void saveOrUpdateUserInfo(String userId,String provinceId,String schoolId,String collegId) throws RepositoryException, JSONException{
-        final JSONObject province = schoolRepository.get(new Query().setFilter(new PropertyFilter("Did", FilterOperator.EQUAL, Integer.parseInt(provinceId))));
-        final JSONObject school = schoolRepository.get(new Query().setFilter(new PropertyFilter("Did", FilterOperator.EQUAL, Integer.parseInt(schoolId))));
-        final JSONObject colleg = schoolRepository.get(new Query().setFilter(new PropertyFilter("Did", FilterOperator.EQUAL, Integer.parseInt(collegId))));
-        
+    public void saveOrUpdateUserInfo(String userId, String provinceId, String schoolId, String collegId) throws RepositoryException, JSONException {
+        JSONObject province = schoolRepository.get(new Query().setFilter(new PropertyFilter("Did", FilterOperator.EQUAL, Integer.parseInt(provinceId))));
+        province = province.optJSONArray(Keys.RESULTS).optJSONObject(0);
+
+        JSONObject school = schoolRepository.get(new Query().setFilter(new PropertyFilter("Did", FilterOperator.EQUAL, Integer.parseInt(schoolId))));
+        school = school.optJSONArray(Keys.RESULTS).optJSONObject(0);
+
+        JSONObject colleg = schoolRepository.get(new Query().setFilter(new PropertyFilter("Did", FilterOperator.EQUAL, Integer.parseInt(collegId))));
+        colleg = colleg.optJSONArray(Keys.RESULTS).optJSONObject(0);
+
         final Query query = new Query();
         query.setFilter(new PropertyFilter("MemberID", FilterOperator.EQUAL, Integer.parseInt(userId)));
-        JSONObject userInfo = userRepository.get(query);
-        if(CollectionUtils.jsonArrayToList(userInfo.getJSONArray(Keys.RESULTS)).isEmpty()){
+        JSONObject userInfo = userInfoRepository.get(query);
+
+        if (CollectionUtils.jsonArrayToList(userInfo.getJSONArray(Keys.RESULTS)).isEmpty()) {
             userInfo = new JSONObject();
             userInfo.put("MemberID", userId);
             userInfo.put("Area", province.get("Name"));
@@ -484,8 +514,11 @@ public class UserService {
             userInfo.put("UniversityCode", school.get("Did"));
             userInfo.put("College", colleg.get("Name"));
             userInfo.put("CollegeCode", colleg.get("Did"));
-            userRepository.add(userInfo);
-        }else{
+            userInfo.put("Major", "无限制");
+            userInfo.put("MajorCode", -1);
+
+            userInfoRepository.add(userInfo);
+        } else {
             userInfo.put("MemberID", userId);
             userInfo.put("Area", province.get("Name"));
             userInfo.put("AreaCode", province.get("Did"));
@@ -493,7 +526,8 @@ public class UserService {
             userInfo.put("UniversityCode", school.get("Did"));
             userInfo.put("College", colleg.get("Name"));
             userInfo.put("CollegeCode", colleg.get("Did"));
-            userRepository.update(userInfo.getString("ID"), userInfo);
+
+            userInfoRepository.update(userInfo.getString("ID"), userInfo);
         }
     }
 }
