@@ -525,7 +525,7 @@ footer {
     background-position: -45px -51px;
     float: left;
     height: 18px;
-    margin: 4px 0 0 7px;
+    margin: 1px 0 0 7px;
     width: 16px;
 }
 
@@ -542,7 +542,7 @@ footer {
     background-position: 0 -111px;
     float: left;
     height: 15px;
-    margin: 6px 0 0 7px;
+    margin: 3px 0 0 7px;
     width: 53px;
 }
 
@@ -633,5 +633,9 @@ footer {
     height: 40px;
     line-height: 40px;
     padding: 0 6%;
+}
+
+.search .list a {
+    display: block;
 }
 /* end search */
