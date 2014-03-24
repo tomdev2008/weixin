@@ -43,7 +43,7 @@ import org.json.JSONObject;
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.0.0, Mar 24, 2014
+ * @version 1.2.0.0, Mar 24, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -68,7 +68,7 @@ public class QuestionProcessor {
      */
     @RequestProcessing(value = "/admin/question-list", method = HTTPRequestMethod.GET)
     @Before(adviceClass = LoginCheck.class)
-    public void showMyIndex(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+    public void showMyQuestionList(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
@@ -85,12 +85,45 @@ public class QuestionProcessor {
 
         final JSONObject user = (JSONObject) request.getAttribute("user");
 
-        dataModel.put("questionList", (Object) questionService.getUserQuestions(user.optString("id"), pageNum));
+        dataModel.put("questions", (Object) questionService.getUserQuestions(user.optString("id"), pageNum));
         dataModel.put("type", "question");
         dataModel.put("subType", "1");
 
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
+    }
+
+    /**
+     * 获取个人中心-我的信息-我的问题数据（AJAX 拉取分页）.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/admin/question-list-ajax", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
+    public void getMyQuestionList(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final JSONRenderer renderer = new JSONRenderer();
+        context.setRenderer(renderer);
+        final JSONObject ret = new JSONObject();
+        renderer.setJSONObject(ret);
+
+        String pageStr = request.getParameter("p");
+        if (Strings.isEmptyOrNull(pageStr)) {
+            pageStr = "1";
+        }
+
+        final int pageNum = Integer.valueOf(pageStr);
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+
+        final List<JSONObject> list = questionService.getUserQuestions(user.optString("id"), pageNum);
+
+        ret.put("questions", (Object) list);
+        ret.put("pageNum", pageNum);
+        ret.put("type", "question");
+        ret.put("subType", "1");
     }
 
     /**
@@ -103,7 +136,7 @@ public class QuestionProcessor {
      */
     @RequestProcessing(value = "/question-list", method = HTTPRequestMethod.GET)
     @Before(adviceClass = LoginCheck.class)
-    public void showIndex(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+    public void showCommunityQuestionList(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
@@ -136,12 +169,61 @@ public class QuestionProcessor {
 
         final JSONObject community = userService.getUserInfo(userId);
 
-        dataModel.put("questionList", (Object) questionService.getQuestions(community, pageNum));
+        dataModel.put("questions", (Object) questionService.getQuestions(community, pageNum));
         dataModel.put("type", "question");
         dataModel.put("subType", type);
 
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
+    }
+
+    /**
+     * 获取社区问题列表页面数据（AJAX 拉取分页）.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/question-list-ajax", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
+    public void getQuestionList(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final JSONRenderer renderer = new JSONRenderer();
+        context.setRenderer(renderer);
+        final JSONObject ret = new JSONObject();
+        renderer.setJSONObject(ret);
+
+        String pageStr = request.getParameter("p");
+        if (Strings.isEmptyOrNull(pageStr)) {
+            pageStr = "1";
+        }
+
+        // TODO: 问题列表子类型
+        String type = "1";
+        if (request.getParameter("type") != null) {
+            type = request.getParameter("type");
+            if (type.equals("1")) { //最新
+
+            } else if (type.equals("2")) { //已解决
+
+            } else if (type.equals("3")) { //未解决
+
+            }
+        }
+
+        final int pageNum = Integer.valueOf(pageStr);
+
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+        final String userId = user.optString("id");
+
+        final JSONObject community = userService.getUserInfo(userId);
+
+        final List<JSONObject> list = questionService.getQuestions(community, pageNum);
+
+        ret.put("questions", (Object) list);
+        ret.put("pageNum", pageNum);
+        ret.put("subType", type);
     }
 
     /**
@@ -167,6 +249,7 @@ public class QuestionProcessor {
         dataModel.put("answers", answers);
         dataModel.put("type", "question");
         dataModel.put("subType", "1");
+        
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
@@ -211,7 +294,7 @@ public class QuestionProcessor {
         final JSONObject ret = new JSONObject();
         renderer.setJSONObject(ret);
         final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
-        
+
         final JSONObject user = (JSONObject) request.getAttribute("user");
         final String userId = user.optString("id");
 

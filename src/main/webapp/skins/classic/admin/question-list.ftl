@@ -7,7 +7,7 @@
     <body>
         <#include "../common/admin-nav.ftl">
         <ul class="list">
-            <#list questionList as question>
+            <#list questions as question>
             <li class="fn-clear">
                 <a href="/question-details?id=${question.id}">
                     <img class="list-view" src="/images/default-user-thumbnail.png"/>

@@ -26,8 +26,7 @@
             </ul>
         </div>
         <ul class="list">
-            <#if  questionList??>  
-            <#list questionList as q>
+            <#list questions as q>
             <li class="fn-clear">
                 <a href="/question-details?id=${q.id}">
                     <img class="list-view" src="/images/default-user-thumbnail.png"/>
@@ -53,7 +52,6 @@
                 </a>
             </li>
             </#list>
-            </#if>
         </ul>
     </body>
 </html>
