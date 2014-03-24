@@ -102,12 +102,6 @@ public class UserProcessor {
             filler.fillFooter(dataModel);
         } else {
             //保存圈子设置
-            context.setRenderer(renderer);
-            renderer.setTemplateName("/admin/set-community-success.ftl");
-            final Map<String, Object> dataModel = renderer.getDataModel();
-            filler.fillHeader(request, response, dataModel);
-            filler.fillFooter(dataModel);
-
             final JSONObject user = (JSONObject) request.getAttribute("user");
             final String memberId = user.optString("id");
 
