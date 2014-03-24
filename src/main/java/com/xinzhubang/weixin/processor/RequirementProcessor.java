@@ -42,7 +42,7 @@ import org.json.JSONObject;
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.1.0, Mar 23, 2014
+ * @version 1.2.1.0, Mar 24, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -58,7 +58,7 @@ public class RequirementProcessor {
     private UserService userService;
 
     /**
-     * 展示我的需求列表页面.
+     * 展示个人中心-我的信息-我的需求页面.
      *
      * @param context the specified context
      * @param request the specified request
@@ -91,6 +91,38 @@ public class RequirementProcessor {
         dataModel.put("type", "requirement");
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
+    }
+
+    /**
+     * 获取个人中心-我的信息-我的需求数据（AJAX 拉取分页）.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/admin/requirement-list-ajax", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
+    public void getMyRequirementList(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final JSONRenderer renderer = new JSONRenderer();
+        context.setRenderer(renderer);
+        final JSONObject ret = new JSONObject();
+        renderer.setJSONObject(ret);
+
+        String pageStr = request.getParameter("p");
+        if (Strings.isEmptyOrNull(pageStr)) {
+            pageStr = "1";
+        }
+
+        final int pageNum = Integer.valueOf(pageStr);
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+
+        final List<JSONObject> list = itemService.getUserDemands(user.optString("id"), pageNum);
+
+        ret.put("requirements", (Object) list);
+        ret.put("pageNum", pageNum);
+        ret.put("type", "requirement");
     }
 
     /**
@@ -138,6 +170,48 @@ public class RequirementProcessor {
 
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
+    }
+
+    /**
+     * 获取需求页面数据（AJAX 拉取分页）.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/requirement-list-ajax", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
+    public void getRequirementList(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final JSONRenderer renderer = new JSONRenderer();
+        context.setRenderer(renderer);
+        final JSONObject ret = new JSONObject();
+        renderer.setJSONObject(ret);
+
+        String pageStr = request.getParameter("p");
+        if (Strings.isEmptyOrNull(pageStr)) {
+            pageStr = "1";
+        }
+
+        String typeStr = request.getParameter("type");
+        if (Strings.isEmptyOrNull(typeStr)) {
+            typeStr = "1";
+        }
+
+        final int pageNum = Integer.valueOf(pageStr);
+        final int type = Integer.valueOf(typeStr);
+
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+        final String userId = user.optString("id");
+
+        final JSONObject community = userService.getUserInfo(userId);
+
+        community.put("type", type);
+        final List<JSONObject> list = itemService.getDemands(community, pageNum);
+
+        ret.put("requirements", (Object) list);
+        ret.put("pageNum", pageNum);
     }
 
     /**
@@ -224,9 +298,9 @@ public class RequirementProcessor {
         requirement.put("Price", price);
 
         final String userId = user.optString("id");
-        
+
         final JSONObject community = userService.getUserInfo(userId);
-        
+
         requirement.put("Area", community.optString("Area"));
         requirement.put("AreaCode", community.optString("AreaCode"));
         requirement.put("University", community.optString("University"));

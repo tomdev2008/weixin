@@ -42,7 +42,7 @@ import org.json.JSONObject;
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.2.3.1, Mar 23, 2014
+ * @version 1.2.4.1, Mar 24, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -181,6 +181,7 @@ public class SaleProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/sale-list-ajax", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
     public void getSaleList(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final JSONRenderer renderer = new JSONRenderer();
@@ -201,9 +202,10 @@ public class SaleProcessor {
         final int pageNum = Integer.valueOf(pageStr);
         final int type = Integer.valueOf(typeStr);
 
-        final JSONObject community = new JSONObject();
-        community.put("areaCode", "43676");
-        community.put("universityCode", "43762");
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+        final String userId = user.optString("id");
+
+        final JSONObject community = userService.getUserInfo(userId);
         community.put("type", type);
         final List<JSONObject> list = itemService.getSales(community, pageNum);
 
