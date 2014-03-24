@@ -26,9 +26,9 @@
             </ul>
         </div>
         <ul class="list">
-         <#if  questionList??>  
-        <#list questionList as q>
-        <li class="fn-clear">
+            <#if  questionList??>  
+            <#list questionList as q>
+            <li class="fn-clear">
                 <a href="/question-details?id=${q.id}">
                     <img class="list-view" src="/images/default-user-thumbnail.png"/>
                     <div class="list-content">
@@ -41,19 +41,19 @@
                             <span class="ft-green">【待解决】</span>${q.Title}
                         </div>
                         <div class="ft-gray">
-                            圈子
+                            ${q.Area}-${q.University}<#if q.CollegeCode != "-1">-${q.College}</#if>
                         </div>
                         <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">
-                                2012-23-23 &nbsp; 浏览${q.PV} &nbsp; 回应${q.count}
+                                 ${q.AddTime?string('yyyy-MM-dd')} &nbsp; 浏览 ${q.PV} &nbsp; 回应${q.count}
                             </span>
-                            <span class="ft-green fn-right">￥${q.Points}</span>
+                            <span class="ft-green fn-right">${q.Points}</span>
                         </div>
                     </div>
                 </a>
             </li>
-        </#list>
-        </#if>
+            </#list>
+            </#if>
         </ul>
     </body>
 </html>

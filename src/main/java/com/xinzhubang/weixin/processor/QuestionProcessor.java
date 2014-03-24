@@ -35,13 +35,15 @@ import org.b3log.latke.servlet.renderer.JSONRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.AbstractFreeMarkerRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
 import org.b3log.latke.util.Requests;
+import org.b3log.latke.util.Strings;
 import org.json.JSONObject;
 
 /**
  * 问题处理器.
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
- * @version 1.0.0.0, Mar 5, 2014
+ * @author <a href="http://88250.b3log.org">Liang Ding</a>
+ * @version 1.1.0.0, Mar 24, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -70,11 +72,20 @@ public class QuestionProcessor {
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
-        renderer.setTemplateName("/community/question-list.ftl");
-        Map<String, Object> dataModel = renderer.getDataModel();
-        //获取用户session,放入用户id
+        renderer.setTemplateName("/admin/question-list.ftl");
+
+        String pageStr = request.getParameter("p");
+        if (Strings.isEmptyOrNull(pageStr)) {
+            pageStr = "1";
+        }
+
+        final int pageNum = Integer.valueOf(pageStr);
+
+        final Map<String, Object> dataModel = renderer.getDataModel();
+
         final JSONObject user = (JSONObject) request.getAttribute("user");
-        dataModel.put("questionList", (Object) questionService.questionList(user.optInt("id"), 0, null));
+
+        dataModel.put("questionList", (Object) questionService.getUserQuestions(user.optString("id"), pageNum));
         dataModel.put("type", "question");
         dataModel.put("subType", "1");
 
@@ -98,25 +109,37 @@ public class QuestionProcessor {
         context.setRenderer(renderer);
         renderer.setTemplateName("/community/question-list.ftl");
 
+        String pageStr = request.getParameter("p");
+        if (Strings.isEmptyOrNull(pageStr)) {
+            pageStr = "1";
+        }
+
+        final int pageNum = Integer.valueOf(pageStr);
+
         final Map<String, Object> dataModel = renderer.getDataModel();
-        final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
+
+        // TODO: 问题列表子类型
         String type = "1";
         if (request.getParameter("type") != null) {
             type = request.getParameter("type");
-            if (type.equals("1")) {//最新
+            if (type.equals("1")) { //最新
 
-            } else if (type.equals("2")) {//已解决
+            } else if (type.equals("2")) { //已解决
 
-            } else if (type.equals("3")) {//未解决
+            } else if (type.equals("3")) { //未解决
 
             }
         }
+
         final JSONObject user = (JSONObject) request.getAttribute("user");
-        JSONObject userInfo = userService.getUserInfo(user.optString("id"));
-        // FIXME: 社区提问列表圈子
-        dataModel.put("questionList", (Object) questionService.questionList(0, 0, userInfo.getString("CollegeCode")));
+        final String userId = user.optString("id");
+
+        final JSONObject community = userService.getUserInfo(userId);
+
+        dataModel.put("questionList", (Object) questionService.getQuestions(community, pageNum));
         dataModel.put("type", "question");
         dataModel.put("subType", type);
+
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
@@ -157,6 +180,7 @@ public class QuestionProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/question-publish", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
     public void showPublish(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
@@ -187,14 +211,27 @@ public class QuestionProcessor {
         final JSONObject ret = new JSONObject();
         renderer.setJSONObject(ret);
         final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
+        
         final JSONObject user = (JSONObject) request.getAttribute("user");
-        JSONObject userInfo = userService.getUserInfo(user.optString("id"));
+        final String userId = user.optString("id");
+
+        final JSONObject community = userService.getUserInfo(userId);
+
         requestJSONObject.put("AddUserID", user.optInt("id"));
         requestJSONObject.put("Title", requestJSONObject.get("Content"));
         requestJSONObject.put("AddTime", new Timestamp(System.currentTimeMillis()));
-        requestJSONObject.put("CollegeCode", userInfo.optString("CollegeCode"));
+
+        requestJSONObject.put("Area", community.optString("Area"));
+        requestJSONObject.put("AreaCode", community.optString("AreaCode"));
+        requestJSONObject.put("University", community.optString("University"));
+        requestJSONObject.put("UniversityCode", community.optString("UniversityCode"));
+        requestJSONObject.put("College", community.optString("College"));
+        requestJSONObject.put("CollegeCode", community.optString("CollegeCode"));
+
         String id = questionService.add(requestJSONObject);
+
         ret.put(Keys.STATUS_CODE, true);
+
         ret.put(Keys.MSG, "提问保存成功！");
     }
 

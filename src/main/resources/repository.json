@@ -54,6 +54,26 @@
                     "type": "Date"
                 },
                 {
+                    "name": "Area",
+                    "type": "String"
+                },
+                {
+                    "name": "AreaCode",
+                    "type": "String"
+                },
+                {
+                    "name": "University",
+                    "type": "String"
+                },
+                {
+                    "name": "UniversityCode",
+                    "type": "String"
+                },
+                {
+                    "name": "College",
+                    "type": "String"
+                },
+                {
                     "name": "CollegeCode",
                     "type": "String"
                 }
