@@ -116,6 +116,30 @@ var community = {
             });
         }
     },
+    sendGuestBook: function(toMemberID) {
+        if ($.trim($(".textarea").val()).length === 0) {
+            tip.show("发送失败", "内容不能为空");
+        } else {
+            var requestJSONObject = {
+                ToID: toMemberID,
+                Content: $(".textarea").val()
+            };
+
+            $.ajax({
+                url: "/guest-book",
+                type: "POST",
+                cache: false,
+                data: JSON.stringify(requestJSONObject),
+                success: function(result, textStatus) {
+                    if (result.sc) {
+                        community.cancel();
+                    } else {
+                        tip.show("发送失败", result.msg);
+                    }
+                }
+            });
+        }
+    },
     follow: function(userId, it) {
         var $it = $(it),
                 url = "/follow/user?id=" + userId;

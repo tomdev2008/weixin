@@ -30,16 +30,20 @@
             <#list items as item>
             <li class="fn-clear">
                 <a href="/<#if type == "student">requirement<#else>sale</#if>-details?id=${item.ID?c}">
-                    <img class="list-view" src="/images/default-user-thumbnail.png"/>
+                   <img class="list-view" src="/images/default-user-thumbnail.png"/>
                     <div class="list-content">
                         <div>
+                            <#if item.ItemType == 1>
                             <span class="ico-resource">资料</span>
+                            <#elseif item.ItemType ==2>
                             <span class="ico-qa">答疑</span>
+                            <#else>
                             <span class="ico-school">授课</span>
+                            </#if>
                             ${item.Name}
                         </div>
                         <div class="ft-gray">
-                            圈子
+                            ${item.Area}-${item.University}<#if item.CollegeCode != "-1">-${item.College}</#if>
                         </div>
                         <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">
@@ -52,12 +56,10 @@
             </li>
             </#list>
         </ul>
-        <!--
-        <a class="ft-green user-card-msg" href="/whisper">
-          给他/她留言
+        <a class="ft-green user-card-msg" href="/guest-book?toMemberID=${user.id?c}">
+            给 Ta 留言
         </a>
         <script src="/js/lib/jquery-2.1.0.min.js"></script>
         <script src="/js/community.js"></script>
-        -->
     </body>
 </html>

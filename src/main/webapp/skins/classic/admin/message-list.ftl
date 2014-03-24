@@ -7,30 +7,52 @@
     <body>
         <#include "../common/admin-nav.ftl">
         <ul class="list">
-            <#if list??>
-                <#list list as l>
-                    <li class="fn-clear">
-                        <img class="list-view" src="/images/default-user-thumbnail.png"/>
-                        <div class="list-content">
-                            <div class="fn-clear">
-                                <span class="fn-left">${l.fromUser.user_name}</span>
-                                <span class="ico ico-cater"></span>
-                                <span class="ico ico-level1"></span>
-                            </div>
-                            <div class="ft-gray">
-                                ${l.CONTENT}
-                            </div>
-                            <div class="fn-clear">
-                                <span class="ft-gray ft-small fn-left">
-                                    2012-23-23 12:12
-                                </span>
-                                <a href="/whisper?itemID=${l.ID?c}&toMemberID=${l.FromID?c}" class="fn-right">回复</a>
-                                <a href="/admin/message-details?id=${l.ID}" class="fn-right">${l.count}条信息 &nbsp; &nbsp;</a>
-                            </div>
-                        </div>
-                    </li>
-                </#list>
-            </#if>
+            <#list whispers as whisper>
+            <li class="fn-clear">
+                <img class="list-view" src="/images/default-user-thumbnail.png"/>
+                <div class="list-content">
+                    <div class="fn-clear">
+                        <span class="fn-left">${whisper.fromUser.user_name}</span>
+                        <span class="ico ico-cater"></span>
+                        <span class="ico ico-level1"></span>
+                        <span class="ico-resource">悄悄话</span>
+                    </div>
+                    <div class="ft-gray">
+                        ${whisper.CONTENT}
+                    </div>
+                    <div class="fn-clear">
+                        <span class="ft-gray ft-small fn-left">
+                            ${whisper.CreateTime?string('yyyy-MM-dd HH:mm:ss')}
+                        </span>
+                        <a href="/whisper?itemID=${whisper.KeyID?c}&toMemberID=${whisper.FromID?c}" class="fn-right">回复</a>
+                        <a href="/admin/message-details?id=${whisper.ID}" class="fn-right">${whisper.count}条信息 &nbsp; &nbsp;</a>
+                    </div>
+                </div>
+            </li>
+            </#list>
+
+            <#list guestBooks as guestBook>
+            <li class="fn-clear">
+                <img class="list-view" src="/images/default-user-thumbnail.png"/>
+                <div class="list-content">
+                    <div class="fn-clear">
+                        <span class="fn-left">${guestBook.fromUser.user_name}</span>
+                        <span class="ico ico-cater"></span>
+                        <span class="ico ico-level1"></span>
+                        <span class="ico-qa">留言</span>
+                    </div>
+                    <div class="ft-gray">
+                        ${guestBook.GBookContent}
+                    </div>
+                    <div class="fn-clear">
+                        <span class="ft-gray ft-small fn-left">
+                            ${guestBook.PostTime?string('yyyy-MM-dd HH:mm:ss')}
+                        </span>
+                        <a href="/guest-book?toMemberID=${guestBook.SendID?c}" class="fn-right">回复</a>
+                    </div>
+                </div>
+            </li>
+            </#list>
         </ul>
     </body>
 </html>

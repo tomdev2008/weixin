@@ -23,7 +23,7 @@
                             ${userCard.PropertyTitle}
                         </div>
                         <div class="ft-gray">
-                            圈子
+                            ${userCard.Area}-${userCard.University}<#if userCard.CollegeCode != "-1">-${userCard.College}</#if>
                         </div>
                     </a>
                     <span class="ft-green follow" onclick=<#if isLoggedIn>"community.follow(${user.id?c}, this)"<#else>"window.location.href='/login'"</#if>><#if userCard.isFollow>取消关注<#else>关注</#if></span>

@@ -15,6 +15,7 @@
  */
 package com.xinzhubang.weixin.service;
 
+import com.xinzhubang.weixin.repository.GuestBookRepository;
 import com.xinzhubang.weixin.repository.SchoolRepository;
 import com.xinzhubang.weixin.repository.UserAttentionRepository;
 import com.xinzhubang.weixin.repository.UserCardRepository;
@@ -52,7 +53,7 @@ import org.json.JSONObject;
  * 用户服务.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.1.0, Mar 23, 2014
+ * @version 1.2.1.0, Mar 24, 2014
  * @since 1.0.0
  */
 @Service
@@ -74,6 +75,67 @@ public class UserService {
 
     @Inject
     private SchoolRepository schoolRepository;
+
+    @Inject
+    private GuestBookRepository guestBookRepository;
+
+    /**
+     * 根据用户 id 获取用户的留言.
+     *
+     * @param userId
+     * @return
+     */
+    public List<JSONObject> getGuestBooksByUserId(final String userId, final int pageNum) {
+        try {
+            final Query query = new Query().setFilter(new PropertyFilter("MemberID", FilterOperator.EQUAL, userId));
+            query.setCurrentPageNum(pageNum).setPageSize(10);
+
+            final JSONObject result = guestBookRepository.get(query);
+
+            final JSONArray results = result.getJSONArray(Keys.RESULTS);
+            final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
+
+            for (final JSONObject j : ret) {
+                j.put("toUser", userRepository.get(j.getString("MemberID")));
+                j.put("fromUser", userRepository.get(j.getString("SendID")));
+                j.put("type", "gb"); // 类型是留言
+            }
+
+            return ret;
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "获取用户 [id=" + userId + "] 悄悄话列表异常", e);
+
+            return Collections.emptyList();
+        }
+    }
+
+    /**
+     * 发送指定的留言.
+     *
+     * @param guestBook 指定的悄悄话，例如：
+     * <pre>
+     * {
+     *     "MemberID": int,
+     *     "SendID": int,
+     *     "GBookContent": ""
+     * }
+     * </pre>
+     *
+     * @return
+     * @throws ServiceException
+     */
+    @Transactional
+    public boolean sendGuestBook(final JSONObject guestBook) throws ServiceException {
+        try {
+            guestBookRepository.add(guestBook);
+
+            return true;
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "发留言 [" + guestBook.toString() + "] 异常", e);
+
+            return false;
+        }
+    }
 
     /**
      * 获取指定的社区圈子里指定类型（学生/老师）的名片列表。
@@ -527,9 +589,9 @@ public class UserService {
             userInfo.put("UniversityCode", school.get("Did"));
             userInfo.put("College", colleg.get("Name"));
             userInfo.put("CollegeCode", colleg.get("Did"));
-            
+
             userInfo.remove("rownum");
-            
+
             userInfoRepository.update(userInfo.getString("ID"), userInfo);
         }
     }

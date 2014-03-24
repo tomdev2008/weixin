@@ -15,8 +15,8 @@
  */
 package com.xinzhubang.weixin.service;
 
+import com.xinzhubang.weixin.repository.GuestBookRepository;
 import com.xinzhubang.weixin.repository.ItemRepository;
-import com.xinzhubang.weixin.repository.UserCardRepository;
 import com.xinzhubang.weixin.repository.UserRepository;
 import com.xinzhubang.weixin.repository.WhisperRepository;
 import java.sql.Timestamp;
@@ -46,7 +46,7 @@ import org.json.JSONObject;
  * 项目服务.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.3.0.0, Mar 20, 2014
+ * @version 1.4.0.0, Mar 24, 2014
  * @since 1.0.0
  */
 @Service
@@ -58,13 +58,13 @@ public class ItemService {
     private UserRepository userRepository;
 
     @Inject
-    private UserCardRepository userCardRepository;
-
-    @Inject
     private ItemRepository itemRepository;
 
     @Inject
     private WhisperRepository whisperRepository;
+
+    @Inject
+    private GuestBookRepository guestBookRepository;
 
     /**
      * 发送指定的悄悄话.
@@ -99,40 +99,49 @@ public class ItemService {
     }
 
     /**
-     * 根据用户ID获取用户的消息
+     * 根据用户 id 获取用户的悄悄话.
      *
      * @param userId
      * @return
-     * @throws RepositoryException
-     * @throws JSONException
      */
-    public List<JSONObject> getWhispersByUserId(int userId) throws RepositoryException, JSONException {
-        final Query q = new Query().setFilter(new PropertyFilter("ToID", FilterOperator.EQUAL, userId));
-        final JSONObject result = whisperRepository.get(q);
-        
-        final JSONArray results = result.getJSONArray(Keys.RESULTS);
-        final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
-        
-        for (final JSONObject j : ret) {
-            j.put("toUser", userRepository.get(j.getString("ToID")));
-            j.put("fromUser", userRepository.get(j.getString("FromID")));
-            final JSONObject subResult = whisperRepository.get(new Query().setFilter(new PropertyFilter("KeyID", FilterOperator.EQUAL, j.getInt("ID"))));
-            j.put("count", subResult.getJSONArray(Keys.RESULTS).length());
-        }
+    public List<JSONObject> getWhispersByUserId(final String userId, final int pageNum) {
+        try {
+            final Query query = new Query().setFilter(new PropertyFilter("ToID", FilterOperator.EQUAL, userId));
+            query.setCurrentPageNum(pageNum).setPageSize(10);
 
-        return ret;
+            final JSONObject result = whisperRepository.get(query);
+
+            final JSONArray results = result.getJSONArray(Keys.RESULTS);
+            final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
+
+            for (final JSONObject j : ret) {
+                j.put("toUser", userRepository.get(j.getString("ToID")));
+                j.put("fromUser", userRepository.get(j.getString("FromID")));
+
+                final JSONObject subResult = whisperRepository.get(new Query().setFilter(new PropertyFilter("KeyID", FilterOperator.EQUAL, j.getInt("ID"))));
+                j.put("count", subResult.getJSONArray(Keys.RESULTS).length());
+
+                j.put("type", "w"); // 类型是悄悄话
+            }
+
+            return ret;
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "获取用户 [id=" + userId + "] 悄悄话列表异常", e);
+
+            return Collections.emptyList();
+        }
     }
 
     /**
-     * 根据消息ID获取消息详情
+     * 根据消息 id 获取悄悄话详情.
      *
      * @param id
      * @return
      * @throws RepositoryException
      * @throws JSONException
      */
-    public JSONObject queryWhisperById(int id) throws RepositoryException, JSONException {
-        final JSONObject result = whisperRepository.get("" + id);
+    public JSONObject getWhisper(final String id) throws RepositoryException, JSONException {
+        final JSONObject result = whisperRepository.get(id);
         final JSONObject subResult = whisperRepository.get(new Query().setFilter(new PropertyFilter("KeyID", FilterOperator.EQUAL, id)));
         result.put("toUser", userRepository.get(result.getString("ToID")));
         result.put("fromUser", userRepository.get(result.getString("FromID")));

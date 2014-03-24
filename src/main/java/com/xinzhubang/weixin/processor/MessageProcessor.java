@@ -17,6 +17,7 @@ package com.xinzhubang.weixin.processor;
 
 import com.xinzhubang.weixin.processor.advice.LoginCheck;
 import com.xinzhubang.weixin.service.ItemService;
+import com.xinzhubang.weixin.service.UserService;
 import com.xinzhubang.weixin.util.Filler;
 import java.util.Map;
 import javax.inject.Inject;
@@ -34,6 +35,7 @@ import org.b3log.latke.servlet.renderer.freemarker.AbstractFreeMarkerRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
 import org.b3log.latke.util.CollectionUtils;
 import org.b3log.latke.util.Requests;
+import org.b3log.latke.util.Strings;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -42,7 +44,7 @@ import org.json.JSONObject;
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.0.0, Mar 18, 2014
+ * @version 1.2.0.0, Mar 24, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -54,6 +56,9 @@ public class MessageProcessor {
     @Inject
     private ItemService itemService;
 
+    @Inject
+    private UserService userService;
+
     /**
      * 展示发送悄悄话页面.
      *
@@ -63,6 +68,7 @@ public class MessageProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/whisper", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
     public void showSendWhisper(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
@@ -73,7 +79,7 @@ public class MessageProcessor {
 
         dataModel.put("itemID", request.getParameter("itemID"));
         dataModel.put("toMemberID", request.getParameter("toMemberID"));
-        System.out.println(dataModel);
+
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
@@ -94,12 +100,75 @@ public class MessageProcessor {
         context.setRenderer(renderer);
         final JSONObject ret = new JSONObject();
         renderer.setJSONObject(ret);
+
         final JSONObject whisper = Requests.parseRequestJSONObject(request, response);
-        System.err.println(whisper);
+
         final JSONObject user = (JSONObject) request.getAttribute("user");
+
         whisper.put("FromID", user.optInt("id"));
         whisper.put("ToID", whisper.getString("ToID").replace(",", ""));
+
         final boolean succ = itemService.sendWhisper(whisper);
+
+        ret.put(Keys.STATUS_CODE, succ);
+        if (!succ) {
+            ret.put(Keys.MSG, "发布失败");
+        }
+
+        renderer.setJSONObject(ret);
+    }
+
+    /**
+     * 展示发留言页面.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/guest-book", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
+    public void showSendGuestBook(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+        context.setRenderer(renderer);
+        renderer.setTemplateName("/community/guest-book.ftl");
+
+        final Map<String, Object> dataModel = renderer.getDataModel();
+
+        dataModel.put("toMemberID", request.getParameter("toMemberID"));
+
+        filler.fillHeader(request, response, dataModel);
+        filler.fillFooter(dataModel);
+    }
+
+    /**
+     * 发留言.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/guest-book", method = HTTPRequestMethod.POST)
+    @Before(adviceClass = LoginCheck.class)
+    public void sendGuestBook(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final JSONRenderer renderer = new JSONRenderer();
+        context.setRenderer(renderer);
+        final JSONObject ret = new JSONObject();
+        renderer.setJSONObject(ret);
+        final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
+
+        final JSONObject guestBook = new JSONObject();
+
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+        guestBook.put("SendID", user.optInt("id"));
+
+        guestBook.put("MemberID", requestJSONObject.getString("ToID"));
+        guestBook.put("GBookContent", requestJSONObject.optString("Content"));
+
+        final boolean succ = userService.sendGuestBook(guestBook);
 
         ret.put(Keys.STATUS_CODE, succ);
         if (!succ) {
@@ -167,10 +236,22 @@ public class MessageProcessor {
         context.setRenderer(renderer);
         renderer.setTemplateName("/admin/message-list.ftl");
 
+        String pageStr = request.getParameter("p");
+        if (Strings.isEmptyOrNull(pageStr)) {
+            pageStr = "1";
+        }
+
+        final int pageNum = Integer.valueOf(pageStr);
+
         final Map<String, Object> dataModel = renderer.getDataModel();
+
         final JSONObject user = (JSONObject) request.getAttribute("user");
-        dataModel.put("list", itemService.getWhispersByUserId(user.optInt("id")));
+        final String userId = user.optString("id");
+
+        dataModel.put("whispers", itemService.getWhispersByUserId(userId, pageNum));
+        dataModel.put("guestBooks", userService.getGuestBooksByUserId(userId, pageNum));
         dataModel.put("type", "message");
+
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
@@ -193,7 +274,7 @@ public class MessageProcessor {
         final Map<String, Object> dataModel = renderer.getDataModel();
         String id = request.getParameter("id");
         if (StringUtils.isNotEmpty(id)) {
-            JSONObject message = itemService.queryWhisperById(Integer.parseInt(id));
+            JSONObject message = itemService.getWhisper(id);
             JSONArray sublist = message.getJSONArray("list");
             dataModel.put("message", message);
             dataModel.put("list", CollectionUtils.jsonArrayToList(sublist));

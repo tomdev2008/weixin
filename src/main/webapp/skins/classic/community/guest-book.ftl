@@ -2,12 +2,12 @@
 <html>
     <head>
         <#include "../common/macro-meta.ftl">
-        <@meta title="悄悄话 - 新助邦"/>
+        <@meta title="留言 - 新助邦"/>
     </head>
     <body>
         <div class="wrap">
             <textarea class="textarea" placeholder="请填写要发送的内容"></textarea>
-            <button class="button orange" onclick="community.sendWhisper(${itemID}, ${toMemberID})">发 送</button>
+            <button class="button orange" onclick="community.sendGuestBook(${toMemberID})">发 送</button>
             <button class="button" onclick="community.cancel()">取 消</button>
         </div>
         <#include "../common/tip.ftl">

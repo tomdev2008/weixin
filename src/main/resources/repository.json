@@ -1,6 +1,6 @@
 {
     "description": "Description of repository structures, for generation (DDL: http://en.wikipedia.org/wiki/Data_Definition_Language) of the relational database table and persistence validation.",
-    "version": "1.2.0.0, Mar 23, 2014",
+    "version": "1.3.0.0, Mar 24, 2014",
     "authors": ["Liang Ding"],
     "since": "1.0.0",
     "repositories": [
@@ -156,6 +156,24 @@
                 {
                     "name": "CreateTime",
                     "type": "Datetime"
+                }
+            ]
+        },
+        {
+            "name": "MGBook",
+            "keys": [
+                {
+                    "name": "MemberID",
+                    "type": "int"
+                },
+                {
+                    "name": "SendID",
+                    "type": "int"
+                },
+                {
+                    "name": "GBookContent",
+                    "type": "String",
+                    "length": 1024
                 }
             ]
         },

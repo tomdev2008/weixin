@@ -43,7 +43,7 @@ import org.json.JSONObject;
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.2.0.2, Mar 18, 2014
+ * @version 1.2.1.2, Mar 24, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -167,6 +167,11 @@ public class UserProcessor {
             } else {
                 userCard.put("isFollow", false);
             }
+            
+            userCard.put("Area", community.optString("Area"));
+            userCard.put("University", community.optString("University"));
+            userCard.put("CollegeCode", community.optString("CollegeCode"));
+            userCard.put("College", community.optString("College"));
         }
 
         dataModel.put("type", type);
