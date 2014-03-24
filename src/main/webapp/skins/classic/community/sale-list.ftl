@@ -59,7 +59,7 @@
                         + '</div>'
                         + '<div class="fn-clear">'
                         + '<span class="ft-gray ft-small fn-left">'
-                        + obj.CreateTime.substr(0, 10) + '&nbsp; 浏览' + obj.ClickCount
+                        + obj.CreateTime.substr(0, 10) + '&nbsp; 浏览 ' + obj.ClickCount
                         + '</span>'
                         + '<span class="ft-green fn-right">￥' + obj.Price + '</span>'
                         + '</div>'
