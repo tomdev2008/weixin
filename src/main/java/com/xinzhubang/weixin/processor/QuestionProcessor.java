@@ -113,6 +113,7 @@ public class QuestionProcessor {
         }
         final JSONObject user = (JSONObject) request.getAttribute("user");
         JSONObject userInfo = userService.getUserInfo(user.optString("id"));
+        // FIXME: 社区提问列表圈子
         dataModel.put("questionList", (Object) questionService.questionList(0, 0, userInfo.getString("CollegeCode")));
         dataModel.put("type", "question");
         dataModel.put("subType", type);
