@@ -134,24 +134,28 @@ public class QuestionService {
      * @param pageNum
      * @return
      */
-    public List<JSONObject> questionList(final int userId,final int pageNum,String collegeCode){
-         try {
-            final List<Filter> filters = new ArrayList<Filter>();            
-            if(userId!=0){
-                 filters.add(new PropertyFilter("AddUserID", FilterOperator.EQUAL, userId));
-             } 
-            if(StringUtils.isNotEmpty(collegeCode)){
-                 filters.add(new PropertyFilter("CollegeCode", FilterOperator.EQUAL, collegeCode));
-             } 
-            final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+    public List<JSONObject> questionList(final int userId, final int pageNum, String collegeCode) {
+        try {
+            final Query query = new Query();
+
+            if (userId != 0) {
+                query.setFilter(new PropertyFilter("AddUserID", FilterOperator.EQUAL, userId));
+            }
+
+            if (StringUtils.isNotEmpty(collegeCode)) {
+                query.setFilter(new PropertyFilter("CollegeCode", FilterOperator.EQUAL, collegeCode));
+            }
+
             final JSONObject result = questionRepository.get(query);
             final JSONArray results = result.getJSONArray(Keys.RESULTS);
+            
             final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
-            for (JSONObject j : ret) {
+            for (final JSONObject j : ret) {
                 j.put("user", userRepository.get(j.getString("AddUserID")));
                 final JSONObject subResult = answerRepository.get(new Query().setFilter(new PropertyFilter("QID", FilterOperator.EQUAL, j.getInt("id"))));
                 j.put("count", subResult.getJSONArray(Keys.RESULTS).length());
             }
+            
             return ret;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "获取提问列表出错", e);

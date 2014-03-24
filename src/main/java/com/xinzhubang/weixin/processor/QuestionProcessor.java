@@ -52,6 +52,7 @@ public class QuestionProcessor {
 
     @Inject
     private QuestionService questionService;
+
     @Inject
     private UserService userService;
 
@@ -73,7 +74,7 @@ public class QuestionProcessor {
         Map<String, Object> dataModel = renderer.getDataModel();
         //获取用户session,放入用户id
         final JSONObject user = (JSONObject) request.getAttribute("user");
-        dataModel.put("questionList", (Object)questionService.questionList(user.optInt("id"), 0,null));
+        dataModel.put("questionList", (Object) questionService.questionList(user.optInt("id"), 0, null));
         dataModel.put("type", "question");
         dataModel.put("subType", "1");
 
@@ -112,7 +113,7 @@ public class QuestionProcessor {
         }
         final JSONObject user = (JSONObject) request.getAttribute("user");
         JSONObject userInfo = userService.getUserInfo(user.optString("id"));
-        dataModel.put("questionList", (Object)questionService.questionList(0, 0,userInfo.getString("CollegeCode")));
+        dataModel.put("questionList", (Object) questionService.questionList(0, 0, userInfo.getString("CollegeCode")));
         dataModel.put("type", "question");
         dataModel.put("subType", type);
         filler.fillHeader(request, response, dataModel);
