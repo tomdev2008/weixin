@@ -57,14 +57,18 @@ var loadMore = {
     },
     load: function(url) {
         $.ajax({
-            url: url + $(".list:last").data("page"),
+            url: url + ($(".list:last").data("page") + 1),
             type: "GET",
             cache: false,
             success: function(result, textStatus) {
                 $(".list:last .loading").remove();
-                $(".list:last").data("page", result.pageNum + 1);
+                $(".list:last").data("page", result.pageNum);
                 var listHTML = "",
-                        sales = result.sales;
+                        sales = result.sales || result.requirements;
+                if (sales.length === 0) {
+                     $(window).unbind("scroll");
+                }
+                
                 for (var i = 0, iLength = sales.length; i < iLength; i++) {
                     listHTML += loadMore.genHTML(sales[i]);
                 }

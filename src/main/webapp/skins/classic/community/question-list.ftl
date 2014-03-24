@@ -6,7 +6,7 @@
     </head>
     <body>
         <#include "../common/community-nav.ftl">
-        <div class="sub-nav">
+        <div class="sub-nav" data-page="1">
             <ul class="fn-clear">
                 <li style="width: 25%">
                     <a href="/question-list?type=1"
@@ -29,7 +29,9 @@
             <#list questions as question>
             <li class="fn-clear">
                 <a href="/question-details?id=${question.id}">
-                    <img class="list-view" src="/images/default-user-thumbnail.png"/>
+                    <img class="list-view" 
+                          onerror="this.src='/images/default-user-thumbnail.png'" 
+                          src="${question.Thumbnail}"/>
                     <div class="list-content">
                         <div class="fn-clear">
                             <span class="fn-left ft-gray">${question.user.user_name}</span>
@@ -53,5 +55,39 @@
             </li>
             </#list>
         </ul>
+        <#include "../common/tip.ftl">
+        <script src="/js/lib/jquery-2.1.0.min.js"></script>
+        <script src="/js/common.js"></script>
+        <script>
+            loadMore.init("/question-list-ajax?p=");
+            loadMore.genHTML = function(obj) {
+                var community = obj.Area + '-' + obj.University;
+                if (obj.CollegeCode !== "-1") {
+                    community += '-' + obj.College;
+                }
+                var liHTML = '<li class="fn-clear">'
+                        + '<a href="/sale-details?id=' + obj.ID + '">'
+                        + '<img class="list-view" src="http://www.xiajirong.com' + obj.Thumbnail + '"/>'
+                        + '<div class="list-content">'
+                        + '<div class="fn-clear">'
+                        + '<span class="ft-gray fn-left">' + obj.userName + '</span>'
+                        + '<span class="ico ico-cater"></span>'
+                        + '<span class="ico ico-level1"></span>'
+                        + '</div>'
+                        + '<div>' + obj.Name + '</div>'
+                        + '<div class="ft-gray">' + community
+                        + '</div>'
+                        + '<div class="fn-clear">'
+                        + '<span class="ft-gray ft-small fn-left">'
+                        + obj.CreateTime.substr(0, 10) + '&nbsp; 浏览' + obj.ClickCount
+                        + '</span>'
+                        + '<span class="ft-green fn-right">￥' + obj.Price + '</span>'
+                        + '</div>'
+                        + '</div>'
+                        + '</a>'
+                        + '</li>';
+                return liHTML;
+            };
+        </script>
     </body>
 </html>

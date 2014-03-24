@@ -10,7 +10,9 @@
             <#list userCards as userCard>
             <li class="fn-clear">
                 <a href="/user-card?type=${type}&userName=${userCard.userName}">
-                    <img class="list-view" src="/images/default-user-thumbnail.png"/>
+                    <img class="list-view"
+                         onerror="this.src='/images/default-user-thumbnail.png'" 
+                         src="${userCard.Thumbnail}"/>
                 </a>
                 <div class="list-content">
                     <a href="/user-card?type=${type}&userName=${userCard.userName}">
