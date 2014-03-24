@@ -56,7 +56,7 @@ public class MessageProcessor {
     private ItemService itemService;
 
     /**
-     * 展示发送悄悄话页面.  ok
+     * 展示发送悄悄话页面.
      *
      * @param context the specified context
      * @param request the specified request
@@ -80,7 +80,7 @@ public class MessageProcessor {
     }
 
     /**
-     * 发悄悄话. ok
+     * 发悄悄话.
      *
      * @param context the specified context
      * @param request the specified request
@@ -91,7 +91,7 @@ public class MessageProcessor {
     @Before(adviceClass = LoginCheck.class)
     public void sendWhisper(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
-       final JSONRenderer renderer = new JSONRenderer();
+        final JSONRenderer renderer = new JSONRenderer();
         context.setRenderer(renderer);
         final JSONObject ret = new JSONObject();
         renderer.setJSONObject(ret);
@@ -193,11 +193,11 @@ public class MessageProcessor {
 
         final Map<String, Object> dataModel = renderer.getDataModel();
         String id = request.getParameter("id");
-        if(StringUtils.isNotEmpty(id)){
+        if (StringUtils.isNotEmpty(id)) {
             JSONObject message = itemService.queryWhisperById(Integer.parseInt(id));
             JSONArray sublist = message.getJSONArray("list");
-            dataModel.put("message",message);
-            dataModel.put("list",CollectionUtils.jsonArrayToList(sublist));
+            dataModel.put("message", message);
+            dataModel.put("list", CollectionUtils.jsonArrayToList(sublist));
         }
         dataModel.put("type", "message");
         filler.fillHeader(request, response, dataModel);

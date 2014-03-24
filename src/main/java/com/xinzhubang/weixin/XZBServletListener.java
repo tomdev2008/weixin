@@ -46,7 +46,7 @@ public class XZBServletListener extends AbstractServletListener {
     @Override
     public void contextInitialized(final ServletContextEvent servletContextEvent) {
         super.contextInitialized(servletContextEvent);
-        
+
         // 数据库表主键名为 id
         JdbcRepositories.setDefaultKeyName("id");
 
@@ -71,14 +71,14 @@ public class XZBServletListener extends AbstractServletListener {
             httpServletRequest.setAttribute(Keys.HttpRequest.IS_SEARCH_ENGINE_BOT, true);
         } else {
             httpServletRequest.setAttribute(Keys.HttpRequest.IS_SEARCH_ENGINE_BOT, false);
-            
+
             if (StaticResources.isStatic(httpServletRequest)) {
                 return;
             }
-            
+
             // Gets the session of this request
             final HttpSession session = httpServletRequest.getSession();
-            LOGGER.log(Level.DEBUG, "Gets a session[id={0}, remoteAddr={1}, User-Agent={2}, isNew={3}]",
+            LOGGER.log(Level.TRACE, "Gets a session[id={0}, remoteAddr={1}, User-Agent={2}, isNew={3}]",
                        new Object[]{session.getId(), httpServletRequest.getRemoteAddr(), httpServletRequest.getHeader("User-Agent"),
                                     session.isNew()});
         }
