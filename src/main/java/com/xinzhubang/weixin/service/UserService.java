@@ -333,22 +333,21 @@ public class UserService {
     }
 
     public JSONObject getUserByEmailOrUsername(final String email, final String userName) {
-
         final List<Filter> filters = new ArrayList<Filter>();
         filters.add(new PropertyFilter("user_name", FilterOperator.EQUAL, userName));
         filters.add(new PropertyFilter("email", FilterOperator.EQUAL, userName));
+
         final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.OR, filters));
+
         try {
             final JSONObject result = userRepository.get(query);
-            if (result != null) {
-                return result.getJSONArray(Keys.RESULTS).optJSONObject(0);
-            } else {
-                return null;
-            }
+
+            return result.getJSONArray(Keys.RESULTS).optJSONObject(0);
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "根据用户名和邮箱 [" + email + "][" + userName + "] 获取用户异常", e);
+
+            return null;
         }
-        return null;
     }
 
     /**

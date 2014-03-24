@@ -41,7 +41,7 @@ import org.json.JSONObject;
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.1.0, Mar 23, 2014
+ * @version 1.1.2.0, Mar 24, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -52,7 +52,7 @@ public class LoginProcessor {
 
     @Inject
     private UserService userService;
-    
+
     /**
      * 展示登录页面.
      *
@@ -67,14 +67,14 @@ public class LoginProcessor {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
         renderer.setTemplateName("/login.ftl");
-        
+
         String go = request.getParameter("go");
         if (Strings.isEmptyOrNull(go)) {
             go = "/user-list";
         }
 
         final Map<String, Object> dataModel = renderer.getDataModel();
-        
+
         dataModel.put("go", go);
 
         filler.fillHeader(request, response, dataModel);
@@ -115,11 +115,11 @@ public class LoginProcessor {
         user.put("userId", user.optString("id"));
 
         Sessions.login(request, response, user);
-        
+
         // 查询用户是否已经设置过圈子
-        final JSONObject community = userService.getUserInfo( user.optString("id"));
+        final JSONObject community = userService.getUserInfo(user.optString("id"));
         if (null == community) {
-             ret.put("go", "/admin/set-community");
+            ret.put("go", "/admin/set-community");
         } else {
             ret.put("go", "/user-list");
         }
@@ -168,7 +168,7 @@ public class LoginProcessor {
     }
 
     /**
-     * 用户注册
+     * 用户注册.
      *
      * @param context the specified context
      * @param request the specified request
@@ -193,11 +193,14 @@ public class LoginProcessor {
         if (user != null) {
             ret.put(Keys.STATUS_CODE, false);
             ret.put(Keys.MSG, "邮箱或用户名已存在，请重新输入！");
+
+            return;
         }
-        if (null == user) {
-            userService.addUser(requestJSONObject);
-            ret.put(Keys.STATUS_CODE, true);
-            ret.put(Keys.MSG, "注册成功，请登录！");
-        }
+
+        requestJSONObject.put("password", DESs.encrypt(password, "XHJY"));
+        
+        userService.addUser(requestJSONObject);
+        ret.put(Keys.STATUS_CODE, true);
+        ret.put(Keys.MSG, "注册成功，请登录！");
     }
 }
