@@ -19,13 +19,13 @@
                         <span class="ft-green">【待解决】</span>${question.Title}
                     </div>
                     <div class="ft-gray">
-                        圈子
+                        ${question.Area}-${question.University}<#if question.CollegeCode != "-1">-${question.College}</#if>
                     </div>
                     <div class="fn-clear">
                         <span class="ft-gray ft-small fn-left">
-                            2012-23-23 &nbsp; 浏览${question.PV} &nbsp; 回应${question.count}
+                            ${question.AddTime?string('yyyy-MM-dd')} &nbsp; 浏览${question.PV} &nbsp; 回应${question.count}
                         </span>
-                        <span class="ft-green fn-right">￥${question.Points}</span>
+                        <span class="ft-green fn-right">${question.Points}</span>
                     </div>
                 </div>
             </li>
@@ -46,13 +46,13 @@
                     </div>
                     <div class="fn-clear">
                         <span class="ft-gray ft-small fn-left">
-                             ${a.AddTime?string('yyyy-MM-dd')}
+                            ${a.AddTime?string('yyyy-MM-dd')}
                         </span>
                         <#if a.Agree==0>
-                        <span onclick="community.questionAccept(${question.id},${a.id})" class="ft-green fn-right question-accept">采纳</span>
+                        <span onclick="community.questionAccept(${question.id}, ${a.id})" class="ft-green fn-right question-accept">采纳</span>
                         </#if>
                         <#if a.Agree!=0>
-                            <span class="ft-green fn-right question-accept">已采纳</span>
+                        <span class="ft-green fn-right question-accept">已采纳</span>
                         </#if>
                     </div>
                 </div>
