@@ -43,7 +43,7 @@ import org.json.JSONObject;
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.2.1.2, Mar 24, 2014
+ * @version 1.3.1.2, Mar 24, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -68,7 +68,7 @@ public class UserProcessor {
      */
     @RequestProcessing(value = "/admin/set-community", method = HTTPRequestMethod.GET)
     @Before(adviceClass = LoginCheck.class)
-    public void showIndex(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+    public void showSetCommunity(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
 
@@ -147,10 +147,10 @@ public class UserProcessor {
 
         final JSONObject user = (JSONObject) request.getAttribute("user");
         final String userId = user.optString("id");
-        
+
         final JSONObject community = userService.getUserInfo(userId);
         community.put("type", type);
-        
+
         final List<JSONObject> userCards = userService.getUserCards(community, pageNum);
 
         final Map<String, Object> dataModel = renderer.getDataModel();
@@ -167,7 +167,7 @@ public class UserProcessor {
             } else {
                 userCard.put("isFollow", false);
             }
-            
+
             userCard.put("Area", community.optString("Area"));
             userCard.put("University", community.optString("University"));
             userCard.put("CollegeCode", community.optString("CollegeCode"));
@@ -179,6 +179,65 @@ public class UserProcessor {
 
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
+    }
+
+    /**
+     * 获取社区用户（学生/老师）列表页面数据（AJAX 拉取分页）.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/user-list-ajax", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
+    public void getUserList(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final JSONRenderer renderer = new JSONRenderer();
+        context.setRenderer(renderer);
+        final JSONObject ret = new JSONObject();
+        renderer.setJSONObject(ret);
+
+        String pageStr = request.getParameter("p");
+        if (Strings.isEmptyOrNull(pageStr)) {
+            pageStr = "1";
+        }
+        final int pageNum = Integer.valueOf(pageStr);
+
+        String type = request.getParameter("type"); // teacher/student
+        if (Strings.isEmptyOrNull(type)) {
+            type = "teacher";
+        }
+
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+        final String userId = user.optString("id");
+
+        final JSONObject community = userService.getUserInfo(userId);
+        community.put("type", type);
+
+        final List<JSONObject> userCards = userService.getUserCards(community, pageNum);
+
+        final JSONObject currUser = userService.getCurrentUser(request);
+        if (null != currUser) {
+            ret.put("user", currUser);
+        }
+
+        for (final JSONObject userCard : userCards) {
+            final String uId = userCard.optString("T_User_ID");
+            if (null != currUser) {
+                userCard.put("isFollow", userService.isFollow(currUser.optString("id"), uId));
+            } else {
+                userCard.put("isFollow", false);
+            }
+
+            userCard.put("Area", community.optString("Area"));
+            userCard.put("University", community.optString("University"));
+            userCard.put("CollegeCode", community.optString("CollegeCode"));
+            userCard.put("College", community.optString("College"));
+        }
+
+        ret.put("type", type);
+        ret.put("userCards", userCards);
     }
 
     /**
