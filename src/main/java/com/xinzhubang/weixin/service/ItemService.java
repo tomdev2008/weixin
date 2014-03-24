@@ -106,7 +106,7 @@ public class ItemService {
      * @throws RepositoryException
      * @throws JSONException
      */
-    public List<JSONObject> queryWhisperByUserId(int userId) throws RepositoryException, JSONException {
+    public List<JSONObject> getWhispersByUserId(int userId) throws RepositoryException, JSONException {
         final Query q = new Query().setFilter(new PropertyFilter("ToID", FilterOperator.EQUAL, userId));
         final JSONObject result = whisperRepository.get(q);
         

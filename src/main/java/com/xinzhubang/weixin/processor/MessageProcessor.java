@@ -18,7 +18,6 @@ package com.xinzhubang.weixin.processor;
 import com.xinzhubang.weixin.processor.advice.LoginCheck;
 import com.xinzhubang.weixin.service.ItemService;
 import com.xinzhubang.weixin.util.Filler;
-import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -170,7 +169,7 @@ public class MessageProcessor {
 
         final Map<String, Object> dataModel = renderer.getDataModel();
         final JSONObject user = (JSONObject) request.getAttribute("user");
-        dataModel.put("list", itemService.queryWhisperByUserId(user.optInt("id")));
+        dataModel.put("list", itemService.getWhispersByUserId(user.optInt("id")));
         dataModel.put("type", "message");
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
