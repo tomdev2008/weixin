@@ -18,7 +18,7 @@
                         <span class="ft-green"><#if 0 == question.BestAnswer>【待解决】<#else>【已解决】</#if></span>${question.Title}
                     </div>
                     <div class="ft-gray">
-                        ${question.Area}-${question.University}<#if question.CollegeCode != "-1">-${question.College}</#if>
+                        ${question.Area}<#if question.University != "">-${question.University}</#if><#if question.CollegeCode != "">-${question.College}</#if>
                     </div>
                     <div class="fn-clear">
                         <span class="ft-gray ft-small fn-left">

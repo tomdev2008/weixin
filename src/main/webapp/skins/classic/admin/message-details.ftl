@@ -6,7 +6,7 @@
     </head>
     <body>
         <#include "../common/admin-nav.ftl">
-        <ul class="list" style="margin-bottom: 3em">
+        <ul class="list">
             <li class="fn-clear">
                 <img class="list-view" src="/images/default-user-thumbnail.png"/>
                 <div class="list-content">
@@ -22,24 +22,25 @@
                     </div>
                 </div>
             </li>
-回复：
-            <#if list??>
+        </ul>
+        <ul class="list question" style="margin-bottom: 3em">
+             <#if list??>
             <#list list as l>
-                <li class="fn-clear">
-                            <img class="list-view" src="/images/default-user-thumbnail.png"/>
-                            <div class="list-content">
-                                <div class="fn-clear">
-                                    <span class="fn-left">${l.fromUser.user_name}</span>
-                                    <span class="ico ico-cater"></span>
-                                </div>
-                                <div class="ft-gray">
-                                    ${l.CONTENT}
-                                </div>
-                                <div class="ft-gray ft-small">
-                                    ${l.CreateTime?string('yyyy-MM-dd HH:mm:ss')}
-                                </div>
-                            </div>
-                        </li>
+            <li class="fn-clear">
+                <img class="list-view" src="/images/default-user-thumbnail.png"/>
+                <div class="list-content">
+                    <div class="fn-clear">
+                        <span class="fn-left">${l.fromUser.user_name}</span>
+                        <span class="ico ico-cater"></span>
+                    </div>
+                    <div class="ft-gray">
+                        ${l.CONTENT}
+                    </div>
+                    <div class="ft-gray ft-small">
+                        ${l.CreateTime?string('yyyy-MM-dd HH:mm:ss')}
+                    </div>
+                </div>
+            </li>
             </#list>
             </#if>
         </ul>

@@ -28,7 +28,6 @@
                 </div>
             </li>
             </#list>
-
             <#list guestBooks as guestBook>
             <li class="fn-clear">
                 <img class="list-view" src="/images/default-user-thumbnail.png"/>

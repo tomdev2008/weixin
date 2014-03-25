@@ -40,7 +40,7 @@
                         ${sale.ItemContent}
                     </div>
                     <div class="ft-gray">
-                        ${sale.Area}-${sale.University}<#if sale.CollegeCode != "-1">-${sale.College}</#if>
+                        ${sale.Area}<#if sale.University != "">-${sale.University}</#if><#if sale.CollegeCode != "">-${sale.College}</#if>
                     </div>
                     <div class="fn-clear">
                         <span class="ft-gray fn-left">${sale.userName}</span>

@@ -10,7 +10,9 @@
             <#list followingUsers as followingUser>
             <li class="fn-clear">
                 <a href="/user-card?type${type}&userName=${followingUser.userName}">
-                    <img class="list-view" src="/images/default-user-thumbnail.png"/>
+                    <img class="list-view" 
+                         onerror="this.src='/images/default-user-thumbnail.png'" 
+                         src="/images/default-user-thumbnail.png"/>
                 </a>
                 <div class="list-content">
                     <a href="/user-card?type${type}&userName=${followingUser.userName}">
@@ -22,7 +24,7 @@
                             ${followingUser.PropertyTitle}
                         </div>
                         <div class="ft-gray">
-                            ${followingUser.Area}-${followingUser.University}<#if followingUser.CollegeCode != "-1">-${followingUser.College}</#if>
+                            ${followingUser.Area}<#if followingUser.CollegeCode != "">-${followingUser.University}</#if><#if followingUser.CollegeCode != "">-${followingUser.College}</#if>
                         </div>
                     </a>
                     <span class="ft-green follow" style="color: #F48A00" onclick=<#if isLoggedIn>"community.follow(${followingUser.T_User_ID?c}, this)"<#else>"window.location.href='/login'"</#if>><#if followingUser.isFollow>取消关注<#else>关注</#if></span>
@@ -37,13 +39,16 @@
         <script>
             loadMore.init("/admin/follow-list-ajax?p=");
             loadMore.genHTML = function(obj) {
-                var community = obj.Area + '-' + obj.University;
-                if (obj.CollegeCode !== "-1") {
+                var community = obj.Area;
+                if (obj.University !== "") {
+                    community += '-' + obj.University;
+                }
+                if (obj.CollegeCode !== "") {
                     community += '-' + obj.College;
                 }
                 var liHTML = '<li class="fn-clear">'
                         + '<a href="/user-card?type=${type}&userName=' + obj.userName + '">'
-                        + '<img class="list-view" onerror="this.src=\'/images/default-user-thumbnail.png\'" src=""/>'
+                        + '<img class="list-view" onerror="this.src=\'/images/default-user-thumbnail.png\'" src="/images/default-user-thumbnail.png"/>'
                         + '</a>'
                         + '<div class="list-content">'
                         + '<a href="/user-card?type=${type}&userName=' + obj.userName + '">'
@@ -54,8 +59,8 @@
                         + '<div class="ft-gray">' + obj.PropertyTitle + '</div>'
                         + '<div class="ft-gray">' + community + '</div>'
                         + '</a>'
-                        + '<span class="ft-green follow" onclick="community.follow(' + obj.ID + ', this)">' 
-                        + (obj.isFollow ? "取消关注" : "关注")+ '</span>'
+                        + '<span style="color: #F48A00" class="ft-green follow" onclick="community.follow(' + obj.ID + ', this)">'
+                        + (obj.isFollow ? "取消关注" : "关注") + '</span>'
                         + '</div>'
                         + '</li>';
                 return liHTML;

@@ -6,7 +6,7 @@
     </head>
     <body>
         <#include "../common/admin-nav.ftl">
-        <ul class="list">
+        <ul class="list" data-page="1">
             <#list questions as question>
             <li class="fn-clear">
                 <a href="/question-details?id=${question.ID?c}">
@@ -17,7 +17,7 @@
                             ${question.Title}
                         </div>
                         <div class="ft-gray">
-                            ${question.Area}-${question.University}<#if question.CollegeCode != "-1">-${question.College}</#if>
+                            ${question.Area}<#if question.University != "">-${question.University}</#if><#if question.CollegeCode != "">-${question.College}</#if>
                         </div>
                         <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">
@@ -35,26 +35,28 @@
         <script>
             loadMore.init("/admin/question-list-ajax?p=");
             loadMore.genHTML = function(obj) {
-                var community = obj.Area + '-' + obj.University;
-                if (obj.CollegeCode !== "-1") {
+                var resolution = "【已解决】";
+                if (obj.BestAnswer === 0) {
+                    resolution = "【待解决】";
+                }
+                var community = obj.Area;
+                if (obj.University !== "") {
+                    community += '-' + obj.University;
+                }
+                if (obj.CollegeCode !== "") {
                     community += '-' + obj.College;
                 }
                 var liHTML = '<li class="fn-clear">'
-                        + '<a href="/sale-details?id=' + obj.id + '">'
+                        + '<a href="/question-details?id=' + obj.ID + '">'
                         + '<img class="list-view" onerror="this.src=\'/images/default-user-thumbnail.png\'" src="' + obj.user.avatar + '"/>'
                         + '<div class="list-content">'
-                        + '<div class="fn-clear">'
-                        + '<span class="ft-gray fn-left">' + obj.user.nick_name + '</span>'
-                        + '<span class="ico ico-cater"></span>'
-                        + '</div>'
-                        + '<div>' + obj.Title + '</div>'
+                        + '<div><span class="ft-green">' + resolution + '</span>' + obj.Title + '</div>'
                         + '<div class="ft-gray">' + community
                         + '</div>'
                         + '<div class="fn-clear">'
                         + '<span class="ft-gray ft-small fn-left">'
-                        + obj.AddTime.substr(0, 10) + '&nbsp; 浏览 ' + obj.PV + '&nbsp; 回应 ' + obj.count
+                        + obj.AddTime.substr(0, 10) + '&nbsp; 浏览 ' + obj.PV 
                         + '</span>'
-                        + '<span class="ft-green fn-right">￥' + obj.Points + '</span>'
                         + '</div>'
                         + '</div>'
                         + '</a>'

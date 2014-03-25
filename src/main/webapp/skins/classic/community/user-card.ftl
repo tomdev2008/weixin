@@ -15,9 +15,10 @@
                         <span class="ico ico-cater"></span>
                     </div>
                     <div class="ft-gray">
-                        ${user.cardTitle}
+                         ${user.community.Area}<#if user.community.University != "">-${user.community.University}</#if><#if user.community.CollegeCode != "">-${user.community.College}</#if>
                     </div>
-                    <div class="ft-gray">
+                    <div>
+                        ${user.cardTitle}
                     </div>
                     <span<#if isFollow> style="color: #F48A00"</#if> class="ft-green follow" onclick=<#if isLoggedIn>"community.follow(${user.id?c}, this)"<#else>"window.location.href='/login'"</#if>><#if isFollow>取消关注<#else>关注</#if></span>
                 </div>
@@ -27,7 +28,7 @@
             </li>
         </ul>
         <div class="user-card-sub">Ta 的<#if type == "student">需求<#else>服务</#if>列表</div>
-        <ul class="list" style="margin-bottom: 3em;">
+        <ul class="list question" style="margin-bottom: 3em;">
             <#list items as item>
             <li class="fn-clear">
                 <a href="/<#if type == "student">requirement<#else>sale</#if>-details?id=${item.ID?c}">
@@ -44,7 +45,7 @@
                             ${item.Name}
                         </div>
                         <div class="ft-gray">
-                            ${item.Area}-${item.University}<#if item.CollegeCode != "-1">-${item.College}</#if>
+                            ${item.Area}<#if item.University != "">-${item.University}</#if><#if item.CollegeCode != "">-${item.College}</#if>
                         </div>
                         <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">

@@ -11,8 +11,8 @@
             <li class="fn-clear">
                 <a href="/sale-details?id=${sale.ID?c}">
                     <img class="list-view" 
-                         onerror="this.src='/images/default-doc.png'" 
-                         src="${sale.Thumbnail}"/>
+                         onerror="this.src='/images/default-doc.jpg'" 
+                         src="/images/default-doc.jpg"/>
                     <div class="list-content">
                         <div>
                             <#if sale.ItemType == 1>
@@ -25,7 +25,7 @@
                             ${sale.Name}
                         </div>
                         <div class="ft-gray">
-                            ${sale.Area}-${sale.University}<#if sale.CollegeCode != "-1">-${sale.College}</#if>
+                            ${sale.Area}<#if sale.University != "">-${sale.University}</#if><#if sale.CollegeCode != "">-${sale.College}</#if>
                         </div>
                         <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">
@@ -46,7 +46,10 @@
             loadMore.genHTML = function(obj) {
                 var community = obj.Area + '-' + obj.University,
                         type = '<span class="ico-resource">资料</span>';
-                if (obj.CollegeCode !== "-1") {
+                if (obj.University !== "") {
+                    community += '-' + obj.University;
+                }
+                if (obj.CollegeCode !== "") {
                     community += '-' + obj.College;
                 }
 
@@ -57,7 +60,7 @@
                 }
                 var liHTML = '<li class="fn-clear">'
                         + '<a href="/sale-details?id=' + obj.ID + '">'
-                        + '<img class="list-view" onerror="this.src=\'/images/default-doc.png\'" src="' + obj.Thumbnail + '"/>'
+                        + '<img class="list-view" onerror="this.src=\'/images/default-doc.jpg\'" src="/images/default-doc.jpg"/>'
                         + '<div class="list-content">'
                         + '<div>' + type + " " + obj.Name + '</div>'
                         + '<div class="ft-gray">' + community

@@ -11,8 +11,8 @@
             <li class="fn-clear">
                 <a href="/requirement-details?id=${requirement.ID?c}">
                     <img class="list-view" 
-                         onerror="this.src='/images/default-doc.png'" 
-                         src="${requirement.Thumbnail}"/>
+                         onerror="this.src='/images/default-doc.jpg'" 
+                         src="/images/default-doc.jpg"/>
                     <div class="list-content">
                         <div>
                             <#if requirement.ItemType == 1>
@@ -25,7 +25,7 @@
                             ${requirement.Name}
                         </div>
                         <div class="ft-gray">
-                            ${requirement.Area}-${requirement.University}<#if requirement.CollegeCode != "-1">-${requirement.College}</#if>
+                            ${requirement.Area}-<#if requirement.University != "">${requirement.University}</#if><#if requirement.CollegeCode != "">-${requirement.College}</#if>
                         </div>
                         <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">
@@ -46,7 +46,10 @@
             loadMore.genHTML = function(obj) {
                 var community = obj.Area + '-' + obj.University,
                         type = '<span class="ico-resource">资料</span>';
-                if (obj.CollegeCode !== "-1") {
+                if (obj.University !== "") {
+                    community += '-' + obj.University;
+                }
+                if (obj.CollegeCode !== "") {
                     community += '-' + obj.College;
                 }
                 
@@ -56,8 +59,8 @@
                      type = '<span class="ico-school">授课</span>';
                 }
                 var liHTML = '<li class="fn-clear">'
-                        + '<a href="/sale-details?id=' + obj.ID + '">'
-                        + '<img class="list-view" onerror="this.src=\'/images/default-doc.png\'" src="' + obj.Thumbnail + '"/>'
+                        + '<a href="/requirement-details?id=' + obj.ID + '">'
+                        + '<img class="list-view" onerror="this.src=\'/images/default-doc.jpg\'" src="/images/default-doc.jpg"/>'
                         + '<div class="list-content">'
                         + '<div>' + type + " " + obj.Name + '</div>'
                         + '<div class="ft-gray">' + community
