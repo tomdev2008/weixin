@@ -164,11 +164,11 @@ public class QuestionService {
             final JSONArray results = result.getJSONArray(Keys.RESULTS);
             final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
 
-            // 获取每个问题的回答计数
-            for (final JSONObject j : ret) {
-                j.put("user", userRepository.get(j.getString("AddUserID")));
-                final JSONObject subResult = answerRepository.get(new Query().setFilter(new PropertyFilter("QID", FilterOperator.EQUAL, j.getInt("id"))));
-                j.put("count", subResult.getJSONArray(Keys.RESULTS).length());
+            for (final JSONObject question : ret) {
+                question.put("user", userRepository.get(question.getString("AddUserID")));
+                final JSONObject subResult = answerRepository.get(new Query().setFilter(
+                        new PropertyFilter("QID", FilterOperator.EQUAL, question.getInt("id"))));
+                question.put("count", subResult.getJSONArray(Keys.RESULTS).length());
             }
 
             return ret;
@@ -195,10 +195,11 @@ public class QuestionService {
             final JSONArray results = result.getJSONArray(Keys.RESULTS);
 
             final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
-            for (final JSONObject j : ret) {
-                j.put("user", userRepository.get(j.getString("AddUserID")));
-                final JSONObject subResult = answerRepository.get(new Query().setFilter(new PropertyFilter("QID", FilterOperator.EQUAL, j.getInt("id"))));
-                j.put("count", subResult.getJSONArray(Keys.RESULTS).length());
+            for (final JSONObject question : ret) {
+                question.put("user", userRepository.get(question.getString("AddUserID")));
+                final JSONObject subResult = answerRepository.get(new Query().setFilter(
+                        new PropertyFilter("QID", FilterOperator.EQUAL, question.getInt("id"))));
+                question.put("count", subResult.getJSONArray(Keys.RESULTS).length());
             }
 
             return ret;
