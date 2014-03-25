@@ -42,6 +42,8 @@ public class XZBServletListener extends AbstractServletListener {
      * Logger.
      */
     private static final Logger LOGGER = Logger.getLogger(XZBServletListener.class.getName());
+    
+    public static final int PAGE_SIZE = 2;
 
     @Override
     public void contextInitialized(final ServletContextEvent servletContextEvent) {

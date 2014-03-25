@@ -15,6 +15,7 @@
  */
 package com.xinzhubang.weixin.service;
 
+import com.xinzhubang.weixin.XZBServletListener;
 import com.xinzhubang.weixin.repository.GuestBookRepository;
 import com.xinzhubang.weixin.repository.SchoolRepository;
 import com.xinzhubang.weixin.repository.UserAttentionRepository;
@@ -88,7 +89,7 @@ public class UserService {
     public List<JSONObject> getGuestBooksByUserId(final String userId, final int pageNum) {
         try {
             final Query query = new Query().setFilter(new PropertyFilter("MemberID", FilterOperator.EQUAL, userId));
-            query.setCurrentPageNum(pageNum).setPageSize(10);
+            query.setCurrentPageNum(pageNum).setPageSize(XZBServletListener.PAGE_SIZE);
 
             final JSONObject result = guestBookRepository.get(query);
 
@@ -165,7 +166,7 @@ public class UserService {
             filters.add(new PropertyFilter("CollegeCode", FilterOperator.EQUAL, collegeCode));
 
             final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
-            query.setCurrentPageNum(pageNum).setPageSize(50);
+            query.setCurrentPageNum(pageNum).setPageSize(XZBServletListener.PAGE_SIZE * 3);
             final JSONObject userInfoResult = userInfoRepository.get(query);
 
             final JSONArray userInfos = userInfoResult.optJSONArray(Keys.RESULTS);

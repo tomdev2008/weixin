@@ -15,6 +15,7 @@
  */
 package com.xinzhubang.weixin.service;
 
+import com.xinzhubang.weixin.XZBServletListener;
 import com.xinzhubang.weixin.repository.GuestBookRepository;
 import com.xinzhubang.weixin.repository.ItemRepository;
 import com.xinzhubang.weixin.repository.UserRepository;
@@ -102,12 +103,13 @@ public class ItemService {
      * 根据用户 id 获取用户的悄悄话.
      *
      * @param userId
+     * @param pageNum
      * @return
      */
     public List<JSONObject> getWhispersByUserId(final String userId, final int pageNum) {
         try {
             final Query query = new Query().setFilter(new PropertyFilter("ToID", FilterOperator.EQUAL, userId));
-            query.setCurrentPageNum(pageNum).setPageSize(10);
+            query.setCurrentPageNum(pageNum).setPageSize(XZBServletListener.PAGE_SIZE);
 
             final JSONObject result = whisperRepository.get(query);
 
@@ -273,7 +275,7 @@ public class ItemService {
             filters.add(new PropertyFilter("DemandOrService", FilterOperator.EQUAL, 1));
 
             final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
-            query.setCurrentPageNum(pageNum).setPageSize(10);
+            query.setCurrentPageNum(pageNum).setPageSize(XZBServletListener.PAGE_SIZE);
             final JSONObject result = itemRepository.get(query);
 
             final JSONArray results = result.getJSONArray(Keys.RESULTS);
@@ -302,7 +304,7 @@ public class ItemService {
             filters.add(new PropertyFilter("DemandOrService", FilterOperator.EQUAL, 0));
 
             final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
-            query.setCurrentPageNum(pageNum).setPageSize(10);
+            query.setCurrentPageNum(pageNum).setPageSize(XZBServletListener.PAGE_SIZE);
             final JSONObject result = itemRepository.get(query);
 
             final JSONArray results = result.getJSONArray(Keys.RESULTS);
@@ -348,7 +350,7 @@ public class ItemService {
             filters.add(new PropertyFilter("DemandOrService", FilterOperator.EQUAL, 1)); // 服务
 
             final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
-            query.setCurrentPageNum(pageNum).setPageSize(10);
+            query.setCurrentPageNum(pageNum).setPageSize(XZBServletListener.PAGE_SIZE);
             final JSONObject result = itemRepository.get(query);
 
             final JSONArray results = result.getJSONArray(Keys.RESULTS);
@@ -400,7 +402,7 @@ public class ItemService {
             filters.add(new PropertyFilter("DemandOrService", FilterOperator.EQUAL, 0)); // 需求
 
             final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
-            query.setCurrentPageNum(pageNum).setPageSize(10);
+            query.setCurrentPageNum(pageNum).setPageSize(XZBServletListener.PAGE_SIZE);
             final JSONObject result = itemRepository.get(query);
 
             final JSONArray results = result.getJSONArray(Keys.RESULTS);

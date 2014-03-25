@@ -20,6 +20,7 @@
  */
 package com.xinzhubang.weixin.service;
 
+import com.xinzhubang.weixin.XZBServletListener;
 import com.xinzhubang.weixin.repository.AnswerRepository;
 import com.xinzhubang.weixin.repository.QuestionRepository;
 import com.xinzhubang.weixin.repository.UserRepository;
@@ -177,7 +178,7 @@ public class QuestionService {
             }
 
             final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
-            query.setCurrentPageNum(pageNum).setPageSize(10);
+            query.setCurrentPageNum(pageNum).setPageSize(XZBServletListener.PAGE_SIZE);
 
             query.addSort("AddTime", SortDirection.DESCENDING);
 
