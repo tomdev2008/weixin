@@ -49,7 +49,7 @@
                             ${a.AddTime?string('yyyy-MM-dd')}
                         </span>
                         <#if a.Agree==0>
-                        <span onclick="community.questionAccept(${question.id}, ${a.id})" class="ft-green fn-right question-accept">采纳</span>
+                        <span onclick="community.questionAccept(${question.ID?c}, ${a.ID?c})" class="ft-green fn-right question-accept">采纳</span>
                         </#if>
                         <#if a.Agree!=0>
                         <span class="ft-green fn-right question-accept">已采纳</span>
@@ -60,7 +60,7 @@
             </#list>
             </#if>
         </ul>
-        <a class="ft-green user-card-msg" href="/question-answer?id=${question.id}">回 答</a>
+        <a class="ft-green user-card-msg" href="/question-answer?id=${question.ID?c}">回 答</a>
         <#include "../common/tip.ftl">
         <script src="/js/lib/jquery-2.1.0.min.js"></script>
         <script src="/js/common.js"></script>

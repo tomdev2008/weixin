@@ -164,20 +164,20 @@ var community = {
             }
         });
     },
-    questionAccept: function(qid,id) {
+    questionAccept: function(qid, id) {
         var requestJSONObject = {
-                id: id,
-                qid:qid
-            };
+            id: id,
+            qid: qid
+        };
         $.ajax({
-            url: "/accept?=id"+id,
+            url: "/accept?=id" + id,
             type: "POST",
             cache: false,
             data: JSON.stringify(requestJSONObject),
             success: function(result, textStatus) {
                 if (result.sc) {
-                   tip.show("答案采纳成功！");
-                   $("#tipContent").next().text("GO").attr("onclick", "window.location='question-details?id="+sc.qid+"'");
+                    tip.show("答案采纳成功！");
+                    $("#tipContent").next().text("GO").attr("onclick", "window.location='question-details?id=" + sc.qid + "'");
                 } else {
                     tip.show("提示", result.msg);
                 }
@@ -216,7 +216,7 @@ var community = {
         } else {
             var requestJSONObject = {
                 Content: $(".textarea").val(),
-                QID:$('#id').val()
+                QID: $('#id').val()
             };
 
             $.ajax({
@@ -226,8 +226,8 @@ var community = {
                 data: JSON.stringify(requestJSONObject),
                 success: function(result, textStatus) {
                     if (result.sc) {
-                         tip.show("回答成功", result.msg);
-                         $("#tipContent").next().text("GO").attr("onclick", "window.location='/question-details?id="+result.id+"'");
+                        tip.show("回答成功", result.msg);
+                        $("#tipContent").next().text("GO").attr("onclick", "window.location='/question-details?id=" + result.id + "'");
                         //window.location = '/question-details?id='+result.id;
                     } else {
                         tip.show("回答失败", result.msg);

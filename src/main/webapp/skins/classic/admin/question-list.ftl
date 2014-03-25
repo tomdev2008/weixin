@@ -9,7 +9,7 @@
         <ul class="list">
             <#list questions as question>
             <li class="fn-clear">
-                <a href="/question-details?id=${question.id}">
+                <a href="/question-details?id=${question.ID?c}">
                     <img class="list-view" src="/images/default-user-thumbnail.png"/>
                     <div class="list-content">
                         <div>

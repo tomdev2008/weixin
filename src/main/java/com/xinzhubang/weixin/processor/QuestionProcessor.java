@@ -43,7 +43,7 @@ import org.json.JSONObject;
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.2.0.0, Mar 24, 2014
+ * @version 1.2.1.0, Mar 25, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -151,24 +151,17 @@ public class QuestionProcessor {
 
         final Map<String, Object> dataModel = renderer.getDataModel();
 
-        // TODO: 问题列表子类型
-        String type = "1";
-        if (request.getParameter("type") != null) {
-            type = request.getParameter("type");
-            if (type.equals("1")) { //最新
-
-            } else if (type.equals("2")) { //已解决
-
-            } else if (type.equals("3")) { //未解决
-
-            }
+        String type = request.getParameter("type");
+        if (Strings.isEmptyOrNull(type)) {
+            // 默认设置 type 为最新
+            type = "1";
         }
 
         final JSONObject user = (JSONObject) request.getAttribute("user");
         final String userId = user.optString("id");
 
         final JSONObject community = userService.getUserInfo(userId);
-
+        community.put("type", type);
         dataModel.put("questions", (Object) questionService.getQuestions(community, pageNum));
         dataModel.put("type", "question");
         dataModel.put("subType", type);
@@ -199,17 +192,10 @@ public class QuestionProcessor {
             pageStr = "1";
         }
 
-        // TODO: 问题列表子类型
-        String type = "1";
-        if (request.getParameter("type") != null) {
-            type = request.getParameter("type");
-            if (type.equals("1")) { //最新
-
-            } else if (type.equals("2")) { //已解决
-
-            } else if (type.equals("3")) { //未解决
-
-            }
+        String type = request.getParameter("type");
+        if (Strings.isEmptyOrNull(type)) {
+            // 默认设置 type 为最新
+            type = "1";
         }
 
         final int pageNum = Integer.valueOf(pageStr);
@@ -218,7 +204,7 @@ public class QuestionProcessor {
         final String userId = user.optString("id");
 
         final JSONObject community = userService.getUserInfo(userId);
-
+        community.put("type", type);
         final List<JSONObject> list = questionService.getQuestions(community, pageNum);
 
         ret.put("questions", (Object) list);
@@ -235,6 +221,7 @@ public class QuestionProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/question-details", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
     public void showDetails(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
@@ -242,14 +229,16 @@ public class QuestionProcessor {
         renderer.setTemplateName("/community/question-details.ftl");
 
         final Map<String, Object> dataModel = renderer.getDataModel();
-        JSONObject question = questionService.getById(request.getParameter("id"));
-        List<JSONObject> answers = questionService.queryAnswerByQuestionId(question.getInt("id"));
+
+        final JSONObject question = questionService.getById(request.getParameter("id"));
+        final List<JSONObject> answers = questionService.getAnswerByQuestionId(question.getInt("ID"));
+
         question.put("count", answers.size());
         dataModel.put("question", question);
         dataModel.put("answers", answers);
         dataModel.put("type", "question");
         dataModel.put("subType", "1");
-        
+
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
@@ -326,6 +315,7 @@ public class QuestionProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/question-answer", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
     public void showAnswer(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
@@ -336,7 +326,7 @@ public class QuestionProcessor {
 
         dataModel.put("type", "question");
         dataModel.put("id", request.getParameter("id"));
-        
+
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
@@ -357,15 +347,15 @@ public class QuestionProcessor {
         context.setRenderer(renderer);
         final JSONObject ret = new JSONObject();
         renderer.setJSONObject(ret);
-        
+
         final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
-        
+
         final JSONObject user = (JSONObject) request.getAttribute("user");
         requestJSONObject.put("AddUserID", user.optInt("id"));
         requestJSONObject.put("AddTime", new Timestamp(System.currentTimeMillis()));
-        
+
         questionService.addAnswer(requestJSONObject);
-        
+
         ret.put(Keys.STATUS_CODE, true);
         ret.put(Keys.MSG, "回答成功！");
         ret.put("id", requestJSONObject.get("QID"));
@@ -387,11 +377,11 @@ public class QuestionProcessor {
         context.setRenderer(renderer);
         final JSONObject ret = new JSONObject();
         renderer.setJSONObject(ret);
-        
+
         final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
-        
+
         questionService.acceptAnswer(requestJSONObject.getString("id"));
-        
+
         ret.put(Keys.STATUS_CODE, true);
         ret.put(Keys.MSG, "采纳成功！");
         ret.put("qid", requestJSONObject.getInt("qid"));

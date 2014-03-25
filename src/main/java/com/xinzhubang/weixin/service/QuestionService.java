@@ -23,11 +23,11 @@ package com.xinzhubang.weixin.service;
 import com.xinzhubang.weixin.repository.AnswerRepository;
 import com.xinzhubang.weixin.repository.QuestionRepository;
 import com.xinzhubang.weixin.repository.UserRepository;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
-import org.apache.commons.lang.StringUtils;
 import org.b3log.latke.Keys;
 import org.b3log.latke.logging.Level;
 import org.b3log.latke.logging.Logger;
@@ -38,9 +38,11 @@ import org.b3log.latke.repository.FilterOperator;
 import org.b3log.latke.repository.PropertyFilter;
 import org.b3log.latke.repository.Query;
 import org.b3log.latke.repository.RepositoryException;
+import org.b3log.latke.repository.SortDirection;
 import org.b3log.latke.repository.annotation.Transactional;
 import org.b3log.latke.service.annotation.Service;
 import org.b3log.latke.util.CollectionUtils;
+import org.b3log.latke.util.Ids;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,7 +51,7 @@ import org.json.JSONObject;
  * 用户提问。
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.0.0, Mar 24, 2014
+ * @version 1.1.1.0, Mar 25, 2014
  * @since 1.0.0
  */
 @Service
@@ -97,12 +99,13 @@ public class QuestionService {
         String ret;
 
         try {
+            answer.put("ID", Ids.genTimeMillisId());
             answer.put("Agree", 0);
-            
+
             ret = answerRepository.add(answer);
         } catch (RepositoryException ex) {
             LOGGER.log(Level.ERROR, "保存回答出错！", ex);
-            
+
             return null;
         }
 
@@ -110,21 +113,28 @@ public class QuestionService {
     }
 
     /**
-     * 采纳答案.
+     * 采纳回答.
+     *
+     * @param answerId 指定的回答 id
      */
     @Transactional
-    public void acceptAnswer(final String id) {
+    public void acceptAnswer(final String answerId) {
         try {
-            JSONObject old = answerRepository.get(id);
-            
-            JSONObject answer = new JSONObject();
-            answer.put("Content", old.get("Content"));
-            answer.put("AddUserID", old.getInt("AddUserID"));
-            answer.put("AddTime", old.get("AddTime"));
-            answer.put("QID", old.getInt("QID"));
-            answer.put("Agree", 1);
-            
-            answerRepository.update(id, answer);
+            // 1. 更新回答：为答案
+            JSONObject answer = answerRepository.get(answerId);
+
+            final int questionId = answer.getInt("QID");
+
+            answer.put("Best", 1); // 最佳答案
+
+            answerRepository.update(answerId, answer);
+
+            // 2. 更新问题：关联答案
+            final JSONObject question = questionRepository.get(questionId + "");
+            question.put("BestAnswer", Long.valueOf(answerId));
+            question.put("BestAnswerTime", new Timestamp(System.currentTimeMillis()));
+
+            questionRepository.update(questionId + "", question);
         } catch (final Exception ex) {
             LOGGER.log(Level.ERROR, "保存回答出错！", ex);
         }
@@ -139,6 +149,7 @@ public class QuestionService {
      *     "AreaCode": "",
      *     "UniversityCode": "",
      *     "CollegeCode": "", // 可选的
+     *     "type": "" // "1"：最新，"2"：已解决，"3"：待解决
      * }
      * </pre>
      *
@@ -156,8 +167,19 @@ public class QuestionService {
             filters.add(new PropertyFilter("UniversityCode", FilterOperator.EQUAL, universityCode));
             filters.add(new PropertyFilter("CollegeCode", FilterOperator.EQUAL, collegeCode));
 
+            final String type = community.optString("type");
+            if ("1".equals(type)) { // 最新
+                // 最新就是后面按时间排序
+            } else if ("2".equals(type)) { // 已解决
+                filters.add(new PropertyFilter("BestAnswer", FilterOperator.NOT_EQUAL, 0));
+            } else { // 待解决
+                filters.add(new PropertyFilter("BestAnswer", FilterOperator.EQUAL, 0));
+            }
+
             final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
             query.setCurrentPageNum(pageNum).setPageSize(10);
+
+            query.addSort("AddTime", SortDirection.DESCENDING);
 
             final JSONObject result = questionRepository.get(query);
 
@@ -167,7 +189,7 @@ public class QuestionService {
             for (final JSONObject question : ret) {
                 question.put("user", userRepository.get(question.getString("AddUserID")));
                 final JSONObject subResult = answerRepository.get(new Query().setFilter(
-                        new PropertyFilter("QID", FilterOperator.EQUAL, question.getInt("id"))));
+                        new PropertyFilter("QID", FilterOperator.EQUAL, question.getInt("ID"))));
                 question.put("count", subResult.getJSONArray(Keys.RESULTS).length());
             }
 
@@ -198,7 +220,7 @@ public class QuestionService {
             for (final JSONObject question : ret) {
                 question.put("user", userRepository.get(question.getString("AddUserID")));
                 final JSONObject subResult = answerRepository.get(new Query().setFilter(
-                        new PropertyFilter("QID", FilterOperator.EQUAL, question.getInt("id"))));
+                        new PropertyFilter("QID", FilterOperator.EQUAL, question.getInt("ID"))));
                 question.put("count", subResult.getJSONArray(Keys.RESULTS).length());
             }
 
@@ -219,14 +241,14 @@ public class QuestionService {
      * @throws org.json.JSONException
      */
     public JSONObject getById(String id) throws RepositoryException, JSONException {
-        //根据id获取问题
-        JSONObject j = questionRepository.get(id);
-        //放入问题的用户
-        j.put("user", userRepository.get(j.getString("AddUserID")));
-        return j;
+        JSONObject ret = questionRepository.get(id);
+
+        ret.put("user", userRepository.get(ret.getString("AddUserID")));
+
+        return ret;
     }
 
-    public List<JSONObject> queryAnswerByQuestionId(int id) throws RepositoryException, JSONException {
+    public List<JSONObject> getAnswerByQuestionId(int id) throws RepositoryException, JSONException {
         final Query query = new Query().setFilter(new PropertyFilter("QID", FilterOperator.EQUAL, id));
         JSONObject answers = answerRepository.get(query);
         final JSONArray answersArray = answers.getJSONArray(Keys.RESULTS);
