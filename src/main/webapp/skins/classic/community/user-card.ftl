@@ -13,12 +13,13 @@
                     <div class="fn-clear">
                         <span class="fn-left ft-dark">${user.user_name}</span>
                         <span class="ico ico-cater"></span>
-                        <span class="ico ico-level1"></span>
                     </div>
                     <div class="ft-gray">
                         ${user.cardTitle}
                     </div>
-                    <span class="ft-green follow" onclick=<#if isLoggedIn>"community.follow(${user.id?c}, this)"<#else>"window.location.href='/login'"</#if>><#if isFollow>取消关注<#else>关注</#if></span>
+                    <div class="ft-gray">
+                    </div>
+                    <span<#if isFollow> style="color: #F48A00"</#if> class="ft-green follow" onclick=<#if isLoggedIn>"community.follow(${user.id?c}, this)"<#else>"window.location.href='/login'"</#if>><#if isFollow>取消关注<#else>关注</#if></span>
                 </div>
             </li>
             <li class="ft-gray">
@@ -47,7 +48,7 @@
                         </div>
                         <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">
-                                ${item.CreateTime?string('yyyy-MM-dd')} &nbsp; 浏览${item.ClickCount}
+                                ${item.CreateTime?string('yyyy-MM-dd')} &nbsp; 浏览 ${item.ClickCount}
                             </span>
                             <span class="ft-green fn-right">￥${item.Price}</span>
                         </div>

@@ -14,8 +14,6 @@
                     <div class="fn-clear">
                         <span class="fn-left">${whisper.fromUser.user_name}</span>
                         <span class="ico ico-cater"></span>
-                        <span class="ico ico-level1"></span>
-                        <span class="ico-resource">悄悄话</span>
                     </div>
                     <div class="ft-gray">
                         ${whisper.CONTENT}
@@ -38,7 +36,6 @@
                     <div class="fn-clear">
                         <span class="fn-left">${guestBook.fromUser.user_name}</span>
                         <span class="ico ico-cater"></span>
-                        <span class="ico ico-level1"></span>
                         <span class="ico-qa">留言</span>
                     </div>
                     <div class="ft-gray">

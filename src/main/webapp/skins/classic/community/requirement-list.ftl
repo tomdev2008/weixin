@@ -5,26 +5,23 @@
         <@meta title="需求列表 - 新助邦"/>
     </head>
     <body>
+        <header>XXXXXXXXXXXXXXXXXX</header>
         <#include "../common/community-nav.ftl">
         <#include "../common/community-sub-nav.ftl">
         <ul class="list" data-page="1">
             <#list requirements as requirement>
             <li class="fn-clear">
                 <a href="/requirement-details?id=${requirement.ID?c}">
-                    <img class="list-view" onerror="this.src='/images/default-doc.png'" src="${requirement.Thumbnail}"/>
+                    <img class="list-view" onerror="this.src='/images/default-doc.jpg'" src="/images/default-doc.jpg"/>
                     <div class="list-content">
                         <div class="fn-clear">
                             <span class="ft-gray fn-left">${requirement.userName}</span>
                             <span class="ico ico-cater"></span>
-                            <span class="ico ico-level1"></span>
                         </div>
                         <div>${requirement.Name}</div>
-                        <div class="ft-gray">
-                            ${requirement.Area}-${requirement.University}<#if requirement.CollegeCode != "-1">-${requirement.College}</#if>
-                        </div>
                         <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">
-                                ${requirement.CreateTime?string('yyyy-MM-dd')} &nbsp; 浏览${requirement.ClickCount}
+                                ${requirement.CreateTime?string('yyyy-MM-dd')} &nbsp; 浏览 ${requirement.ClickCount}
                             </span>
                             <span class="ft-green fn-right">￥${requirement.Price}</span>
                         </div>
@@ -39,22 +36,15 @@
         <script>
             loadMore.init("/requirement-list-ajax?p=");
             loadMore.genHTML = function(obj) {
-                var community = obj.Area + '-' + obj.University;
-                if (obj.CollegeCode !== "-1") {
-                    community += '-' + obj.College;
-                }
                 var liHTML = '<li class="fn-clear">'
                         + '<a href="/sale-details?id=' + obj.ID + '">'
-                        + '<img class="list-view" onerror="this.src=\'/images/default-doc.png\'" src="' + obj.Thumbnail + '"/>'
+                        + '<img class="list-view" onerror="this.src=\'/images/default-doc.jpg\'" src="/images/default-doc.jpg"/>'
                         + '<div class="list-content">'
                         + '<div class="fn-clear">'
                         + '<span class="ft-gray fn-left">' + obj.userName + '</span>'
                         + '<span class="ico ico-cater"></span>'
-                        + '<span class="ico ico-level1"></span>'
                         + '</div>'
                         + '<div>' + obj.Name + '</div>'
-                        + '<div class="ft-gray">' + community
-                        + '</div>'
                         + '<div class="fn-clear">'
                         + '<span class="ft-gray ft-small fn-left">'
                         + obj.CreateTime.substr(0, 10) + '&nbsp; 浏览' + obj.ClickCount

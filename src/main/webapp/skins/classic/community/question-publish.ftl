@@ -5,13 +5,13 @@
         <@meta title="提问 - 新助邦"/>
     </head>
     <body>
+        <header>XXXXXXXXXXXXXXXXXX</header>
         <#include "../common/community-nav.ftl">
         <div class="wrap">
-            <div class="publish">
-                <textarea id="content" placeholder="请填写您的问题" class="textarea"></textarea>
-                <input id="keys" placeholder="请定义关键字" class="input" />
-                <div class="ft-gray">关键字用空格隔开</div>
-            </div>
+            <textarea id="content" placeholder="请填写您的问题" class="textarea"></textarea>
+            <input id="keys" placeholder="请定义关键字" class="input" />
+            <div class="ft-gray">关键字用空格隔开</div>
+            <button class="button" onclick="community.questionPublish()">发 送</button>
         </div>
         <!--
         <div class="user-card-sub">类似问题及答案</div>
@@ -37,7 +37,6 @@
             </li>
         </ul>
         -->
-        <div class="ft-green user-card-msg" onclick="community.questionPublish()">发 送</div>
         <#include "../common/tip.ftl">
         <script src="/js/lib/jquery-2.1.0.min.js"></script>
         <script src="/js/common.js"></script>

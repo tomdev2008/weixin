@@ -5,6 +5,7 @@
         <@meta title="出售列表 - 新助邦"/>
     </head>
     <body>
+        <header>XXXXXXXXXXXXXXXXXX</header>
         <#include "../common/community-nav.ftl">
         <#include "../common/community-sub-nav.ftl">
         <ul class="list" data-page="1">
@@ -12,21 +13,17 @@
             <li class="fn-clear">
                 <a href="/sale-details?id=${sale.ID?c}">
                     <img class="list-view"
-                         onerror="this.src='/images/default-doc.png'"
-                         src="${sale.Thumbnail}"/>
+                         onerror="this.src='/images/default-doc.jpg'"
+                         src="/images/default-doc.jpg"/>
                     <div class="list-content">
                         <div class="fn-clear">
                             <span class="ft-gray fn-left">${sale.userName}</span>
                             <span class="ico ico-cater"></span>
-                            <span class="ico ico-level1"></span>
                         </div>
                         <div>${sale.Name}</div>
-                        <div class="ft-gray">
-                            ${sale.Area}-${sale.University}<#if sale.CollegeCode != "-1">-${sale.College}</#if>
-                        </div>
                         <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">
-                                ${sale.CreateTime?string('yyyy-MM-dd')} &nbsp; 浏览${sale.ClickCount}
+                                ${sale.CreateTime?string('yyyy-MM-dd')} &nbsp; 浏览 ${sale.ClickCount}
                             </span>
                             <span class="ft-green fn-right">￥${sale.Price}</span>
                         </div>
@@ -41,22 +38,15 @@
         <script>
             loadMore.init("/sale-list-ajax?type=${subType}&p=");
             loadMore.genHTML = function(obj) {
-                var community = obj.Area + '-' + obj.University;
-                if (obj.CollegeCode !== "-1") {
-                    community += '-' + obj.College;
-                }
                 var liHTML = '<li class="fn-clear">'
                         + '<a href="/sale-details?id=' + obj.ID + '">'
-                        + '<img class="list-view" src="http://www.xiajirong.com' + obj.Thumbnail + '"/>'
+                        + '<img class="list-view" src="/images/default-doc.jpg" onerror="this.src=\'/images/default-doc.jpg\'"/>'
                         + '<div class="list-content">'
                         + '<div class="fn-clear">'
                         + '<span class="ft-gray fn-left">' + obj.userName + '</span>'
                         + '<span class="ico ico-cater"></span>'
-                        + '<span class="ico ico-level1"></span>'
                         + '</div>'
                         + '<div>' + obj.Name + '</div>'
-                        + '<div class="ft-gray">' + community
-                        + '</div>'
                         + '<div class="fn-clear">'
                         + '<span class="ft-gray ft-small fn-left">'
                         + obj.CreateTime.substr(0, 10) + '&nbsp; 浏览 ' + obj.ClickCount

@@ -8,7 +8,7 @@
         <nav>
             <ul class="fn-clear">
                 <li <#if type==1>class="current"</#if>>
-                    <span>
+                    <span onclick="window.location='/search'">
                         学科门类<span class="ico ico-arrow-down"></span>
                     </span>
                 </li>

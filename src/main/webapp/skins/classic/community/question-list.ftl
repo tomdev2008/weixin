@@ -5,6 +5,7 @@
         <@meta title="提问列表 - 新助邦"/>
     </head>
     <body>
+        <header>XXXXXXXXXXXXXXXXXX</header>
         <#include "../common/community-nav.ftl">
         <div class="sub-nav">
             <ul class="fn-clear">
@@ -31,24 +32,23 @@
                 <a href="/question-details?id=${question.ID}">
                     <img class="list-view" 
                           onerror="this.src='/images/default-user-thumbnail.png'" 
-                          src="TODO"/>
+                          src="/images/default-user-thumbnail.png"/>
                     <div class="list-content">
                         <div class="fn-clear">
                             <span class="fn-left ft-gray">${question.user.user_name}</span>
                             <span class="ico ico-cater"></span>
-                            <span class="ico ico-level1"></span>
                         </div>
                         <div>
-                            <span class="ft-green TODO"></span>${question.Title}
-                        </div>
-                        <div class="ft-gray">
-                            ${question.Area}-${question.University}<#if question.CollegeCode != "-1">-${question.College}</#if>
+                            <#if subType == "1">
+                            <span class="ft-green"></span>
+                            </#if>
+                            ${question.Title}
                         </div>
                         <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">
                                  ${question.AddTime?string('yyyy-MM-dd')} &nbsp; 浏览 ${question.PV} &nbsp; 回应 ${question.count}
                             </span>
-                            <span class="ft-green fn-right">${question.Points}</span>
+                            <span class="ft-green fn-right">￥${question.Points}</span>
                         </div>
                     </div>
                 </a>
@@ -61,22 +61,15 @@
         <script>
             loadMore.init("/question-list-ajax?type=${subType}&p=");
             loadMore.genHTML = function(obj) {
-                var community = obj.Area + '-' + obj.University;
-                if (obj.CollegeCode !== "-1") {
-                    community += '-' + obj.College;
-                }
                 var liHTML = '<li class="fn-clear">'
-                        + '<a href="/sale-details?id=' + obj.id + '">'
-                        + '<img class="list-view" onerror="this.src=\'/images/default-user-thumbnail.png\'" src="' + obj.user.avatar + '"/>'
+                        + '<a href="/question-details?id=' + obj.ID + '">'
+                        + '<img class="list-view" onerror="this.src=\'/images/default-user-thumbnail.png\'" src="/images/default-user-thumbnail.png"/>'
                         + '<div class="list-content">'
                         + '<div class="fn-clear">'
-                        + '<span class="ft-gray fn-left">' + obj.user.nick_name + '</span>'
+                        + '<span class="ft-gray fn-left">' + obj.user.user_name + '</span>'
                         + '<span class="ico ico-cater"></span>'
-                        + '<span class="ico ico-level1"></span>'
                         + '</div>'
-                        + '<div>' + obj.Title + '</div>'
-                        + '<div class="ft-gray">' + community
-                        + '</div>'
+                        + '<div><#if subType == "1"><span class="ft-green"></span></#if>' + obj.Title + '</div>'
                         + '<div class="fn-clear">'
                         + '<span class="ft-gray ft-small fn-left">'
                         + obj.AddTime.substr(0, 10) + '&nbsp; 浏览 ' + obj.PV + '&nbsp; 回应 ' + obj.count
