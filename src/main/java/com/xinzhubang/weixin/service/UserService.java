@@ -178,6 +178,7 @@ public class UserService {
                 final JSONObject userInfo = userInfos.optJSONObject(i);
                 final String memberId = userInfo.optString("MemberID");
                 final JSONObject userCard = getUserCard(memberId, typeArg);
+                
                 if (null != userCard) {
                     ret.add(userCard);
                 }
@@ -213,8 +214,9 @@ public class UserService {
                 final String followingUserId = attention.optString("AttentionMemberID");
 
                 final JSONObject userCard = getUserCard(followingUserId, "a");
-
-                ret.add(userCard);
+                if (null != userCard) {
+                    ret.add(userCard);
+                }
             }
 
             for (final JSONObject followingUser : ret) {
@@ -554,11 +556,13 @@ public class UserService {
                 ret = new JSONObject();
 
                 ret.put("Area", "");
+                ret.put("AreaCode", "");
                 ret.put("University", "");
+                ret.put("UniversityCode", "");
                 ret.put("CollegeCode", "");
                 ret.put("College", "");
             }
-            
+
             return ret;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "获取用户 [userId=" + userId + "] 圈子异常", e);
