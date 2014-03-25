@@ -31,7 +31,7 @@ import org.json.JSONObject;
  * Filler utilities.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.0.0, Mar 18, 2014
+ * @version 1.2.0.0, Mar 25, 2014
  * @since 1.0.0
  */
 @Service
@@ -66,6 +66,16 @@ public class Filler {
         
         final JSONObject user = userService.getCurrentUser(request);
         dataModel.put("isLoggedIn", null != user);
+        
+        final String userId = user.optString("id");
+        final JSONObject userInfo = userService.getUserInfo(userId);
+        
+        dataModel.put("Area", userInfo.optString("Area"));
+        dataModel.put("AreaCode", userInfo.optString("AreaCode"));
+        dataModel.put("University", userInfo.optString("University"));
+        dataModel.put("UniversityCode", userInfo.optString("UniversityCode"));
+        dataModel.put("College", userInfo.optString("College"));
+        dataModel.put("CollegeCode", userInfo.optString("CollegeCode"));
 
         fillLangs(dataModel);
     }
