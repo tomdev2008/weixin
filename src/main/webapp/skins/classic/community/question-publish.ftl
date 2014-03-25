@@ -13,6 +13,7 @@
                 <div class="ft-gray">关键字用空格隔开</div>
             </div>
         </div>
+        <!--
         <div class="user-card-sub">类似问题及答案</div>
         <ul class="list" style="margin-bottom: 3em;">
             <li class="fn-clear">
@@ -35,6 +36,7 @@
                 </a>
             </li>
         </ul>
+        -->
         <div class="ft-green user-card-msg" onclick="community.questionPublish()">发 送</div>
         <#include "../common/tip.ftl">
         <script src="/js/lib/jquery-2.1.0.min.js"></script>
