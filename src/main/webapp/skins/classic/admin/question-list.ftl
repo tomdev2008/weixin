@@ -13,8 +13,7 @@
                     <img class="list-view" src="/images/default-user-thumbnail.png"/>
                     <div class="list-content">
                         <div>
-                            <span class="ft-green">【待解决】</span>
-                            <span class="ft-green">【已解决】</span>
+                            <span class="ft-green"><#if 0 == question.BestAnswer>【待解决】<#else>【已解决】</#if></span>
                             ${question.Title}
                         </div>
                         <div class="ft-gray">

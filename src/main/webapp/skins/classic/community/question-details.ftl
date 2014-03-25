@@ -16,7 +16,7 @@
                         <span class="ico ico-level1"></span>
                     </div>
                     <div>
-                        <span class="ft-green">【待解决】</span>${question.Title}
+                        <span class="ft-green"><#if 0 == question.BestAnswer>【待解决】<#else>【已解决】</#if></span>${question.Title}
                     </div>
                     <div class="ft-gray">
                         ${question.Area}-${question.University}<#if question.CollegeCode != "-1">-${question.College}</#if>

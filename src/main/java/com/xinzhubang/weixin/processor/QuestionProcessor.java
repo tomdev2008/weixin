@@ -291,6 +291,27 @@ public class QuestionProcessor {
 
         requestJSONObject.put("AddUserID", user.optInt("id"));
         requestJSONObject.put("Title", requestJSONObject.get("Content"));
+
+        // 处理关键字
+        String keywords = requestJSONObject.optString("Keywords");
+        final StringBuilder keywordsBuilder = new StringBuilder("|");
+
+        final String[] parts = keywords.split(","); // 先尝试用 ',' 分割
+        for (final String part : parts) {
+            final String[] parts1 = part.split(" "); // 再尝试用 ' ' 分割
+
+            for (final String part1 : parts1) {
+                final String keyword = part1.trim();
+
+                if (!Strings.isEmptyOrNull(keyword)) {
+                    keywordsBuilder.append(keyword);
+                    keywordsBuilder.append('|');
+                }
+            }
+        }
+        
+        requestJSONObject.put("Keywords", keywordsBuilder.toString());
+
         requestJSONObject.put("AddTime", new Timestamp(System.currentTimeMillis()));
 
         requestJSONObject.put("Area", community.optString("Area"));
@@ -300,7 +321,7 @@ public class QuestionProcessor {
         requestJSONObject.put("College", community.optString("College"));
         requestJSONObject.put("CollegeCode", community.optString("CollegeCode"));
 
-        questionService.add(requestJSONObject);
+        questionService.addQuestion(requestJSONObject);
 
         ret.put(Keys.STATUS_CODE, true);
         ret.put(Keys.MSG, "提问保存成功！");

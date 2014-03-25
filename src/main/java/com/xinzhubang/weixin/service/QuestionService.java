@@ -75,7 +75,7 @@ public class QuestionService {
      * @return
      */
     @Transactional
-    public String add(final JSONObject question) {
+    public String addQuestion(final JSONObject question) {
         String ret;
 
         try {

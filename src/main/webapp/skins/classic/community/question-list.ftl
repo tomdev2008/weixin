@@ -18,7 +18,7 @@
                 </li>
                 <li style="width: 25%">
                     <a href="/question-list?type=3"
-                       <#if subType == "3">class="current"</#if>>未解决</a>
+                       <#if subType == "3">class="current"</#if>>待解决</a>
                 </li>
                 <li style="width: 25%">
                     <a class="last" href="/question-publish">提问</a>
