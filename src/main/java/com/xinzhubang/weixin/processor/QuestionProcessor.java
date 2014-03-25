@@ -278,7 +278,7 @@ public class QuestionProcessor {
     }
 
     /**
-     * 发布问题提交保存
+     * 发布问题.
      *
      * @param context the specified context
      * @param request the specified request
@@ -287,7 +287,7 @@ public class QuestionProcessor {
      */
     @RequestProcessing(value = "/question-publish", method = HTTPRequestMethod.POST)
     @Before(adviceClass = LoginCheck.class)
-    public void savePublish(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+    public void publishQuestion(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final JSONRenderer renderer = new JSONRenderer();
         context.setRenderer(renderer);
@@ -311,10 +311,9 @@ public class QuestionProcessor {
         requestJSONObject.put("College", community.optString("College"));
         requestJSONObject.put("CollegeCode", community.optString("CollegeCode"));
 
-        String id = questionService.add(requestJSONObject);
+        questionService.add(requestJSONObject);
 
         ret.put(Keys.STATUS_CODE, true);
-
         ret.put(Keys.MSG, "提问保存成功！");
     }
 
@@ -337,12 +336,13 @@ public class QuestionProcessor {
 
         dataModel.put("type", "question");
         dataModel.put("id", request.getParameter("id"));
+        
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
 
     /**
-     * 保存回答
+     * 保存回答.
      *
      * @param context
      * @param request
@@ -357,18 +357,22 @@ public class QuestionProcessor {
         context.setRenderer(renderer);
         final JSONObject ret = new JSONObject();
         renderer.setJSONObject(ret);
+        
         final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
+        
         final JSONObject user = (JSONObject) request.getAttribute("user");
         requestJSONObject.put("AddUserID", user.optInt("id"));
         requestJSONObject.put("AddTime", new Timestamp(System.currentTimeMillis()));
+        
         questionService.addAnswer(requestJSONObject);
+        
         ret.put(Keys.STATUS_CODE, true);
         ret.put(Keys.MSG, "回答成功！");
         ret.put("id", requestJSONObject.get("QID"));
     }
 
     /**
-     * 采纳答案
+     * 采纳答案.
      *
      * @param context
      * @param request
@@ -383,8 +387,11 @@ public class QuestionProcessor {
         context.setRenderer(renderer);
         final JSONObject ret = new JSONObject();
         renderer.setJSONObject(ret);
+        
         final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
-        questionService.acceptAnswer(requestJSONObject.getInt("id"));
+        
+        questionService.acceptAnswer(requestJSONObject.getString("id"));
+        
         ret.put(Keys.STATUS_CODE, true);
         ret.put(Keys.MSG, "采纳成功！");
         ret.put("qid", requestJSONObject.getInt("qid"));

@@ -87,7 +87,7 @@ public class QuestionService {
     }
 
     /**
-     * 添加回答
+     * 添加回答.
      *
      * @param answer
      * @return
@@ -98,9 +98,11 @@ public class QuestionService {
 
         try {
             answer.put("Agree", 0);
+            
             ret = answerRepository.add(answer);
         } catch (RepositoryException ex) {
             LOGGER.log(Level.ERROR, "保存回答出错！", ex);
+            
             return null;
         }
 
@@ -108,25 +110,23 @@ public class QuestionService {
     }
 
     /**
-     * 采纳答案
-     *
-     * @param answer
-     * @return
+     * 采纳答案.
      */
     @Transactional
-    public void acceptAnswer(int id) throws RepositoryException, JSONException {
+    public void acceptAnswer(final String id) {
         try {
-            JSONObject answer = answerRepository.get(id + "");
-            JSONObject answer2 = new JSONObject();
-            answer2.put("Content", answer.get("Content"));
-            answer2.put("AddUserID", answer.getInt("AddUserID"));
-            answer2.put("AddTime", answer.get("AddTime"));
-            answer2.put("QID", answer.getInt("QID"));
-            answer2.put("Agree", 1);
-            answerRepository.update(id + "", answer2);
-        } catch (RepositoryException ex) {
+            JSONObject old = answerRepository.get(id);
+            
+            JSONObject answer = new JSONObject();
+            answer.put("Content", old.get("Content"));
+            answer.put("AddUserID", old.getInt("AddUserID"));
+            answer.put("AddTime", old.get("AddTime"));
+            answer.put("QID", old.getInt("QID"));
+            answer.put("Agree", 1);
+            
+            answerRepository.update(id, answer);
+        } catch (final Exception ex) {
             LOGGER.log(Level.ERROR, "保存回答出错！", ex);
-            ;
         }
     }
 
