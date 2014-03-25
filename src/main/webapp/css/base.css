@@ -304,7 +304,7 @@ footer {
     display: none;
     margin: 0 auto;
     padding-bottom: 1em;
-    position: absolute;
+    position: fixed;
     width: 70%;
     z-index: 10;
 }
@@ -354,11 +354,6 @@ footer {
     border-width: 0;
     width: 79%;
     background-color: #FFF;
-}
-
-.publish > div {
-    color: #999999;
-    text-align: right;
 }
 
 .textarea,

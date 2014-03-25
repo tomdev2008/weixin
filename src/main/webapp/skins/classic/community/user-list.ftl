@@ -5,6 +5,7 @@
         <@meta title="用户列表 - 新助邦"/>
     </head>
     <body>
+        <header>XXXXXXXXXXXXXXXXXX</header>
         <#include "../common/community-nav.ftl">
         <ul class="list" data-page="1">
             <#list userCards as userCard>
@@ -12,7 +13,7 @@
                 <a href="/user-card?type=${type}&userName=${userCard.userName}">
                     <img class="list-view"
                          onerror="this.src='/images/default-user-thumbnail.png'" 
-                         src="TODO"/>
+                         src="/images/default-user-thumbnail.png"/>
                 </a>
                 <div class="list-content">
                     <a href="/user-card?type=${type}&userName=${userCard.userName}">
@@ -26,7 +27,6 @@
                     </a>
                     <span class="ft-green follow"<#if userCard.isFollow> style="color: #F48A00"</#if> onclick=<#if isLoggedIn>"community.follow(${userCard.T_User_ID?c}, this)"<#else>"window.location.href='/login'"</#if>><#if userCard.isFollow>取消关注<#else>关注</#if></span>
                 </div>
-
             </li>
             </#list>
         </ul>
@@ -39,7 +39,7 @@
             loadMore.genHTML = function(obj) {
                 var liHTML = '<li class="fn-clear">'
                         + '<a href="/user-card?type=${type}&userName=' + obj.userName + '">'
-                        + '<img class="list-view" onerror="this.src=\'/images/default-user-thumbnail.png\'" src=""/>'
+                        + '<img class="list-view" onerror="this.src=\'/images/default-user-thumbnail.png\'" src="/images/default-user-thumbnail.png"/>'
                         + '</a>'
                         + '<div class="list-content">'
                         + '<a href="/user-card?type=${type}&userName=' + obj.userName + '">'
@@ -49,7 +49,7 @@
                         + '</div>'
                         + '<div class="ft-gray">' + obj.PropertyTitle + '</div>'
                         + '</a>'
-                        + '<span class="ft-green follow" onclick="community.follow(' + obj.ID + ', this)">' 
+                        + '<span' + (obj.isFollow ? ' style="color: #F48A00"' : '') + ' class="ft-green follow" onclick="community.follow(' + obj.ID + ', this)">' 
                         + (obj.isFollow ? "取消关注" : "关注")+ '</span>'
                         + '</div>'
                         + '</li>';

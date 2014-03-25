@@ -26,7 +26,16 @@
             <div class="fn-clear">
                 <img class="list-view" src="/images/default-user-thumbnail.png"/>
                 <div class="list-content">
-                    <div>${sale.Name}</div>
+                    <div>
+                        <#if sale.ItemType == 1>
+                        <span class="ico-resource">资料</span>
+                        <#elseif sale.ItemType == 2>
+                        <span class="ico-qa">答疑</span>
+                        <#elseif sale.ItemType == 3>
+                        <span class="ico-school">授课</span>
+                        </#if>
+                        ${sale.Name}
+                    </div>
                     <div class="ft-gray">
                         ${sale.ItemContent}
                     </div>
@@ -39,14 +48,14 @@
                     </div>
                     <div class="fn-clear">
                         <span class="ft-gray ft-small fn-left">
-                            ${sale.CreateTime?string('yyyy-MM-dd')} &nbsp; 浏览：${sale.ClickCount}
+                            ${sale.CreateTime?string('yyyy-MM-dd')} &nbsp; 浏览 ${sale.ClickCount}
                         </span>
                         <span class="ft-green fn-right">￥${sale.Price}</span>
                     </div>
                 </div>
             </div>
             <div class="fn-clear">
-                <button class="button fn-left" onclick="window.location='/whisper?itemID=${sale.ID?c}&toMemberID=${sale.MemberID?c}'">说悄悄话</button>
+                <button class="button fn-left" onclick="window.location = '/whisper?itemID=${sale.ID?c}&toMemberID=${sale.MemberID?c}'">说悄悄话</button>
                 <button class="button fn-right" onclick='tip.show("温馨提示", "功能正在开发中，敬请期待");'>我要购买</button>
             </div>
         </div>

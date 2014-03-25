@@ -22,9 +22,9 @@
                     </div>
                     <div class="fn-clear">
                         <span class="ft-gray ft-small fn-left">
-                            ${question.AddTime?string('yyyy-MM-dd')} &nbsp; 浏览${question.PV} &nbsp; 回应${question.count}
+                            ${question.AddTime?string('yyyy-MM-dd')} &nbsp; 浏览 ${question.PV} &nbsp; 回应 ${question.count}
                         </span>
-                        <span class="ft-green fn-right">${question.Points}</span>
+                        <span class="ft-green fn-right">￥${question.Points}</span>
                     </div>
                 </div>
             </li>

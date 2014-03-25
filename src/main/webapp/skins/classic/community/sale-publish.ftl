@@ -5,6 +5,7 @@
         <@meta title="发出售 - 新助邦"/>
     </head>
     <body>
+        <header>XXXXXXXXXXXXXXXXXX</header>
         <#include "../common/community-nav.ftl">
         <div class="sub-nav">
             <span><i class="ico ico-radio-checked" data-type="1"></i>资料</span>
@@ -12,13 +13,11 @@
             <span><i class="ico ico-radio" data-type="3"></i>授课</span>
         </div>
         <div class="wrap">
-            <div class="publish">
-                <input class="input" id="title" placeholder="请填写标题名称"/>
-                <textarea class="textarea" id="details" placeholder="亲，请填写具体描述..."></textarea>
-                <div>50</div>
-                <input class="input" id="price" placeholder="请填写需要的费用"/>
-                <div>￥(元)</div>
-            </div>
+            <input class="input" id="title" placeholder="请填写标题名称"/>
+            <textarea class="textarea" id="details" placeholder="亲，请填写具体描述..."></textarea>
+            <div class="ft-gray">50</div>
+            <input class="input" id="price" placeholder="请填写需要的费用"/>
+            <div class="ft-gray">￥(元)</div>
             <button class="button" onclick="community.salePublish()">提 交</button>
         </div>
         <#include "../common/tip.ftl">
@@ -26,7 +25,7 @@
         <script src="/js/common.js"></script>
         <script src="/js/community.js"></script>
         <script>
-            community.salePublishInit();
+                community.salePublishInit();
         </script>
     </body>
 </html>
