@@ -195,9 +195,10 @@ public class UserService {
      * 获取指定的用户 id 的关注列表.
      *
      * @param userId 指定的用户 id
+     * @param pageNum
      * @return
      */
-    public List<JSONObject> getFollowers(final String userId, final int pageNum) {
+    public List<JSONObject> getFollowingUsers(final String userId, final int pageNum) {
         try {
             final Query query = new Query().setFilter(new PropertyFilter("MemberID", FilterOperator.EQUAL, userId));
             query.setCurrentPageNum(pageNum).setPageSize(10);
@@ -209,11 +210,23 @@ public class UserService {
             final JSONArray attentions = result.optJSONArray(Keys.RESULTS);
             for (int i = 0; i < attentions.length(); i++) {
                 final JSONObject attention = attentions.optJSONObject(i);
-                final String followerId = attention.optString("AttentionMemberID");
+                final String followingUserId = attention.optString("AttentionMemberID");
 
-                final JSONObject userCard = getUserCard(followerId, "a");
+                final JSONObject userCard = getUserCard(followingUserId, "a");
 
                 ret.add(userCard);
+            }
+
+            for (final JSONObject followingUser : ret) {
+                final String followingUserId = followingUser.optString("T_User_ID");
+                followingUser.put("isFollow", true);
+
+                final JSONObject community = getUserInfo(followingUserId);
+
+                followingUser.put("Area", community.optString("Area"));
+                followingUser.put("University", community.optString("University"));
+                followingUser.put("CollegeCode", community.optString("CollegeCode"));
+                followingUser.put("College", community.optString("College"));
             }
 
             return ret;
@@ -534,7 +547,19 @@ public class UserService {
         try {
             final JSONObject result = userInfoRepository.get(query);
 
-            return result.optJSONArray(Keys.RESULTS).optJSONObject(0);
+            JSONObject ret = result.optJSONArray(Keys.RESULTS).optJSONObject(0);
+
+            if (null == ret) {
+                // PC 端的已有用户可能没设置圈子，这里给出默认值，避免 NPE
+                ret = new JSONObject();
+
+                ret.put("Area", "");
+                ret.put("University", "");
+                ret.put("CollegeCode", "");
+                ret.put("College", "");
+            }
+            
+            return ret;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "获取用户 [userId=" + userId + "] 圈子异常", e);
 

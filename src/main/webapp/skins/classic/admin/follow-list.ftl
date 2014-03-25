@@ -7,26 +7,26 @@
     <body>
         <#include "../common/admin-nav.ftl">
         <ul class="list" data-page="1">
-            <#list followers as follower>
+            <#list followingUsers as followingUser>
             <li class="fn-clear">
-                <a href="/user-card?type${type}&userName=${follower.userName}">
+                <a href="/user-card?type${type}&userName=${followingUser.userName}">
                     <img class="list-view" src="/images/default-user-thumbnail.png"/>
                 </a>
                 <div class="list-content">
-                    <a href="/user-card?type${type}&userName=${follower.userName}">
+                    <a href="/user-card?type${type}&userName=${followingUser.userName}">
                         <div class="fn-clear">
-                            <span class="fn-left ft-dark">${follower.userName}</span>
+                            <span class="fn-left ft-dark">${followingUser.userName}</span>
                             <span class="ico ico-cater"></span>
                             <span class="ico ico-level1"></span>
                         </div>
                         <div class="ft-gray">
-                            ${follower.PropertyTitle}
+                            ${followingUser.PropertyTitle}
                         </div>
                         <div class="ft-gray">
-                            圈子
+                            ${followingUser.Area}-${followingUser.University}<#if followingUser.CollegeCode != "-1">-${followingUser.College}</#if>
                         </div>
                     </a>
-                    <span class="ft-green follow" style="color: #F48A00" onclick=<#if isLoggedIn>"community.follow(${follower.T_User_ID?c}, this)"<#else>"window.location.href='/login'"</#if>><#if isFollow>取消关注<#else>关注</#if></span>
+                    <span class="ft-green follow" style="color: #F48A00" onclick=<#if isLoggedIn>"community.follow(${followingUser.T_User_ID?c}, this)"<#else>"window.location.href='/login'"</#if>><#if followingUser.isFollow>取消关注<#else>关注</#if></span>
                 </div>
             </li>
             </#list>

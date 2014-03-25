@@ -414,17 +414,47 @@ public class UserProcessor {
         final JSONObject user = (JSONObject) request.getAttribute("user");
         final String memberId = user.optString("id");
 
-        final List<JSONObject> followers = userService.getFollowers(memberId, pageNum);
-        for (final JSONObject follower : followers) {
-            final String followerId = follower.optString("T_User_ID");
-            dataModel.put("isFollow", userService.isFollow(memberId, followerId));
-        }
+        final List<JSONObject> followingUsers = userService.getFollowingUsers(memberId, pageNum);
 
-        dataModel.put("followers", (Object) followers);
+        dataModel.put("followingUsers", (Object) followingUsers);
 
         dataModel.put("type", "follow");
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
+    }
+
+    /**
+     * AJAX 拉取我关注的人.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/admin/follow-list-ajax", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
+    public void getMyUserList(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final JSONRenderer renderer = new JSONRenderer();
+        context.setRenderer(renderer);
+        final JSONObject ret = new JSONObject();
+        renderer.setJSONObject(ret);
+
+        String pageStr = request.getParameter("p");
+        if (Strings.isEmptyOrNull(pageStr)) {
+            pageStr = "1";
+        }
+
+        final int pageNum = Integer.valueOf(pageStr);
+
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+        final String memberId = user.optString("id");
+
+        final List<JSONObject> followingUsers = userService.getFollowingUsers(memberId, pageNum);
+
+        ret.put("followingUsers", (Object) followingUsers);
+
+        ret.put("type", "follow");
     }
 
     /**
