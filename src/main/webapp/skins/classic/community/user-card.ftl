@@ -13,7 +13,6 @@
                     <div class="fn-clear">
                         <span class="fn-left ft-dark">${user.user_name}</span>
                         <span class="ico ico-cater"></span>
-                        <span class="ico ico-level1"></span>
                     </div>
                     <div class="ft-gray">
                         ${user.cardTitle}

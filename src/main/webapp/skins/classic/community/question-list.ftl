@@ -36,7 +36,6 @@
                         <div class="fn-clear">
                             <span class="fn-left ft-gray">${question.user.user_name}</span>
                             <span class="ico ico-cater"></span>
-                            <span class="ico ico-level1"></span>
                         </div>
                         <div>
                             <span class="ft-green TODO"></span>${question.Title}
@@ -72,7 +71,6 @@
                         + '<div class="fn-clear">'
                         + '<span class="ft-gray fn-left">' + obj.user.nick_name + '</span>'
                         + '<span class="ico ico-cater"></span>'
-                        + '<span class="ico ico-level1"></span>'
                         + '</div>'
                         + '<div>' + obj.Title + '</div>'
                         + '<div class="ft-gray">' + community

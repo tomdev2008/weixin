@@ -17,7 +17,6 @@
                         <div class="fn-clear">
                             <span class="fn-left ft-dark">${followingUser.userName}</span>
                             <span class="ico ico-cater"></span>
-                            <span class="ico ico-level1"></span>
                         </div>
                         <div class="ft-gray">
                             ${followingUser.PropertyTitle}
@@ -36,7 +35,7 @@
         <script src="/js/common.js"></script>
         <script src="/js/community.js"></script>
         <script>
-            loadMore.init("/user-list-ajax?p=");
+            loadMore.init("/admin/follow-list-ajax?p=");
             loadMore.genHTML = function(obj) {
                 var community = obj.Area + '-' + obj.University;
                 if (obj.CollegeCode !== "-1") {
@@ -51,7 +50,6 @@
                         + '<div class="fn-clear">'
                         + '<span class="fn-left ft-dark">' + obj.userName + '</span>'
                         + '<span class="ico ico-cater"></span>'
-                        + '<span class="ico ico-level1"></span>'
                         + '</div>'
                         + '<div class="ft-gray">' + obj.PropertyTitle + '</div>'
                         + '<div class="ft-gray">' + community + '</div>'

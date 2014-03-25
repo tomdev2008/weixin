@@ -18,7 +18,6 @@
                         <div class="fn-clear">
                             <span class="ft-gray fn-left">${sale.userName}</span>
                             <span class="ico ico-cater"></span>
-                            <span class="ico ico-level1"></span>
                         </div>
                         <div>${sale.Name}</div>
                         <div class="ft-gray">
@@ -52,7 +51,6 @@
                         + '<div class="fn-clear">'
                         + '<span class="ft-gray fn-left">' + obj.userName + '</span>'
                         + '<span class="ico ico-cater"></span>'
-                        + '<span class="ico ico-level1"></span>'
                         + '</div>'
                         + '<div>' + obj.Name + '</div>'
                         + '<div class="ft-gray">' + community

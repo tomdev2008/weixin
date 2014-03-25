@@ -5,10 +5,13 @@
         <@meta title="圈子设置 - 新助邦"/>
     </head>
     <body class="search">
+        <header>
+            亲，请先设置您的圈子
+        </header>
         <nav>
             <ul class="fn-clear">
                 <li <#if type==0>class="current"</#if> >
-                    <span>
+                    <span onclick="window.location='/admin/set-community'">
                         省份<span class="ico ico-arrow-down"></span>
                     </span>
                 </li>

@@ -13,7 +13,6 @@
                     <div class="fn-clear">
                         <span class="fn-left">${message.fromUser.user_name}</span>
                         <span class="ico ico-cater"></span>
-                        <span class="ico ico-level1"></span>
                     </div>
                     <div class="ft-gray">
                         ${message.CONTENT}
@@ -32,7 +31,6 @@
                                 <div class="fn-clear">
                                     <span class="fn-left">${l.fromUser.user_name}</span>
                                     <span class="ico ico-cater"></span>
-                                    <span class="ico ico-level1"></span>
                                 </div>
                                 <div class="ft-gray">
                                     ${l.CONTENT}

@@ -13,7 +13,6 @@
                     <div class="fn-clear">
                         <span class="fn-left ft-gray">${question.user.user_name}</span>
                         <span class="ico ico-cater"></span>
-                        <span class="ico ico-level1"></span>
                     </div>
                     <div>
                         <span class="ft-green"><#if 0 == question.BestAnswer>【待解决】<#else>【已解决】</#if></span>${question.Title}
@@ -39,7 +38,6 @@
                     <div class="fn-clear">
                         <span class="fn-left ft-green">${a.user.user_name}</span>
                         <span class="ico ico-cater"></span>
-                        <span class="ico ico-level1"></span>
                     </div>
                     <div>
                         ${a.Content}
