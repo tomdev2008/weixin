@@ -28,6 +28,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.zip.ZipException;
 import javax.inject.Inject;
 import org.b3log.latke.Keys;
 import org.b3log.latke.logging.Level;
@@ -216,6 +217,7 @@ public class QuestionService {
 
             final JSONObject result = questionRepository.get(query);
             final JSONArray results = result.getJSONArray(Keys.RESULTS);
+            query.setPageCount(pageNum).setPageSize(XZBServletListener.PAGE_SIZE);
 
             final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
             for (final JSONObject question : ret) {
