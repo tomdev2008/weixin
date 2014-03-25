@@ -203,7 +203,7 @@ public class UserService {
     public List<JSONObject> getFollowingUsers(final String userId, final int pageNum) {
         try {
             final Query query = new Query().setFilter(new PropertyFilter("MemberID", FilterOperator.EQUAL, userId));
-            query.setCurrentPageNum(pageNum).setPageSize(10);
+            query.setCurrentPageNum(pageNum).setPageSize(XZBServletListener.PAGE_SIZE);
 
             final JSONObject result = userAttentionRepository.get(query);
 
