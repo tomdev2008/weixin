@@ -5,7 +5,7 @@
         <@meta title="出售列表 - 新助邦"/>
     </head>
     <body>
-        <header>XXXXXXXXXXXXXXXXXX</header>
+        <header>${Area}-${University}<#if CollegeCode != "">-${College}</#if></header>
         <#include "../common/community-nav.ftl">
         <#include "../common/community-sub-nav.ftl">
         <ul class="list" data-page="1">

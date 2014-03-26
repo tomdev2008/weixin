@@ -5,7 +5,7 @@
         <@meta title="提问列表 - 新助邦"/>
     </head>
     <body>
-        <header>XXXXXXXXXXXXXXXXXX</header>
+        <header>${Area}-${University}<#if CollegeCode != "">-${College}</#if></header>
         <#include "../common/community-nav.ftl">
         <div class="sub-nav">
             <ul class="fn-clear">
