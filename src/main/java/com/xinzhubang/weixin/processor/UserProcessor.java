@@ -349,8 +349,9 @@ public class UserProcessor {
         if (null == userCard) {
             userCard = new JSONObject();
 
-            userCard.put("PropertyTitle", "请设置您的名片标题");
-            userCard.put("PropertyRemark", "请设置您个人详细介绍");
+            userCard.put("nickName", "请设置昵称");
+            userCard.put("PropertyTitle", "请设置您的个性签名");
+            userCard.put("PropertyRemark", "请设置您个人的详细介绍");
         }
 
         dataModel.put("userCard", userCard);
@@ -380,11 +381,13 @@ public class UserProcessor {
         renderer.setJSONObject(ret);
 
         final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
+        final String nickName = requestJSONObject.optString("nickName");
         final String title = requestJSONObject.optString("title");
         final String details = requestJSONObject.optString("details");
         final String type = requestJSONObject.optString("type");
 
         final JSONObject userCard = new JSONObject();
+        userCard.put("nickName", nickName);
         userCard.put("PropertyTitle", title);
         userCard.put("PropertyRemark", details);
         userCard.put("Property", "teacher".equals(type) ? 1 : 0);

@@ -11,7 +11,7 @@
                 <img class="list-view" src="/images/default-user-thumbnail.png"/>
                 <div class="list-content">
                     <div class="fn-clear">
-                        <span class="fn-left ft-dark">${user.user_name}</span>
+                        <span class="fn-left ft-dark">${user.nick_name}</span>
                         <span class="ico ico-cater"></span>
                     </div>
                     <div class="ft-gray">

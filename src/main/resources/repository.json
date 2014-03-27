@@ -8,6 +8,15 @@
             "name": "Users",
             "keys": [
                 {
+                    "name": "id",
+                    "type": "int",
+                    "nullable": true
+                },
+                {
+                    "name": "group_id",
+                    "type": "int"
+                },
+                {
                     "name": "user_name",
                     "type": "String",
                     "length": 100
@@ -23,8 +32,200 @@
                     "length": 50
                 },
                 {
-                    "name": "group_id",
-                    "type": "int"
+                    "name": "nick_name",
+                    "type": "String",
+                    "length": 100,
+                    "nullable": true
+                },
+                {
+                    "name": "RealName",
+                    "type": "String",
+                    "length": 100,
+                    "nullable": true
+                },
+                {
+                    "name": "avatar",
+                    "type": "String",
+                    "length": 255,
+                    "nullable": true
+                },
+                {
+                    "name": "sex",
+                    "type": "String",
+                    "length": 20,
+                    "nullable": true
+                },
+                {
+                    "name": "birthday",
+                    "type": "Datetime",
+                    "nullable": true
+                },
+                {
+                    "name": "telphone",
+                    "type": "String",
+                    "length": 50,
+                    "nullable": true
+                },
+                {
+                    "name": "mobile",
+                    "type": "String",
+                    "length": 20,
+                    "nullable": true
+                },
+                {
+                    "name": "qq",
+                    "type": "String",
+                    "length": 30,
+                    "nullable": true
+                },
+                {
+                    "name": "Province",
+                    "type": "String",
+                    "length": 20,
+                    "nullable": true
+                },
+                {
+                    "name": "City",
+                    "type": "String",
+                    "length": 20,
+                    "nullable": true
+                },
+                {
+                    "name": "County",
+                    "type": "String",
+                    "length": 20,
+                    "nullable": true
+                },
+                {
+                    "name": "address",
+                    "type": "String",
+                    "length": 20,
+                    "nullable": true
+                },
+                {
+                    "name": "safe_question",
+                    "type": "String",
+                    "length": 255,
+                    "nullable": true
+                },
+                {
+                    "name": "safe_answer",
+                    "type": "String",
+                    "length": 255,
+                    "nullable": true
+                },
+                {
+                    "name": "amount",
+                    "type": "Decimal",
+                    "length": 9,
+                    "precision": 2,
+                    "nullable": true
+                },
+                {
+                    "name": "point",
+                    "type": "int",
+                    "nullable": true
+                },
+                {
+                    "name": "exp",
+                    "type": "int",
+                    "nullable": true
+                },
+                {
+                    "name": "is_lock",
+                    "type": "int",
+                    "nullable": true
+                },
+                {
+                    "name": "reg_time",
+                    "type": "Datetime",
+                    "nullable": true
+                },
+                {
+                    "name": "reg_ip",
+                    "type": "String",
+                    "length": 30,
+                    "nullable": true
+                },
+                {
+                    "name": "IDCardNo",
+                    "type": "String",
+                    "length": 50,
+                    "nullable": true
+                },
+                {
+                    "name": "IDCardFiles",
+                    "type": "String",
+                    "length": 500,
+                    "nullable": true
+                },
+                {
+                    "name": "IDCardStatus",
+                    "type": "int",
+                    "nullable": true
+                },
+                {
+                    "name": "CreditStatus",
+                    "type": "int",
+                    "nullable": true
+                },
+                {
+                    "name": "CreditPayment",
+                    "type": "Decimal",
+                    "length": 18,
+                    "precision": 2,
+                    "nullable": true
+                },
+                {
+                    "name": "BindMobile",
+                    "type": "String",
+                    "length": 20,
+                    "nullable": true
+                },
+                {
+                    "name": "Memberlevels",
+                    "type": "String",
+                    "length": 50,
+                    "nullable": true
+                },
+                {
+                    "name": "AlipayAccountName",
+                    "type": "String",
+                    "length": 100,
+                    "nullable": true
+                },
+                {
+                    "name": "CreditPaymentTime",
+                    "type": "Datetime",
+                    "nullable": true
+                },
+                {
+                    "name": "CreditReturnTime",
+                    "type": "Datetime",
+                    "nullable": true
+                },
+                {
+                    "name": "coin",
+                    "type": "Decimal",
+                    "length": 10,
+                    "precision": 2,
+                    "nullable": true
+                },
+                {
+                    "name": "isPromoter",
+                    "type": "int",
+                    "nullable": true
+                },
+                {
+                    "name": "isPromoted",
+                    "type": "int",
+                    "nullable": true
+                },
+                {
+                    "name": "OpenID",
+                    "type": "String",
+                    "length": 500,
+                    "nullable": true
                 }
             ]
         },
@@ -341,26 +542,74 @@
             "name": "User_Property",
             "keys": [
                 {
-                    "name": "id",
-                    "type": "int"
+                    "name": "ID",
+                    "type": "int",
+                    "nullable": true
                 },
                 {
                     "name": "T_User_ID",
-                    "type": "int"
+                    "type": "int",
+                    "nullable": true
                 },
                 {
                     "name": "Property",
-                    "type": "int"
+                    "type": "int",
+                    "nullable": true
+                },
+                {
+                    "name": "IsDefault",
+                    "type": "int",
+                    "nullable": true
+                },
+                {
+                    "name": "CreateTime",
+                    "type": "Datetime",
+                    "nullable": true
+                },
+                {
+                    "name": "IdentificationFiles",
+                    "type": "String",
+                    "length": 500,
+                    "nullable": true
+                },
+                {
+                    "name": "IdentificationStatus",
+                    "type": "int",
+                    "nullable": true
+                },
+                {
+                    "name": "IdentificationTime",
+                    "type": "Datetime",
+                    "nullable": true
+                },
+                {
+                    "name": "FavorableRate",
+                    "type": "Decimal",
+                    "length": 18,
+                    "precision": 2,
+                    "nullable": true
                 },
                 {
                     "name": "PropertyTitle",
                     "type": "String",
-                    "length": 100
+                    "length": 100,
+                    "nullable": true
                 },
                 {
                     "name": "PropertyRemark",
                     "type": "String",
-                    "length": 500
+                    "length": 500,
+                    "nullable": true
+                },
+                {
+                    "name": "AuditingManage",
+                    "type": "int",
+                    "nullable": true
+                },
+                {
+                    "name": "AuditingTime",
+                    "type": "Datetime",
+                    "nullable": true
                 }
             ]
         },

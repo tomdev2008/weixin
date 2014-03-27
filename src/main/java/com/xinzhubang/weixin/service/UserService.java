@@ -282,7 +282,8 @@ public class UserService {
             }
 
             final JSONObject user = userRepository.get(userId);
-            ret.put("userName", user.getString("user_name"));
+            ret.put("userName", user.optString("user_name"));
+            ret.put("nickName", user.optString("nick_name"));
 
             return ret;
         } catch (final Exception e) {
@@ -298,6 +299,7 @@ public class UserService {
      * @param userCard
      * <pre>
      * {
+     *     "nickName": "",
      *     "T_User_ID": int,
      *     "Property": int,
      *     "PropertyTitle": "",
@@ -310,21 +312,41 @@ public class UserService {
     @Transactional
     public boolean setUserCard(final JSONObject userCard) {
         try {
+            final String userId = userCard.optString("T_User_ID");
+
             final List<Filter> filters = new ArrayList<Filter>();
-            filters.add(new PropertyFilter("T_User_ID", FilterOperator.EQUAL, userCard.optInt("T_User_ID")));
+            filters.add(new PropertyFilter("T_User_ID", FilterOperator.EQUAL, userId));
             filters.add(new PropertyFilter("Property", FilterOperator.EQUAL, userCard.optInt("Property")));
 
             final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
             final JSONObject result = userCardRepository.get(query);
             JSONObject property = result.optJSONArray(Keys.RESULTS).optJSONObject(0);
 
-            if (null == property) {
-                property = userCard;
+            // 1. 更新用户名片
+            if (null != property) {
+                property.remove("rownum");
+                
+                property.put("PropertyTitle", userCard.optString("PropertyTitle"));
+                property.put("PropertyRemark", userCard.optString("PropertyRemark"));
+
+                userCardRepository.update(property.optString("ID"), property);
             } else {
-                userCardRepository.remove(property.optString("ID"));
+                property = new JSONObject();
+
+                property.put("PropertyTitle", userCard.optString("PropertyTitle"));
+                property.put("PropertyRemark", userCard.optString("PropertyRemark"));
+                property.put("Property", userCard.optInt("Property"));
+
+                userCardRepository.add(property);
             }
 
-            userCardRepository.add(userCard);
+            // 2. 更新用户昵称
+            final JSONObject user = userRepository.get(userId);
+            user.put("nick_name", userCard.optString("nickName"));
+
+            user.remove("rownum");
+
+            userRepository.update(userId, user);
 
             return true;
         } catch (final Exception e) {

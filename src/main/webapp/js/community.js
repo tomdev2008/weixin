@@ -246,12 +246,15 @@ var admin = {
         });
     },
     setUserCard: function(type) {
-        if ($.trim($("#title").val()).length === 0) {
-            tip.show("提交失败", "标题不能为空");
+        if ($.trim($("#nickName").val()).length === 0) {
+            tip.show("提交失败", "昵称不能为空");
+        } else if ($.trim($("#title").val()).length === 0) {
+            tip.show("提交失败", "个性签名不能为空");
         } else if ($.trim($("#details").val()).length === 0) {
             tip.show("提交失败", "详细介绍不能为空");
         } else {
             var requestJSONObject = {
+                nickName: $("#nickName").val(),
                 title: $("#title").val(),
                 details: $("#details").val(),
                 type: type

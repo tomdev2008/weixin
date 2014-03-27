@@ -16,8 +16,10 @@
             </ul>
         </div>
         <div class="wrap">
+            <input class="input" id="nickName" value="${userCard.nickName}"/>
+            <div class="ft-gray">最多不能超过5个字</div>
             <input class="input" id="title" value="${userCard.PropertyTitle}"/>
-            <div class="ft-gray">最多不能超过50个字</div>
+            <div class="ft-gray">最多不能超过5个字</div>
             <textarea class="textarea" id="details">${userCard.PropertyRemark}</textarea>
             <div class="ft-gray">最多不能超过100个字</div>
             <button class="button" onclick="admin.setUserCard('${type}')">确 定</button>

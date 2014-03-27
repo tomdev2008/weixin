@@ -18,7 +18,7 @@
                 <div class="list-content">
                     <a href="/user-card?type=${type}&userName=${userCard.userName}">
                         <div class="fn-clear">
-                            <span class="fn-left ft-dark">${userCard.userName}</span>
+                            <span class="fn-left ft-dark">${userCard.nickName}</span>
                             <span class="ico ico-cater"></span>
                         </div>
                         <div class="ft-gray">
