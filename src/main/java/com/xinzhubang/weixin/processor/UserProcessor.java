@@ -282,8 +282,8 @@ public class UserProcessor {
         }
 
         final String userId = user.getString("id");
-        final JSONObject card = userService.getUserCard(userId, type);
-        if (null == card) {
+        final List<JSONObject> cards = userService.getUserCard(userId, type);
+        if (cards.isEmpty()) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
 
             return;
@@ -299,7 +299,7 @@ public class UserProcessor {
             dataModel.put("items", (Object) demands);
         }
 
-        user.put("cardTitle", card.getString("PropertyTitle"));
+        user.put("cardTitle", cards.get(0).getString("PropertyTitle"));
 
         final JSONObject community = userService.getUserInfo(userId);
         user.put("community", community);
@@ -342,11 +342,12 @@ public class UserProcessor {
         if (Strings.isEmptyOrNull(type)) {
             type = "teacher";
         }
-
-        JSONObject userCard = userService.getUserCard(memberId, type);
+        
+        JSONObject userCard = null;
+        List<JSONObject> userCards = userService.getUserCard(memberId, type);
 
         final Map<String, Object> dataModel = renderer.getDataModel();
-        if (null == userCard) {
+        if (userCards.isEmpty()) {
             userCard = new JSONObject();
 
             userCard.put("nickName", "请设置昵称");

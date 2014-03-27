@@ -5,6 +5,7 @@
         <@meta title="${user.cardTitle} - 新助邦"/>
     </head>
     <body>
+        <header>${Area}-${University}<#if CollegeCode != "-1">-${College}</#if></header>
         <#include "../common/community-nav.ftl">
         <ul class="list">
             <li class="fn-clear">
@@ -15,7 +16,7 @@
                         <span class="ico ico-cater"></span>
                     </div>
                     <div class="ft-gray">
-                         ${user.community.Area}-${user.community.University}<#if user.community.CollegeCode != "-1">-${user.community.College}</#if>
+                        ${user.community.Area}-${user.community.University}<#if user.community.CollegeCode != "-1">-${user.community.College}</#if>
                     </div>
                     <div>
                         ${user.cardTitle}

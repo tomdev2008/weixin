@@ -17,7 +17,13 @@
                 <div class="list-content">
                     <a href="/user-card?type${type}&userName=${followingUser.userName}">
                         <div class="fn-clear">
-                            <span class="fn-left ft-dark">${followingUser.userName}</span>
+                            <span class="fn-left ft-dark">${followingUser.nickName}</span>
+                            ${followingUser.Property}
+                            <#if followingUser.Property == 0>
+                            【学生】
+                            <#else>
+                            【老师】
+                            </#if>
                             <span class="ico ico-cater"></span>
                         </div>
                         <div class="ft-gray">

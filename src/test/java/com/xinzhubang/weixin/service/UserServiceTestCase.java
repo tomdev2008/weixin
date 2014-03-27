@@ -16,6 +16,7 @@
 package com.xinzhubang.weixin.service;
 
 import java.util.Collection;
+import java.util.List;
 import org.b3log.latke.Latkes;
 import org.b3log.latke.ioc.LatkeBeanManager;
 import org.b3log.latke.ioc.Lifecycle;
@@ -29,7 +30,7 @@ import org.testng.annotations.Test;
  * 用户服务存取单元测试.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.0.1, Mar 15, 2014
+ * @version 1.0.1.1, Mar 27, 2014
  * @since 1.0.0
  */
 public class UserServiceTestCase {
@@ -63,10 +64,10 @@ public class UserServiceTestCase {
     public void getUserCard() throws Exception {
         System.out.println("getUserCard");
 
-        JSONObject userCard = userService.getUserCard("1475", "s");
-        System.out.println(userCard);
+        List<JSONObject> userCards = userService.getUserCard("1475", "s");
+        System.out.println(userCards.get(0));
 
-        userCard = userService.getUserCard("1475", "t");
-        System.out.println(userCard);
+        userCards = userService.getUserCard("1475", "t");
+        System.out.println(userCards.get(0));
     }
 }

@@ -178,10 +178,10 @@ public class UserService {
             for (int i = 0; i < userInfos.length(); i++) {
                 final JSONObject userInfo = userInfos.optJSONObject(i);
                 final String memberId = userInfo.optString("MemberID");
-                final JSONObject userCard = getUserCard(memberId, typeArg);
-
-                if (null != userCard) {
-                    ret.add(userCard);
+                final List<JSONObject> userCard = getUserCard(memberId, typeArg);
+                
+                for (final JSONObject card : userCard) {
+                    ret.add(card);
                 }
             }
 
@@ -214,9 +214,10 @@ public class UserService {
                 final JSONObject attention = attentions.optJSONObject(i);
                 final String followingUserId = attention.optString("AttentionMemberID");
 
-                final JSONObject userCard = getUserCard(followingUserId, "a");
-                if (null != userCard) {
-                    ret.add(userCard);
+                final List<JSONObject> userCards = getUserCard(followingUserId, "a");
+                
+                for (final JSONObject card : userCards) {
+                    ret.add(card);
                 }
             }
 
@@ -248,7 +249,7 @@ public class UserService {
      * @return
      * @throws ServiceException
      */
-    public JSONObject getUserCard(final String userId, final String type) throws ServiceException {
+    public List<JSONObject> getUserCard(final String userId, final String type) throws ServiceException {
         final List<Filter> filters = new ArrayList<Filter>();
         filters.add(new PropertyFilter("T_User_ID", FilterOperator.EQUAL, userId));
 
@@ -276,14 +277,16 @@ public class UserService {
         try {
             final JSONObject result = userCardRepository.get(query);
 
-            final JSONObject ret = result.getJSONArray(Keys.RESULTS).optJSONObject(0);
-            if (null == ret) {
-                return null;
+            final List<JSONObject> ret = CollectionUtils.jsonArrayToList(result.getJSONArray(Keys.RESULTS));
+            if (null == ret || ret.isEmpty()) {
+                return Collections.emptyList();
             }
 
             final JSONObject user = userRepository.get(userId);
-            ret.put("userName", user.optString("user_name"));
-            ret.put("nickName", user.optString("nick_name"));
+            for (final JSONObject card : ret) {
+                card.put("userName", user.optString("user_name"));
+                card.put("nickName", user.optString("nick_name"));
+            }
 
             return ret;
         } catch (final Exception e) {
@@ -325,7 +328,7 @@ public class UserService {
             // 1. 更新用户名片
             if (null != property) {
                 property.remove("rownum");
-                
+
                 property.put("PropertyTitle", userCard.optString("PropertyTitle"));
                 property.put("PropertyRemark", userCard.optString("PropertyRemark"));
 
