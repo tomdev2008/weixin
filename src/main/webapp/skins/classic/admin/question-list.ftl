@@ -17,7 +17,7 @@
                             ${question.Title}
                         </div>
                         <div class="ft-gray">
-                            ${question.Area}<#if question.UniversityCode != "-1">-${question.University}</#if><#if question.CollegeCode != "-1">-${question.College}</#if>
+                            ${question.Area}-${question.University}<#if question.CollegeCode != "-1">-${question.College}</#if>
                         </div>
                         <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">
