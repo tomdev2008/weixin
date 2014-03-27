@@ -43,7 +43,7 @@ import org.json.JSONObject;
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.3.1.3, Mar 25, 2014
+ * @version 1.3.2.3, Mar 27, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -59,7 +59,7 @@ public class UserProcessor {
     private ItemService itemService;
 
     /**
-     * 展示圈子设置页面.
+     * 展示圈子设置页面，设置圈子.
      *
      * @param context the specified context
      * @param request the specified request
@@ -82,14 +82,19 @@ public class UserProcessor {
             id = provinceId;
             type = 1;
         }
+
         if (StringUtils.isNotEmpty(schoolId)) {
             id = schoolId;
             type = 2;
         }
+
         if (StringUtils.isNotEmpty(collegId)) {
             id = collegId;
             type = 3;
+        } else {
+            collegId = "-1";
         }
+
         if (type <= 2) {
             context.setRenderer(renderer);
             renderer.setTemplateName("/admin/set-community.ftl");
@@ -98,8 +103,16 @@ public class UserProcessor {
             dataModel.put("type", type);
             dataModel.put("provinceId", provinceId);
             dataModel.put("schoolId", schoolId);
+
             filler.fillHeader(request, response, dataModel);
             filler.fillFooter(dataModel);
+
+            if (2 == type) { // 选择到学校的时候也需要保存
+                final JSONObject user = (JSONObject) request.getAttribute("user");
+                final String memberId = user.optString("id");
+
+                userService.saveOrUpdateUserInfo(memberId, provinceId, schoolId, collegId);
+            }
         } else {
             //保存圈子设置
             final JSONObject user = (JSONObject) request.getAttribute("user");
@@ -290,7 +303,7 @@ public class UserProcessor {
 
         final JSONObject community = userService.getUserInfo(userId);
         user.put("community", community);
-        
+
         dataModel.put("user", user);
 
         dataModel.put("isFollow", false);

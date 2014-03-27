@@ -5,7 +5,7 @@
         <@meta title="用户列表 - 新助邦"/>
     </head>
     <body>
-        <header>${Area}-${University}<#if CollegeCode != "">-${College}</#if></header>
+        <header>${Area}-${University}<#if CollegeCode != "-1">-${College}</#if></header>
         <#include "../common/community-nav.ftl">
         <ul class="list" data-page="1">
             <#list userCards as userCard>

@@ -5,7 +5,7 @@
         <@meta title="提问 - 新助邦"/>
     </head>
     <body>
-        <header>${Area}-${University}<#if CollegeCode != "">-${College}</#if></header>
+        <header>${Area}-${University}<#if CollegeCode != "-1">-${College}</#if></header>
         <#include "../common/community-nav.ftl">
         <div class="wrap">
             <textarea id="content" placeholder="请填写您的问题" class="textarea"></textarea>

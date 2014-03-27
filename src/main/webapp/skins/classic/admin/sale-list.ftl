@@ -25,7 +25,7 @@
                             ${sale.Name}
                         </div>
                         <div class="ft-gray">
-                            ${sale.Area}<#if sale.University != "">-${sale.University}</#if><#if sale.CollegeCode != "">-${sale.College}</#if>
+                            ${sale.Area}<#if sale.UniversityCode != "-1">-${sale.University}</#if><#if sale.CollegeCode != "-1">-${sale.College}</#if>
                         </div>
                         <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">

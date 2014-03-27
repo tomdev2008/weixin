@@ -15,7 +15,7 @@
                         <span class="ico ico-cater"></span>
                     </div>
                     <div class="ft-gray">
-                         ${user.community.Area}<#if user.community.University != "">-${user.community.University}</#if><#if user.community.CollegeCode != "">-${user.community.College}</#if>
+                         ${user.community.Area}<#if user.community.UniversityCode != "-1">-${user.community.University}</#if><#if user.community.CollegeCode != "-1">-${user.community.College}</#if>
                     </div>
                     <div>
                         ${user.cardTitle}
@@ -45,7 +45,7 @@
                             ${item.Name}
                         </div>
                         <div class="ft-gray">
-                            ${item.Area}<#if item.University != "">-${item.University}</#if><#if item.CollegeCode != "">-${item.College}</#if>
+                            ${item.Area}<#if item.UniversityCode != "-1">-${item.University}</#if><#if item.CollegeCode != "-1">-${item.College}</#if>
                         </div>
                         <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">

@@ -24,7 +24,7 @@
                             ${followingUser.PropertyTitle}
                         </div>
                         <div class="ft-gray">
-                            ${followingUser.Area}<#if followingUser.CollegeCode != "">-${followingUser.University}</#if><#if followingUser.CollegeCode != "">-${followingUser.College}</#if>
+                            ${followingUser.Area}<#if followingUser.UniversityCode != "-1">-${followingUser.University}</#if><#if followingUser.CollegeCode != "-1">-${followingUser.College}</#if>
                         </div>
                     </a>
                     <span class="ft-green follow" style="color: #F48A00" onclick=<#if isLoggedIn>"community.follow(${followingUser.T_User_ID?c}, this)"<#else>"window.location.href='/login'"</#if>><#if followingUser.isFollow>取消关注<#else>关注</#if></span>

@@ -5,7 +5,7 @@
         <@meta title="发出售 - 新助邦"/>
     </head>
     <body>
-        <header>${Area}-${University}<#if CollegeCode != "">-${College}</#if></header>
+        <header>${Area}-${University}<#if CollegeCode != "-1">-${College}</#if></header>
         <#include "../common/community-nav.ftl">
         <div class="sub-nav">
             <span><i class="ico ico-radio-checked" data-type="1"></i>资料</span>

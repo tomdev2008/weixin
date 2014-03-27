@@ -54,7 +54,7 @@ import org.json.JSONObject;
  * 用户服务.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.2.1.0, Mar 24, 2014
+ * @version 1.2.2.0, Mar 27, 2014
  * @since 1.0.0
  */
 @Service
@@ -179,7 +179,7 @@ public class UserService {
                 final JSONObject userInfo = userInfos.optJSONObject(i);
                 final String memberId = userInfo.optString("MemberID");
                 final JSONObject userCard = getUserCard(memberId, typeArg);
-                
+
                 if (null != userCard) {
                     ret.add(userCard);
                 }
@@ -579,10 +579,10 @@ public class UserService {
      * @param provinceId
      * @param schoolId
      * @param collegId
-     * @throws org.b3log.latke.repository.RepositoryException
+     * @throws java.lang.Exception
      */
     @Transactional
-    public void saveOrUpdateUserInfo(String userId, String provinceId, String schoolId, String collegId) throws RepositoryException, JSONException {
+    public void saveOrUpdateUserInfo(String userId, String provinceId, String schoolId, String collegId) throws Exception {
         JSONObject province = schoolRepository.get(new Query().setFilter(new PropertyFilter("Did", FilterOperator.EQUAL, Integer.parseInt(provinceId))));
         province = province.optJSONArray(Keys.RESULTS).optJSONObject(0);
 
@@ -604,8 +604,13 @@ public class UserService {
             userInfo.put("AreaCode", province.get("Did"));
             userInfo.put("University", school.get("Name"));
             userInfo.put("UniversityCode", school.get("Did"));
-            userInfo.put("College", colleg.get("Name"));
-            userInfo.put("CollegeCode", colleg.get("Did"));
+            if ("-1".equals(collegId)) {
+                userInfo.put("College", "无限制");
+                userInfo.put("CollegeCode", -1);
+            } else {
+                userInfo.put("College", colleg.get("Name"));
+                userInfo.put("CollegeCode", colleg.get("Did"));
+            }
             userInfo.put("Major", "无限制");
             userInfo.put("MajorCode", -1);
 
@@ -616,8 +621,13 @@ public class UserService {
             userInfo.put("AreaCode", province.get("Did"));
             userInfo.put("University", school.get("Name"));
             userInfo.put("UniversityCode", school.get("Did"));
-            userInfo.put("College", colleg.get("Name"));
-            userInfo.put("CollegeCode", colleg.get("Did"));
+            if ("-1".equals(collegId)) {
+                userInfo.put("College", "无限制");
+                userInfo.put("CollegeCode", -1);
+            } else {
+                userInfo.put("College", colleg.get("Name"));
+                userInfo.put("CollegeCode", colleg.get("Did"));
+            }
 
             userInfo.remove("rownum");
 

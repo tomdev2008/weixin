@@ -25,7 +25,7 @@
                             ${requirement.Name}
                         </div>
                         <div class="ft-gray">
-                            ${requirement.Area}-<#if requirement.University != "">${requirement.University}</#if><#if requirement.CollegeCode != "">-${requirement.College}</#if>
+                            ${requirement.Area}-<#if requirement.UniversityCode != "-1">${requirement.University}</#if><#if requirement.CollegeCode != "-1">-${requirement.College}</#if>
                         </div>
                         <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">

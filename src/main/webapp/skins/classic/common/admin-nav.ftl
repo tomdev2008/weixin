@@ -1,4 +1,4 @@
-<header>${Area}-${University}<#if CollegeCode != "">-${College}</#if></header>
+<header>${Area}-${University}<#if CollegeCode != "-1">-${College}</#if></header>
 <nav class="nav">
     <ul class="fn-clear">
         <li>
