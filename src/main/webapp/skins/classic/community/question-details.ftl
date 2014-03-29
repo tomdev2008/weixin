@@ -41,7 +41,9 @@
                 <div class="list-content">
                     <div class="fn-clear">
                         <span class="fn-left ft-green">${a.user.user_name}</span>
+                        <#if a.user.IDCardStatus != 0>
                         <span class="ico ico-cater"></span>
+                        </#if>
                     </div>
                     <div>
                         ${a.Content}
