@@ -33,7 +33,8 @@ import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
  * 搜索处理器.
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
- * @version 1.0.0.0, Mar 5, 2014
+ * @author <a href="http://88250.b3log.org">Liang Ding</a>
+ * @version 1.0.1.0, Mar 29, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -59,15 +60,20 @@ public class SearchProcessor {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
         renderer.setTemplateName("/search/course.ftl");
+
         String id = request.getParameter("id");
         String typeS = request.getParameter("type");
+
         int type = 0;
         if (StringUtils.isNotEmpty(typeS)) {
             type = Integer.parseInt(typeS);
         }
+
         final Map<String, Object> dataModel = renderer.getDataModel();
+
         dataModel.put("list", majorService.seach(id, type));
         dataModel.put("type", ++type);
+
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }

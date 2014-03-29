@@ -18,7 +18,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.xinzhubang.weixin.service;
 
 import com.xinzhubang.weixin.repository.MajorRepository;
@@ -31,9 +30,6 @@ import javax.inject.Inject;
 import org.apache.commons.lang.StringUtils;
 import org.b3log.latke.Keys;
 import org.b3log.latke.logging.Logger;
-import org.b3log.latke.repository.CompositeFilter;
-import org.b3log.latke.repository.CompositeFilterOperator;
-import org.b3log.latke.repository.Filter;
 import org.b3log.latke.repository.FilterOperator;
 import org.b3log.latke.repository.PropertyFilter;
 import org.b3log.latke.repository.Query;
@@ -45,44 +41,61 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- *专业搜索相关
+ * 专业搜索相关.
+ *
  * @author 赵晶
+ * @author <a href="http://88250.b3log.org">Liang Ding</a>
+ * @version 1.0.1.0, Mar 29, 2014
+ * @since 1.0.0
  */
 @Service
 public class MajorService {
+
     private static final Logger LOGGER = Logger.getLogger(MajorService.class);
+
     @Inject
     private MajorRepository majorRepository;
+
     @Inject
     private SchoolRepository schoolRepository;
-    public List<JSONObject> seach(String id,int type) throws RepositoryException, JSONException{
-        List<JSONObject> list = null;
-        if(StringUtils.isNotEmpty(id)){
-            if(type==1){
-                final JSONObject result= majorRepository.get( new Query().setFilter(new PropertyFilter("MajorParentID", FilterOperator.EQUAL, id)));
-                final JSONArray results = result.getJSONArray(Keys.RESULTS);
-                list = CollectionUtils.jsonArrayToList(results);
-            }else if(type==2){
-                final JSONObject result= schoolRepository.get( new Query().setFilter(new PropertyFilter("MajorCode", FilterOperator.LIKE, id+"%")));
-                final JSONArray results = result.getJSONArray(Keys.RESULTS);
-                list = CollectionUtils.jsonArrayToList(results);
-                Set<String> sets = new HashSet<String>();
-                for(JSONObject j:list){
-                    sets.add(j.getString("Name"));
-                }
-                list = new ArrayList<JSONObject>();
-                for(String s:sets){
-                    JSONObject j = new JSONObject();
-                    j.put("Name", s);
-                    list.add(j);
-                }
+
+    public List<JSONObject> seach(final String id, final int type) throws RepositoryException, JSONException {
+        List<JSONObject> ret = null;
+
+        if (StringUtils.isEmpty(id)) {
+            final JSONObject result = majorRepository.get(new Query().setFilter(new PropertyFilter("MajorLevel", FilterOperator.EQUAL, 0)));
+
+            final JSONArray results = result.getJSONArray(Keys.RESULTS);
+
+            return CollectionUtils.jsonArrayToList(results);
+        }
+
+        if (type == 1) {
+            final JSONObject result = majorRepository.get(new Query().setFilter(new PropertyFilter("MajorParentID", FilterOperator.EQUAL, id)));
+            final JSONArray results = result.getJSONArray(Keys.RESULTS);
+
+            ret = CollectionUtils.jsonArrayToList(results);
+        } else if (type == 2) {
+            final JSONObject result = schoolRepository.get(new Query().setFilter(new PropertyFilter("MajorCode", FilterOperator.LIKE, id + "%")));
+            final JSONArray results = result.getJSONArray(Keys.RESULTS);
+            
+            ret = CollectionUtils.jsonArrayToList(results);
+            
+            Set<String> sets = new HashSet<String>();
+            
+            for (final JSONObject j : ret) {
+                sets.add(j.getString("Name"));
             }
             
-        }else{
-            final JSONObject result= majorRepository.get( new Query().setFilter(new PropertyFilter("MajorLevel", FilterOperator.EQUAL, 0)));
-            final JSONArray results = result.getJSONArray(Keys.RESULTS);
-            list = CollectionUtils.jsonArrayToList(results);
+            ret = new ArrayList<JSONObject>();
+            
+            for (final String s : sets) {
+                JSONObject j = new JSONObject();
+                j.put("Name", s);
+                ret.add(j);
+            }
         }
-        return list;
+
+        return ret;
     }
 }
