@@ -43,7 +43,7 @@ var community = {
                 success: function(result, textStatus) {
                     if (result.sc) {
                         tip.show("成功提交！", "现在就去看看系统推荐吧！");
-                        $("#tipContent").next().text("GO").attr("onclick", "window.location='/sale-details?id=" 
+                        $("#tipContent").next().text("GO").attr("onclick", "window.location='/sale-details?id="
                                 + result.id + "'");
                     } else {
                         tip.show("提交失败", result.msg);
@@ -81,7 +81,7 @@ var community = {
                 success: function(result, textStatus) {
                     if (result.sc) {
                         tip.show("成功提交！", "现在去看看系统的推荐吧！");
-                        $("#tipContent").next().text("GO").attr("onclick", "window.location='/requirement-details?id=" 
+                        $("#tipContent").next().text("GO").attr("onclick", "window.location='/requirement-details?id="
                                 + result.id + "'");
                     } else {
                         tip.show("提交失败", result.msg);
@@ -110,7 +110,8 @@ var community = {
                 data: JSON.stringify(requestJSONObject),
                 success: function(result, textStatus) {
                     if (result.sc) {
-                        community.cancel();
+                        var searchs = window.location.search.split("=");
+                        window.location = '/admin/message-details?id=' + searchs[searchs.length - 1];
                     } else {
                         tip.show("发送失败", result.msg);
                     }
