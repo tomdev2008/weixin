@@ -79,7 +79,7 @@
             </li>
             </#list>
         </ul>
-        <a class="ft-green user-card-msg" href="/guest-book?toMemberID=${user.id?c}">
+        <a class="ft-green user-card-msg" href="/guest-book?toMemberID=${user.id?c}&form=user">
             给 Ta 留言
         </a>
         <script src="/js/lib/jquery-2.1.0.min.js"></script>

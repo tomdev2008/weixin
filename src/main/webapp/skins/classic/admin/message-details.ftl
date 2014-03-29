@@ -28,6 +28,7 @@
         <ul class="list question" style="margin-bottom: 3em">
             <#if list??>
             <#list list as l>
+            <#if message.ID != l.ID>
             <li class="fn-clear">
                 <img class="list-view" src="/images/default-user-thumbnail.png"/>
                 <div class="list-content">
@@ -45,6 +46,7 @@
                     </div>
                 </div>
             </li>
+            </#if>
             </#list>
             </#if>
         </ul>

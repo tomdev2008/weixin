@@ -111,7 +111,11 @@ var community = {
                 success: function(result, textStatus) {
                     if (result.sc) {
                         var searchs = window.location.search.split("=");
-                        window.location = '/admin/message-details?id=' + searchs[searchs.length - 1];
+                        if (searchs[searchs.length - 2] === "id") {
+                            window.location = '/admin/message-details?id=' + searchs[searchs.length - 1];
+                        } else {
+                            community.cancel();
+                        }
                     } else {
                         tip.show("发送失败", result.msg);
                     }
@@ -135,7 +139,12 @@ var community = {
                 data: JSON.stringify(requestJSONObject),
                 success: function(result, textStatus) {
                     if (result.sc) {
-                        window.location = '/admin/message-list';
+                        var searchs = window.location.search.split("=");
+                        if (searchs[searchs.length - 1] === "user") {
+                            community.cancel();
+                        } else {
+                            window.location = '/admin/message-list';
+                        }
                     } else {
                         tip.show("发送失败", result.msg);
                     }
