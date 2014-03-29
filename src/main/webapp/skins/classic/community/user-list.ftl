@@ -24,7 +24,9 @@
                     <a href="/user-card?type=${type}&userName=${userCard.userName}">
                         <div class="fn-clear">
                             <span class="fn-left ft-dark">${userCard.nickName}</span>
+                            <#if userCard.IdentificationStatus != 0>
                             <span class="ico ico-cater"></span>
+                            </#if>
                         </div>
                         <div class="ft-gray">
                             ${userCard.PropertyTitle}
@@ -42,6 +44,11 @@
         <script>
             loadMore.init("/user-list-ajax?type=${type}&p=");
             loadMore.genHTML = function(obj) {
+                var identification = "";
+                if (obj.IdentificationStatus !== 0) {
+                    identification = '<span class="ico ico-cater"></span>';
+                }
+
                 var liHTML = '<li class="fn-clear">'
                         + '<a href="/user-card?type=${type}&userName=' + obj.userName + '">'
                         + '<img class="list-view" onerror="this.src=\'/images/default-user-thumbnail.png\'" src="/images/default-user-thumbnail.png"/>'
@@ -49,8 +56,8 @@
                         + '<div class="list-content">'
                         + '<a href="/user-card?type=${type}&userName=' + obj.userName + '">'
                         + '<div class="fn-clear">'
-                        + '<span class="fn-left ft-dark">' + obj.userName + '</span>'
-                        + '<span class="ico ico-cater"></span>'
+                        + '<span class="fn-left ft-dark">' + obj.nickName + '</span>'
+                        + identification
                         + '</div>'
                         + '<div class="ft-gray">' + obj.PropertyTitle + '</div>'
                         + '</a>'

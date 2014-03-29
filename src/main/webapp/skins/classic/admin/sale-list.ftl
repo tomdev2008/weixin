@@ -49,10 +49,10 @@
                 var community = "",
                         type = '<span class="ico-resource">资料</span>';
                 if (obj.Area !== "") {
-                   community += obj.Area + '-' + obj.University;
-                }
-                if (obj.CollegeCode !== "-1") {
-                    community += '-' + obj.College;
+                    community += obj.Area + '-' + obj.University;
+                    if (obj.CollegeCode !== "-1") {
+                        community += '-' + obj.College;
+                    }
                 }
 
                 if (obj.ItemType === 2) {

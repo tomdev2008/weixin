@@ -12,7 +12,9 @@
                 <div class="list-content">
                     <div class="fn-clear">
                         <span class="fn-left">${message.fromUser.user_name}</span>
+                        <#if message.fromUser.IDCardStatus != 0>
                         <span class="ico ico-cater"></span>
+                        </#if>
                     </div>
                     <div class="ft-gray">
                         ${message.CONTENT}
@@ -31,7 +33,9 @@
                 <div class="list-content">
                     <div class="fn-clear">
                         <span class="fn-left">${l.fromUser.user_name}</span>
+                         <#if l.fromUser.IDCardStatus != 0>
                         <span class="ico ico-cater"></span>
+                        </#if>
                     </div>
                     <div class="ft-gray">
                         ${l.CONTENT}
