@@ -346,6 +346,7 @@ public class MessageProcessor {
         String id = request.getParameter("id");
         if (StringUtils.isNotEmpty(id)) {
             JSONObject message = itemService.getWhisper(id);
+            
             JSONArray sublist = message.getJSONArray("list");
             dataModel.put("message", message);
             dataModel.put("list", CollectionUtils.jsonArrayToList(sublist));

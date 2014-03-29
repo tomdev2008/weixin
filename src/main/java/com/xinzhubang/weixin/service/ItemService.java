@@ -144,17 +144,24 @@ public class ItemService {
      */
     public JSONObject getWhisper(final String id) throws RepositoryException, JSONException {
         final JSONObject result = whisperRepository.get(id);
-        final JSONObject subResult = whisperRepository.get(new Query().setFilter(new PropertyFilter("KeyID", FilterOperator.EQUAL, id)));
+        
+        final JSONObject subResult = whisperRepository.get(new Query().setFilter(
+                new PropertyFilter("KeyID", FilterOperator.EQUAL, result.getString("KeyID"))));
         result.put("toUser", userRepository.get(result.getString("ToID")));
         result.put("fromUser", userRepository.get(result.getString("FromID")));
-        final JSONArray results = subResult.getJSONArray(Keys.RESULTS);
-        final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
+        
+        final JSONArray subResults = subResult.getJSONArray(Keys.RESULTS);
+        final List<JSONObject> ret = CollectionUtils.jsonArrayToList(subResults);
+        
         result.put("list", ret);
+        
         for (int i = 0; i < ret.size(); i++) {
-            JSONObject j = ret.get(i);
+            final JSONObject j = ret.get(i);
+            
             j.put("toUser", userRepository.get(j.getString("ToID")));
             j.put("fromUser", userRepository.get(j.getString("FromID")));
         }
+        
         return result;
     }
 
