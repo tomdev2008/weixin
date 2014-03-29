@@ -356,6 +356,8 @@ public class UserProcessor {
             userCard.put("nickName", "请设置昵称");
             userCard.put("PropertyTitle", "请设置您的个性签名");
             userCard.put("PropertyRemark", "请设置您个人的详细介绍");
+        } else {
+            userCard = userCards.get(0);
         }
 
         dataModel.put("userCard", userCard);
