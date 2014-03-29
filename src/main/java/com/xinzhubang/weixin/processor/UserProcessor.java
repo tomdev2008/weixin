@@ -300,6 +300,7 @@ public class UserProcessor {
         }
 
         user.put("cardTitle", cards.get(0).getString("PropertyTitle"));
+        user.put("cardRemark", cards.get(0).getString("PropertyRemark"));
 
         final JSONObject community = userService.getUserInfo(userId);
         user.put("community", community);
