@@ -17,7 +17,9 @@
                             ${question.Title}
                         </div>
                         <div class="ft-gray">
+                            <#if question.Area != "">
                             ${question.Area}-${question.University}<#if question.CollegeCode != "-1">-${question.College}</#if>
+                            </#if>
                         </div>
                         <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">
@@ -39,13 +41,15 @@
                 if (obj.BestAnswer === 0) {
                     resolution = "【待解决】";
                 }
-                var community = obj.Area;
-                if (obj.University !== "") {
-                    community += '-' + obj.University;
+                
+                var community = "";
+                if (obj.Area !== "") {
+                    community += obj.Area + '-' + obj.University;
                 }
-                if (obj.CollegeCode !== "") {
+                if (obj.CollegeCode !== "-1") {
                     community += '-' + obj.College;
                 }
+                
                 var liHTML = '<li class="fn-clear">'
                         + '<a href="/question-details?id=' + obj.ID + '">'
                         + '<img class="list-view" onerror="this.src=\'/images/default-user-thumbnail.png\'" src="' + obj.user.avatar + '"/>'
@@ -55,7 +59,7 @@
                         + '</div>'
                         + '<div class="fn-clear">'
                         + '<span class="ft-gray ft-small fn-left">'
-                        + obj.AddTime.substr(0, 10) + '&nbsp; 浏览 ' + obj.PV 
+                        + obj.AddTime.substr(0, 10) + '&nbsp; 浏览 ' + obj.PV
                         + '</span>'
                         + '</div>'
                         + '</div>'

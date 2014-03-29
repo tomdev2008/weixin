@@ -18,19 +18,17 @@
                     <a href="/user-card?type${type}&userName=${followingUser.userName}">
                         <div class="fn-clear">
                             <span class="fn-left ft-dark">${followingUser.nickName}</span>
-                            ${followingUser.Property}
-                            <#if followingUser.Property == 0>
-                            【学生】
-                            <#else>
-                            【老师】
-                            </#if>
+                            <#if followingUser.IdentificationStatus != 0>
                             <span class="ico ico-cater"></span>
+                            </#if>
                         </div>
                         <div class="ft-gray">
                             ${followingUser.PropertyTitle}
                         </div>
                         <div class="ft-gray">
+                            <#if followingUser.Area != "">
                             ${followingUser.Area}-${followingUser.University}<#if followingUser.CollegeCode != "-1">-${followingUser.College}</#if>
+                            </#if>
                         </div>
                     </a>
                     <span class="ft-green follow" style="color: #F48A00" onclick=<#if isLoggedIn>"community.follow(${followingUser.T_User_ID?c}, this)"<#else>"window.location.href='/login'"</#if>><#if followingUser.isFollow>取消关注<#else>关注</#if></span>
@@ -45,12 +43,17 @@
         <script>
             loadMore.init("/admin/follow-list-ajax?p=");
             loadMore.genHTML = function(obj) {
-                var community = obj.Area;
-                if (obj.University !== "") {
-                    community += '-' + obj.University;
+                var community = "";
+                if (obj.Area !== "") {
+                   community += obj.Area + '-' + obj.University;
                 }
-                if (obj.CollegeCode !== "") {
+                if (obj.CollegeCode !== "-1") {
                     community += '-' + obj.College;
+                }
+                
+                var identification = "";
+                if (obj.IdentificationStatus !== 0) {
+                    identification = '<span class="ico ico-cater"></span>';
                 }
                 var liHTML = '<li class="fn-clear">'
                         + '<a href="/user-card?type=${type}&userName=' + obj.userName + '">'
@@ -60,7 +63,7 @@
                         + '<a href="/user-card?type=${type}&userName=' + obj.userName + '">'
                         + '<div class="fn-clear">'
                         + '<span class="fn-left ft-dark">' + obj.userName + '</span>'
-                        + '<span class="ico ico-cater"></span>'
+                        + identification
                         + '</div>'
                         + '<div class="ft-gray">' + obj.PropertyTitle + '</div>'
                         + '<div class="ft-gray">' + community + '</div>'

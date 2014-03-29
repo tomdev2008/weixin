@@ -1,5 +1,7 @@
 <header>
+    <#if Area != "">
     ${Area}-${University}<#if CollegeCode != "-1">-${College}</#if>
+    </#if>
     <a href="/admin/set-community">圈子设置</a>
 </header>
 <nav class="nav">
