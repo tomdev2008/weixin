@@ -54,7 +54,7 @@ import org.json.JSONObject;
  * 用户服务.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.2.2.0, Mar 27, 2014
+ * @version 1.3.2.0, Mar 29, 2014
  * @since 1.0.0
  */
 @Service
@@ -286,6 +286,7 @@ public class UserService {
             for (final JSONObject card : ret) {
                 card.put("userName", user.optString("user_name"));
                 card.put("nickName", user.optString("nick_name"));
+                card.put("Memberlevels", user.optString("Memberlevels"));
             }
 
             return ret;
