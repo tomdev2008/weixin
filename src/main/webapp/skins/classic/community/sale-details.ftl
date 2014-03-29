@@ -15,7 +15,7 @@
                     <a href="/partner-list">合作方列表</a>
                 </li>
                 <li style="text-align: right">
-                    <a class="last" href="/requirement-publish">发需求</a>&nbsp;
+                   &nbsp;
                 </li>
                 <li>
                     <a class="last" href="/sale-publish">发出售</a>

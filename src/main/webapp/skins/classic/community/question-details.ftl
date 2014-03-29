@@ -52,10 +52,11 @@
                         <span class="ft-gray ft-small fn-left">
                             ${a.AddTime?string('yyyy-MM-dd')}
                         </span>
-                        <#if a.Agree==0>
+                        <#if a.Best == 0>
+                        <#if 0 == question.BestAnswer>
                         <span onclick="community.questionAccept(${question.ID?c}, ${a.ID?c})" class="ft-green fn-right question-accept">采纳</span>
                         </#if>
-                        <#if a.Agree!=0>
+                        <#else>
                         <span class="ft-green fn-right question-accept">已采纳</span>
                         </#if>
                     </div>

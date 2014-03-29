@@ -335,6 +335,7 @@ public class MessageProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/admin/message-details", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
     public void showMyMessageDetails(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
@@ -349,7 +350,9 @@ public class MessageProcessor {
             dataModel.put("message", message);
             dataModel.put("list", CollectionUtils.jsonArrayToList(sublist));
         }
+
         dataModel.put("type", "message");
+
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
