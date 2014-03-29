@@ -5,7 +5,10 @@
         <@meta title="需求列表 - 新助邦"/>
     </head>
     <body>
-        <header>${Area}-${University}<#if CollegeCode != "-1">-${College}</#if></header>
+        <header>
+            ${Area}-${University}<#if CollegeCode != "-1">-${College}</#if>
+            <a href="/admin/set-community">圈子设置</a>
+        </header>
         <#include "../common/community-nav.ftl">
         <#include "../common/community-sub-nav.ftl">
         <ul class="list" data-page="1">

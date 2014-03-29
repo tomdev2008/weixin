@@ -42,8 +42,9 @@ var community = {
                 data: JSON.stringify(requestJSONObject),
                 success: function(result, textStatus) {
                     if (result.sc) {
-                        tip.show("成功提交！", "亲，现在去看看其他出售吧！");
-                        $("#tipContent").next().text("GO").attr("onclick", "window.location='/sale-list'");
+                        tip.show("成功提交！", "现在就去看看系统推荐吧！");
+                        $("#tipContent").next().text("GO").attr("onclick", "window.location='/sale-details?id=" 
+                                + result.id + "'");
                     } else {
                         tip.show("提交失败", result.msg);
                     }
@@ -79,8 +80,9 @@ var community = {
                 data: JSON.stringify(requestJSONObject),
                 success: function(result, textStatus) {
                     if (result.sc) {
-                        tip.show("成功提交！", "亲，现在去看看其他需求吧！");
-                        $("#tipContent").next().text("GO").attr("onclick", "window.location='/requirement-list'");
+                        tip.show("成功提交！", "现在去看看系统的推荐吧！");
+                        $("#tipContent").next().text("GO").attr("onclick", "window.location='/requirement-details?id=" 
+                                + result.id + "'");
                     } else {
                         tip.show("提交失败", result.msg);
                     }
@@ -202,7 +204,7 @@ var community = {
                 data: JSON.stringify(requestJSONObject),
                 success: function(result, textStatus) {
                     if (result.sc) {
-                        window.location = '/admin/question-list?type=1';
+                        window.location = '/question-list?type=1';
                     } else {
                         tip.show("提示", result.msg);
                     }

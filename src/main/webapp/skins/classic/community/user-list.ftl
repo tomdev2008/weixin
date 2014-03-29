@@ -5,7 +5,10 @@
         <@meta title="用户列表 - 新助邦"/>
     </head>
     <body>
-        <header>${Area}-${University}<#if CollegeCode != "-1">-${College}</#if></header>
+        <header>
+            ${Area}-${University}<#if CollegeCode != "-1">-${College}</#if>
+            <a href="/admin/set-community">圈子设置</a>
+        </header>
         <#include "../common/community-nav.ftl">
         <ul class="list" data-page="1">
             <#list userCards as userCard>
@@ -49,8 +52,8 @@
                         + '</div>'
                         + '<div class="ft-gray">' + obj.PropertyTitle + '</div>'
                         + '</a>'
-                        + '<span' + (obj.isFollow ? ' style="color: #F48A00"' : '') + ' class="ft-green follow" onclick="community.follow(' + obj.ID + ', this)">' 
-                        + (obj.isFollow ? "取消关注" : "关注")+ '</span>'
+                        + '<span' + (obj.isFollow ? ' style="color: #F48A00"' : '') + ' class="ft-green follow" onclick="community.follow(' + obj.ID + ', this)">'
+                        + (obj.isFollow ? "取消关注" : "关注") + '</span>'
                         + '</div>'
                         + '</li>';
                 return liHTML;

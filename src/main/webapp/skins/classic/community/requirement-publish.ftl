@@ -5,7 +5,10 @@
         <@meta title="发需求 - 新助邦"/>
     </head>
     <body>
-        <header>${Area}-${University}<#if CollegeCode != "-1">-${College}</#if></header>
+        <header>
+            ${Area}-${University}<#if CollegeCode != "-1">-${College}</#if>
+            <a href="/admin/set-community">圈子设置</a>
+        </header>
         <#include "../common/community-nav.ftl">
         <div class="sub-nav">
             <span><i class="ico ico-radio-checked" data-type="1"></i>资料</span>
@@ -27,7 +30,7 @@
         <script src="/js/common.js"></script>
         <script src="/js/community.js"></script>
         <script>
-            community.requirementPublishInit();
+                community.requirementPublishInit();
         </script>
     </body>
 </html>
