@@ -121,8 +121,7 @@ public class ItemService {
                 j.put("toUser", userRepository.get(j.getString("ToID")));
                 j.put("fromUser", userRepository.get(j.getString("FromID")));
 
-                final JSONObject subResult = whisperRepository.get(new Query().setFilter(new PropertyFilter("KeyID", FilterOperator.EQUAL, j.getInt("ID"))));
-                j.put("count", subResult.getJSONArray(Keys.RESULTS).length());
+                j.put("count", whisperRepository.count(new Query().setFilter(new PropertyFilter("KeyID", FilterOperator.EQUAL, j.getInt("KeyID")))));
 
                 j.put("type", "w"); // 类型是悄悄话
             }
