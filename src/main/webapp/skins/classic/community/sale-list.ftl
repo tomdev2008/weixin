@@ -23,7 +23,9 @@
                     <div class="list-content">
                         <div class="fn-clear">
                             <span class="ft-gray fn-left">${sale.userName}</span>
+                            <#if sale.IDCardStatus != 0>
                             <span class="ico ico-cater"></span>
+                            </#if>
                         </div>
                         <div>${sale.Name}</div>
                         <div class="fn-clear">
@@ -43,13 +45,18 @@
         <script>
             loadMore.init("/sale-list-ajax?type=${subType}&p=");
             loadMore.genHTML = function(obj) {
+                var identification = "";
+                if (obj.IDCardStatus !== 0) {
+                    identification = '<span class="ico ico-cater"></span>';
+                }
+
                 var liHTML = '<li class="fn-clear">'
                         + '<a href="/sale-details?id=' + obj.ID + '">'
                         + '<img class="list-view" src="/images/default-doc.jpg" onerror="this.src=\'/images/default-doc.jpg\'"/>'
                         + '<div class="list-content">'
                         + '<div class="fn-clear">'
                         + '<span class="ft-gray fn-left">' + obj.userName + '</span>'
-                        + '<span class="ico ico-cater"></span>'
+                        + identification
                         + '</div>'
                         + '<div>' + obj.Name + '</div>'
                         + '<div class="fn-clear">'

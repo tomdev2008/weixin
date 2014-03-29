@@ -24,7 +24,7 @@
             </li>
         </ul>
         <ul class="list question" style="margin-bottom: 3em">
-             <#if list??>
+            <#if list??>
             <#list list as l>
             <li class="fn-clear">
                 <img class="list-view" src="/images/default-user-thumbnail.png"/>

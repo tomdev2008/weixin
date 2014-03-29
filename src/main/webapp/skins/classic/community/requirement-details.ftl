@@ -46,7 +46,9 @@
                     </div>
                     <div class="fn-clear">
                         <span class="ft-gray fn-left">${requirement.userName}</span>
+                        <#if requirement.IDCardStatus != 0>
                         <span class="ico ico-cater"></span>
+                        </#if>
                     </div>
                     <div class="fn-clear">
                         <span class="ft-gray ft-small fn-left">
