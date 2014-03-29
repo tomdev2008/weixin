@@ -19,6 +19,10 @@ import com.xinzhubang.weixin.processor.advice.LoginCheck;
 import com.xinzhubang.weixin.service.ItemService;
 import com.xinzhubang.weixin.service.UserService;
 import com.xinzhubang.weixin.util.Filler;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -248,8 +252,25 @@ public class MessageProcessor {
         final JSONObject user = (JSONObject) request.getAttribute("user");
         final String userId = user.optString("id");
 
-        dataModel.put("whispers", itemService.getWhispersByUserId(userId, pageNum));
-        dataModel.put("guestBooks", userService.getGuestBooksByUserId(userId, pageNum));
+        final List<JSONObject> whispers = itemService.getWhispersByUserId(userId, pageNum);
+        final List<JSONObject> guestBooks = userService.getGuestBooksByUserId(userId, pageNum);
+        final List<JSONObject> messages = new ArrayList<JSONObject>();
+        messages.addAll(whispers);
+        messages.addAll(guestBooks);
+        
+        Collections.sort(messages, new Comparator<JSONObject>() {
+
+            @Override
+            public int compare(final JSONObject o1, final JSONObject o2) {
+                final String t1 = o1.optString("CreateTime");
+                final String t2 = o2.optString("CreateTime");
+                
+                return t2.compareTo(t1);
+            }
+        });
+        
+        dataModel.put("messages", messages);
+        
         dataModel.put("type", "message");
 
         filler.fillHeader(request, response, dataModel);

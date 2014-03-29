@@ -99,6 +99,8 @@ public class UserService {
             for (final JSONObject j : ret) {
                 j.put("toUser", userRepository.get(j.getString("MemberID")));
                 j.put("fromUser", userRepository.get(j.getString("SendID")));
+                j.put("CreateTime", j.optString("PostTime"));
+                
                 j.put("type", "gb"); // 类型是留言
             }
 
@@ -179,7 +181,7 @@ public class UserService {
                 final JSONObject userInfo = userInfos.optJSONObject(i);
                 final String memberId = userInfo.optString("MemberID");
                 final List<JSONObject> userCard = getUserCard(memberId, typeArg);
-                
+
                 for (final JSONObject card : userCard) {
                     ret.add(card);
                 }
@@ -215,7 +217,7 @@ public class UserService {
                 final String followingUserId = attention.optString("AttentionMemberID");
 
                 final List<JSONObject> userCards = getUserCard(followingUserId, "a");
-                
+
                 for (final JSONObject card : userCards) {
                     ret.add(card);
                 }
