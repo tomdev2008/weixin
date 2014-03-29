@@ -300,8 +300,10 @@ public class UserProcessor {
             dataModel.put("items", (Object) demands);
         }
 
-        user.put("cardTitle", cards.get(0).getString("PropertyTitle"));
-        user.put("cardRemark", cards.get(0).getString("PropertyRemark"));
+        final JSONObject card = cards.get(0);
+        user.put("cardTitle", card.getString("PropertyTitle"));
+        user.put("cardRemark", card.getString("PropertyRemark"));
+        user.put("cardProperty", card.getInt("Property"));
 
         final JSONObject community = userService.getUserInfo(userId);
         user.put("community", community);
