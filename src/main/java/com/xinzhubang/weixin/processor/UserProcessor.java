@@ -257,6 +257,7 @@ public class UserProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/user-card", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)    
     public void showUserCard(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
@@ -301,9 +302,7 @@ public class UserProcessor {
         }
 
         final JSONObject card = cards.get(0);
-        user.put("cardTitle", card.getString("PropertyTitle"));
-        user.put("cardRemark", card.getString("PropertyRemark"));
-        user.put("cardProperty", card.getInt("Property"));
+        user.put("card", card);
 
         final JSONObject community = userService.getUserInfo(userId);
         user.put("community", community);

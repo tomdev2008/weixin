@@ -64,7 +64,9 @@ var loadMore = {
                 $(".list:last .loading").remove();
                 $(".list:last").data("page", result.pageNum);
                 var listHTML = "",
-                        sales = result.sales || result.requirements || result.questions || result.userCards || result.followingUsers;
+                        sales = result.sales || result.requirements 
+                        || result.questions || result.userCards
+                        || result.followingUsers || result.messages;
                 if (sales.length === 0) {
                      $(window).unbind("scroll");
                 }

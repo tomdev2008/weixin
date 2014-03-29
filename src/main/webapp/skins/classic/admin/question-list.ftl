@@ -43,11 +43,11 @@
                 }
                 
                 var community = "";
-                if (obj.Area !== "") {
+                 if (obj.Area !== "") {
                     community += obj.Area + '-' + obj.University;
-                }
-                if (obj.CollegeCode !== "-1") {
-                    community += '-' + obj.College;
+                    if (obj.CollegeCode !== "-1") {
+                        community += '-' + obj.College;
+                    }
                 }
                 
                 var liHTML = '<li class="fn-clear">'

@@ -17,7 +17,12 @@
                 <div class="list-content">
                     <a href="/user-card?type${type}&userName=${followingUser.userName}">
                         <div class="fn-clear">
-                            <span class="fn-left ft-dark">${followingUser.nickName}</span>
+                            <#if followingUser.Property == 0>
+                            <span class="fn-left ico-qa">学生</span>
+                            <#else>
+                            <span class="fn-left ico-resource">老师</span>
+                            </#if>
+                            <span class="fn-left ft-dark">&nbsp;${followingUser.nickName}</span>
                             <#if followingUser.IdentificationStatus != 0>
                             <span class="ico ico-cater"></span>
                             </#if>
@@ -45,10 +50,15 @@
             loadMore.genHTML = function(obj) {
                 var community = "";
                 if (obj.Area !== "") {
-                   community += obj.Area + '-' + obj.University;
+                    community += obj.Area + '-' + obj.University;
+                    if (obj.CollegeCode !== "-1") {
+                        community += '-' + obj.College;
+                    }
                 }
-                if (obj.CollegeCode !== "-1") {
-                    community += '-' + obj.College;
+                
+                var type = '<span class="fn-left ico-resource">老师</span>';
+                if (obj.Property == 0) {
+                    type = '<span class="fn-left ico-qa">学生</span>';
                 }
                 
                 var identification = "";
@@ -61,8 +71,8 @@
                         + '</a>'
                         + '<div class="list-content">'
                         + '<a href="/user-card?type=${type}&userName=' + obj.userName + '">'
-                        + '<div class="fn-clear">'
-                        + '<span class="fn-left ft-dark">' + obj.userName + '</span>'
+                        + '<div class="fn-clear">' + type
+                        + '<span class="fn-left ft-dark">&nbsp;' + obj.userName + '</span>'
                         + identification
                         + '</div>'
                         + '<div class="ft-gray">' + obj.PropertyTitle + '</div>'

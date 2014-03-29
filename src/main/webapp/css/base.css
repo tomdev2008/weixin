@@ -529,6 +529,16 @@ footer {
     margin: 1px 0 0 7px;
     width: 16px;
 }
+
+.ico-rate {
+    background-position: -113px -81px;
+    float: left;
+    height: 19px;
+    line-height: 2em;
+    margin: 1px 7px 0 7px;
+    padding-left: 24px;
+    width: 6px;
+}
 /* end icon */
 
 /* start search */
