@@ -234,7 +234,7 @@ public class MessageProcessor {
      */
     @RequestProcessing(value = "/admin/message-list", method = HTTPRequestMethod.GET)
     @Before(adviceClass = LoginCheck.class)
-    public void showMyMessage(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+    public void showMyMessages(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
         context.setRenderer(renderer);
@@ -257,24 +257,73 @@ public class MessageProcessor {
         final List<JSONObject> messages = new ArrayList<JSONObject>();
         messages.addAll(whispers);
         messages.addAll(guestBooks);
-        
+
         Collections.sort(messages, new Comparator<JSONObject>() {
 
             @Override
             public int compare(final JSONObject o1, final JSONObject o2) {
                 final String t1 = o1.optString("CreateTime");
                 final String t2 = o2.optString("CreateTime");
-                
+
                 return t2.compareTo(t1);
             }
         });
-        
+
         dataModel.put("messages", messages);
-        
+
         dataModel.put("type", "message");
 
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
+    }
+
+    /**
+     * AJAX 拉取我的消息列表数据.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/admin/message-list-ajax", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
+    public void getMyMessags(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final JSONRenderer renderer = new JSONRenderer();
+        context.setRenderer(renderer);
+        final JSONObject ret = new JSONObject();
+        renderer.setJSONObject(ret);
+
+        String pageStr = request.getParameter("p");
+        if (Strings.isEmptyOrNull(pageStr)) {
+            pageStr = "1";
+        }
+
+        final int pageNum = Integer.valueOf(pageStr);
+
+        final JSONObject user = (JSONObject) request.getAttribute("user");
+        final String userId = user.optString("id");
+
+        final List<JSONObject> whispers = itemService.getWhispersByUserId(userId, pageNum);
+        final List<JSONObject> guestBooks = userService.getGuestBooksByUserId(userId, pageNum);
+        final List<JSONObject> messages = new ArrayList<JSONObject>();
+        messages.addAll(whispers);
+        messages.addAll(guestBooks);
+
+        Collections.sort(messages, new Comparator<JSONObject>() {
+
+            @Override
+            public int compare(final JSONObject o1, final JSONObject o2) {
+                final String t1 = o1.optString("CreateTime");
+                final String t2 = o2.optString("CreateTime");
+
+                return t2.compareTo(t1);
+            }
+        });
+
+        ret.put("messages", messages);
+        ret.put("pageNum", pageNum);
+        ret.put("type", "message");
     }
 
     /**
