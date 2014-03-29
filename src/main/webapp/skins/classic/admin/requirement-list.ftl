@@ -25,7 +25,9 @@
                             ${requirement.Name}
                         </div>
                         <div class="ft-gray">
+                            <#if requirement.Area != "">
                             ${requirement.Area}-${requirement.University}<#if requirement.CollegeCode != "-1">-${requirement.College}</#if>
+                            </#if>
                         </div>
                         <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">
@@ -44,19 +46,19 @@
         <script>
             loadMore.init("/admin/requirement-list-ajax?p=");
             loadMore.genHTML = function(obj) {
-                var community = obj.Area + '-' + obj.University,
+                var community = "",
                         type = '<span class="ico-resource">资料</span>';
-                if (obj.University !== "") {
-                    community += '-' + obj.University;
+                if (obj.Area !== "") {
+                   community += obj.Area + '-' + obj.University;
                 }
-                if (obj.CollegeCode !== "") {
+                if (obj.CollegeCode !== "-1") {
                     community += '-' + obj.College;
                 }
                 
                 if (obj.ItemType === 2) {
-                     type = '<span class="ico-qa">答疑</span>';
+                    type = '<span class="ico-qa">答疑</span>';
                 } else if (obj.ItemType === 3) {
-                     type = '<span class="ico-school">授课</span>';
+                    type = '<span class="ico-school">授课</span>';
                 }
                 var liHTML = '<li class="fn-clear">'
                         + '<a href="/requirement-details?id=' + obj.ID + '">'

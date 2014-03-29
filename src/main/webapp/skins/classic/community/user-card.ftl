@@ -6,7 +6,9 @@
     </head>
     <body>
         <header>
+            <#if Area != "">
             ${Area}-${University}<#if CollegeCode != "-1">-${College}</#if>
+            </#if>
             <a href="/admin/set-community">圈子设置</a>
         </header>
         <#include "../common/community-nav.ftl">
@@ -19,7 +21,9 @@
                         <span class="ico ico-cater"></span>
                     </div>
                     <div class="ft-gray">
+                        <#if user.community.Area != "">
                         ${user.community.Area}-${user.community.University}<#if user.community.CollegeCode != "-1">-${user.community.College}</#if>
+                        </#if>
                     </div>
                     <div>
                         ${user.cardTitle}
@@ -28,7 +32,7 @@
                 </div>
             </li>
             <li class="ft-gray">
-                个人信息介绍
+                ${user.cardRemark}
             </li>
         </ul>
         <div class="user-card-sub">Ta 的<#if type == "student">需求<#else>服务</#if>列表</div>
@@ -49,7 +53,9 @@
                             ${item.Name}
                         </div>
                         <div class="ft-gray">
+                            <#if item.Area != "">
                             ${item.Area}-${item.University}<#if item.CollegeCode != "-1">-${item.College}</#if>
+                            </#if>
                         </div>
                         <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">

@@ -40,7 +40,9 @@
                         ${requirement.ItemContent}
                     </div>
                     <div class="ft-gray">
+                        <#if requirement.Area != "">
                         ${requirement.Area}-${requirement.University}<#if requirement.CollegeCode != "-1">-${requirement.College}</#if>
+                        </#if>
                     </div>
                     <div class="fn-clear">
                         <span class="ft-gray fn-left">${requirement.userName}</span>

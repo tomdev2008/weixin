@@ -25,7 +25,9 @@
                             ${sale.Name}
                         </div>
                         <div class="ft-gray">
+                            <#if sale.Area != "">
                             ${sale.Area}-${sale.University}<#if sale.CollegeCode != "-1">-${sale.College}</#if>
+                            </#if>
                         </div>
                         <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">
@@ -44,12 +46,12 @@
         <script>
             loadMore.init("/admin/sale-list-ajax?p=");
             loadMore.genHTML = function(obj) {
-                var community = obj.Area + '-' + obj.University,
+                var community = "",
                         type = '<span class="ico-resource">资料</span>';
-                if (obj.University !== "") {
-                    community += '-' + obj.University;
+                if (obj.Area !== "") {
+                   community += obj.Area + '-' + obj.University;
                 }
-                if (obj.CollegeCode !== "") {
+                if (obj.CollegeCode !== "-1") {
                     community += '-' + obj.College;
                 }
 
