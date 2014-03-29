@@ -244,6 +244,7 @@ public class UserProcessor {
         }
 
         ret.put("type", type);
+        ret.put("pageNum", pageNum);
         ret.put("userCards", userCards);
     }
 
@@ -343,7 +344,7 @@ public class UserProcessor {
         if (Strings.isEmptyOrNull(type)) {
             type = "teacher";
         }
-        
+
         JSONObject userCard = null;
         List<JSONObject> userCards = userService.getUserCard(memberId, type);
 
@@ -474,7 +475,7 @@ public class UserProcessor {
         final List<JSONObject> followingUsers = userService.getFollowingUsers(memberId, pageNum);
 
         ret.put("followingUsers", (Object) followingUsers);
-
+        ret.put("pageNum", pageNum);
         ret.put("type", "follow");
     }
 
