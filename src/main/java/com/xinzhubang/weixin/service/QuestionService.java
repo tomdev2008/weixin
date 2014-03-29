@@ -43,7 +43,6 @@ import org.b3log.latke.repository.SortDirection;
 import org.b3log.latke.repository.annotation.Transactional;
 import org.b3log.latke.service.annotation.Service;
 import org.b3log.latke.util.CollectionUtils;
-import org.b3log.latke.util.Ids;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,7 +51,7 @@ import org.json.JSONObject;
  * 用户提问。
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.2.0, Mar 28, 2014
+ * @version 1.1.3.0, Mar 29, 2014
  * @since 1.0.0
  */
 @Service
@@ -96,21 +95,18 @@ public class QuestionService {
      * @return
      */
     @Transactional
-    public String addAnswer(final JSONObject answer) {
-        String ret;
-
+    public boolean addAnswer(final JSONObject answer) {
         try {
-            answer.put("ID", Ids.genTimeMillisId());
             answer.put("Agree", 0);
 
-            ret = answerRepository.add(answer);
+            answerRepository.add(answer);
         } catch (RepositoryException ex) {
             LOGGER.log(Level.ERROR, "保存回答出错！", ex);
 
-            return null;
+            return false;
         }
 
-        return ret;
+        return true;
     }
 
     /**

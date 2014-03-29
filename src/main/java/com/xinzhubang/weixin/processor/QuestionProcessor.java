@@ -43,7 +43,7 @@ import org.json.JSONObject;
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.2.1.0, Mar 25, 2014
+ * @version 1.2.2.0, Mar 29, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -309,7 +309,7 @@ public class QuestionProcessor {
                 }
             }
         }
-        
+
         requestJSONObject.put("Keywords", keywordsBuilder.toString());
 
         requestJSONObject.put("AddTime", new Timestamp(System.currentTimeMillis()));
@@ -375,11 +375,15 @@ public class QuestionProcessor {
         requestJSONObject.put("AddUserID", user.optInt("id"));
         requestJSONObject.put("AddTime", new Timestamp(System.currentTimeMillis()));
 
-        questionService.addAnswer(requestJSONObject);
+        final boolean succ = questionService.addAnswer(requestJSONObject);
 
-        ret.put(Keys.STATUS_CODE, true);
-        ret.put(Keys.MSG, "回答成功！");
+        ret.put(Keys.STATUS_CODE, succ);
         ret.put("id", requestJSONObject.get("QID"));
+        if (!succ) {
+            ret.put(Keys.MSG, "回答失败！");
+        } else {
+            ret.put(Keys.MSG, "回答成功！");
+        }
     }
 
     /**
