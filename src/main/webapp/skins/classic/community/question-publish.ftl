@@ -5,7 +5,10 @@
         <@meta title="提问 - 新助邦"/>
     </head>
     <body>
-        <header>${Area}-${University}<#if CollegeCode != "-1">-${College}</#if></header>
+        <header>
+            ${Area}-${University}<#if CollegeCode != "-1">-${College}</#if>
+            <a href="/admin/set-community">圈子设置</a>
+        </header>
         <#include "../common/community-nav.ftl">
         <div class="wrap">
             <textarea id="content" placeholder="请填写您的问题" class="textarea"></textarea>
@@ -13,7 +16,6 @@
             <div class="ft-gray">关键字用空格隔开</div>
             <button class="button" onclick="community.questionPublish()">发 送</button>
         </div>
-        <!--
         <div class="user-card-sub">类似问题及答案</div>
         <ul class="list" style="margin-bottom: 3em;">
             <li class="fn-clear">
@@ -36,7 +38,6 @@
                 </a>
             </li>
         </ul>
-        -->
         <#include "../common/tip.ftl">
         <script src="/js/lib/jquery-2.1.0.min.js"></script>
         <script src="/js/common.js"></script>

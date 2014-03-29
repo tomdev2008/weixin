@@ -5,7 +5,10 @@
         <@meta title="提问列表 - 新助邦"/>
     </head>
     <body>
-        <header>${Area}-${University}<#if CollegeCode != "-1">-${College}</#if></header>
+        <header>
+            ${Area}-${University}<#if CollegeCode != "-1">-${College}</#if>
+            <a href="/admin/set-community">圈子设置</a>
+        </header>
         <#include "../common/community-nav.ftl">
         <div class="sub-nav">
             <ul class="fn-clear">
@@ -31,8 +34,8 @@
             <li class="fn-clear">
                 <a href="/question-details?id=${question.ID}">
                     <img class="list-view" 
-                          onerror="this.src='/images/default-user-thumbnail.png'" 
-                          src="/images/default-user-thumbnail.png"/>
+                         onerror="this.src='/images/default-user-thumbnail.png'" 
+                         src="/images/default-user-thumbnail.png"/>
                     <div class="list-content">
                         <div class="fn-clear">
                             <span class="fn-left ft-gray">${question.user.user_name}</span>
@@ -46,7 +49,7 @@
                         </div>
                         <div class="fn-clear">
                             <span class="ft-gray ft-small fn-left">
-                                 ${question.AddTime?string('yyyy-MM-dd')} &nbsp; 浏览 ${question.PV} &nbsp; 回应 ${question.count}
+                                ${question.AddTime?string('yyyy-MM-dd')} &nbsp; 浏览 ${question.PV} &nbsp; 回应 ${question.count}
                             </span>
                         </div>
                     </div>
@@ -72,7 +75,7 @@
                         + '<span class="ft-gray fn-left">' + obj.user.user_name + '</span>'
                         + '<span class="ico ico-cater"></span>'
                         + '</div>'
-                        + '<div><#if subType == "1"><span class="ft-green">' 
+                        + '<div><#if subType == "1"><span class="ft-green">'
                         + resolution + '</span></#if>' + obj.Title + '</div>'
                         + '<div class="fn-clear">'
                         + '<span class="ft-gray ft-small fn-left">'
