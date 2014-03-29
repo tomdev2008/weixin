@@ -135,7 +135,7 @@ var community = {
                 data: JSON.stringify(requestJSONObject),
                 success: function(result, textStatus) {
                     if (result.sc) {
-                        community.cancel();
+                        window.location = '/admin/message-list';
                     } else {
                         tip.show("发送失败", result.msg);
                     }

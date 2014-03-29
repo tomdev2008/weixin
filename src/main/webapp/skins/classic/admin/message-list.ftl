@@ -35,7 +35,7 @@
                         <span class="ft-gray ft-small fn-left">
                             ${msg.CreateTime?string('yyyy-MM-dd HH:mm:ss')}
                         </span>
-                        <a href="/whisper?itemID=${msg.KeyID?c}&toMemberID=${msg.FromID?c}" class="fn-right">回复</a>
+                        <a href="/whisper?itemID=${msg.KeyID?c}&toMemberID=${msg.FromID?c}&id=${msg.ID}" class="fn-right">回复</a>
                         <a href="/admin/message-details?id=${msg.ID}" class="fn-right">${msg.count}条信息 &nbsp; &nbsp;</a>
                         </#if>
                     </div>
@@ -66,8 +66,10 @@
                     infoHTML = '<span class="ft-gray ft-small fn-left">'
                             + obj.CreateTime
                             + '</span>'
-                            + '<a href="/whisper?itemID=' + obj.KeyID + '&toMemberID=' + obj.FromID + '" class="fn-right">回复</a>'
-                            + '<a href="/admin/message-details?id=' + obj.ID + '" class="fn-right">' + obj.count + '条信息 &nbsp; &nbsp;</a>';
+                            + '<a href="/whisper?itemID=' + obj.KeyID + '&toMemberID='
+                            + obj.FromID + '&id=' + obj.ID + '" class="fn-right">回复</a>'
+                            + '<a href="/admin/message-details?id=' + obj.ID + '" class="fn-right">'
+                            + obj.count + '条信息 &nbsp; &nbsp;</a>';
                 }
 
                 var liHTML = '<li class="fn-clear">'
