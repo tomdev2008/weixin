@@ -12,7 +12,9 @@
                 <div class="list-content">
                     <div class="fn-clear">
                         <span class="fn-left ft-gray">${question.user.user_name}</span>
+                        <#if question.user.IDCardStatus != 0>
                         <span class="ico ico-cater"></span>
+                        </#if>
                     </div>
                     <div>
                         <span class="ft-green"><#if 0 == question.BestAnswer>【待解决】<#else>【已解决】</#if></span>${question.Title}

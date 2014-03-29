@@ -41,7 +41,9 @@
                     <div class="list-content">
                         <div class="fn-clear">
                             <span class="fn-left ft-gray">${question.user.user_name}</span>
+                            <#if question.user.IDCardStatus != 0>
                             <span class="ico ico-cater"></span>
+                            </#if>
                         </div>
                         <div>
                             <#if subType == "1">
@@ -69,13 +71,19 @@
                 if (obj.BestAnswer === 0) {
                     resolution = "【待解决】";
                 }
+                
+                var identification = "";
+                if (obj.user.IDCardStatus !== 0) {
+                    identification = '<span class="ico ico-cater"></span>';
+                }
+                
                 var liHTML = '<li class="fn-clear">'
                         + '<a href="/question-details?id=' + obj.ID + '">'
                         + '<img class="list-view" onerror="this.src=\'/images/default-user-thumbnail.png\'" src="/images/default-user-thumbnail.png"/>'
                         + '<div class="list-content">'
                         + '<div class="fn-clear">'
                         + '<span class="ft-gray fn-left">' + obj.user.user_name + '</span>'
-                        + '<span class="ico ico-cater"></span>'
+                        + identification
                         + '</div>'
                         + '<div><#if subType == "1"><span class="ft-green">'
                         + resolution + '</span></#if>' + obj.Title + '</div>'
