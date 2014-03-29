@@ -5,7 +5,7 @@
         <@meta title="专业搜索 - 新助邦"/>
     </head>
     <body class="search">
-        <nav>
+        <nav style="top: 0">
             <ul class="fn-clear">
                 <li <#if type==1>class="current"</#if>>
                     <span onclick="window.location='/search'">
@@ -24,9 +24,8 @@
                 </li>
             </ul>
         </nav>
-
         <#if list??>
-            <ul class="list">
+        <ul class="list" style="padding-top: 3em;">
                 <#list list as l>            
                     <li>
                         <#if type!=3><a href="/search?<#if type==1>id=${l.ID}</#if><#if type==2>id=${l.MajorCode}</#if>&type=${type}"></#if>
