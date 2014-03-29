@@ -146,7 +146,7 @@ public class ItemService {
         final JSONObject result = whisperRepository.get(id);
         
         final JSONObject subResult = whisperRepository.get(new Query().setFilter(
-                new PropertyFilter("KeyID", FilterOperator.EQUAL, result.getString("KeyID"))));
+                new PropertyFilter("KeyID", FilterOperator.EQUAL, result.getString("ID"))));
         result.put("toUser", userRepository.get(result.getString("ToID")));
         result.put("fromUser", userRepository.get(result.getString("FromID")));
         

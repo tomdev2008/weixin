@@ -349,7 +349,7 @@ public class MessageProcessor {
             
             JSONArray sublist = message.getJSONArray("list");
             dataModel.put("message", message);
-            dataModel.put("list", CollectionUtils.jsonArrayToList(sublist));
+            dataModel.put("list", (Object) CollectionUtils.jsonArrayToList(sublist));
         }
 
         dataModel.put("type", "message");

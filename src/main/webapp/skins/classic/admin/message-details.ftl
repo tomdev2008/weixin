@@ -48,6 +48,6 @@
             </#list>
             </#if>
         </ul>
-        <a class="ft-green user-card-msg" href="/whisper?itemID=${message.ID}&toMemberID=${message.FromID}">回 复</a>
+        <a class="ft-green user-card-msg" href="/whisper?itemID=${message.KeyID}&toMemberID=${message.FromID}">回 复</a>
     </body>
 </html>
