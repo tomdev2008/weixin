@@ -28,7 +28,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.zip.ZipException;
 import javax.inject.Inject;
 import org.b3log.latke.Keys;
 import org.b3log.latke.logging.Level;
@@ -53,7 +52,7 @@ import org.json.JSONObject;
  * 用户提问。
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.1.0, Mar 25, 2014
+ * @version 1.1.2.0, Mar 28, 2014
  * @since 1.0.0
  */
 @Service
@@ -214,10 +213,10 @@ public class QuestionService {
         try {
             final Query query = new Query();
             query.setFilter(new PropertyFilter("AddUserID", FilterOperator.EQUAL, userId));
+            query.setCurrentPageNum(pageNum).setPageSize(XZBServletListener.PAGE_SIZE);
 
             final JSONObject result = questionRepository.get(query);
             final JSONArray results = result.getJSONArray(Keys.RESULTS);
-            query.setPageCount(pageNum).setPageSize(XZBServletListener.PAGE_SIZE);
 
             final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
             for (final JSONObject question : ret) {
