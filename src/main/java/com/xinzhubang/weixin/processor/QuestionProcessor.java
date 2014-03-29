@@ -231,7 +231,7 @@ public class QuestionProcessor {
         final Map<String, Object> dataModel = renderer.getDataModel();
 
         final JSONObject question = questionService.getById(request.getParameter("id"));
-        final List<JSONObject> answers = questionService.getAnswerByQuestionId(question.getInt("ID"));
+        final List<JSONObject> answers = questionService.getAnswerByQuestionId(question.getString("ID"));
 
         question.put("count", answers.size());
         dataModel.put("question", question);

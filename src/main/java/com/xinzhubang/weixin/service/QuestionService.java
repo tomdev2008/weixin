@@ -51,7 +51,7 @@ import org.json.JSONObject;
  * 用户提问。
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.3.0, Mar 29, 2014
+ * @version 1.1.4.0, Mar 29, 2014
  * @since 1.0.0
  */
 @Service
@@ -246,14 +246,26 @@ public class QuestionService {
         return ret;
     }
 
-    public List<JSONObject> getAnswerByQuestionId(int id) throws RepositoryException, JSONException {
+    /**
+     * 获取指定 id 问题的答案列表.
+     * 
+     * @param id 指定 id 问题
+     * @return
+     * @throws Exception 
+     */
+    public List<JSONObject> getAnswerByQuestionId(final String id) throws Exception {
         final Query query = new Query().setFilter(new PropertyFilter("QID", FilterOperator.EQUAL, id));
+        query.addSort("Best", SortDirection.DESCENDING);
+
         JSONObject answers = answerRepository.get(query);
+
         final JSONArray answersArray = answers.getJSONArray(Keys.RESULTS);
-        final List<JSONObject> answersList = CollectionUtils.jsonArrayToList(answersArray);
-        for (JSONObject j : answersList) {
+        final List<JSONObject> ret = CollectionUtils.jsonArrayToList(answersArray);
+
+        for (final JSONObject j : ret) {
             j.put("user", userRepository.get(j.getString("AddUserID")));
         }
-        return answersList;
+
+        return ret;
     }
 }
