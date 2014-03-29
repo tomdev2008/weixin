@@ -35,6 +35,7 @@ import org.b3log.latke.repository.FilterOperator;
 import org.b3log.latke.repository.PropertyFilter;
 import org.b3log.latke.repository.Query;
 import org.b3log.latke.repository.RepositoryException;
+import org.b3log.latke.repository.SortDirection;
 import org.b3log.latke.repository.annotation.Transactional;
 import org.b3log.latke.service.ServiceException;
 import org.b3log.latke.service.annotation.Service;
@@ -47,23 +48,23 @@ import org.json.JSONObject;
  * 项目服务.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.4.0.0, Mar 24, 2014
+ * @version 1.5.0.0, Mar 29, 2014
  * @since 1.0.0
  */
 @Service
 public class ItemService {
-
+    
     private static final Logger LOGGER = Logger.getLogger(ItemService.class);
-
+    
     @Inject
     private UserRepository userRepository;
-
+    
     @Inject
     private ItemRepository itemRepository;
-
+    
     @Inject
     private WhisperRepository whisperRepository;
-
+    
     @Inject
     private GuestBookRepository guestBookRepository;
 
@@ -88,13 +89,13 @@ public class ItemService {
         try {
             whisper.put("Category", 1);
             whisper.put("CreateTime", new Timestamp(System.currentTimeMillis()));
-
+            
             whisperRepository.add(whisper);
-
+            
             return true;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "发悄悄话 [" + whisper.toString() + "] 异常", e);
-
+            
             return false;
         }
     }
@@ -110,26 +111,26 @@ public class ItemService {
         try {
             final Query query = new Query().setFilter(new PropertyFilter("ToID", FilterOperator.EQUAL, userId));
             query.setCurrentPageNum(pageNum).setPageSize(XZBServletListener.PAGE_SIZE);
-
+            
             final JSONObject result = whisperRepository.get(query);
-
+            
             final JSONArray results = result.getJSONArray(Keys.RESULTS);
             final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
-
+            
             for (final JSONObject j : ret) {
                 j.put("toUser", userRepository.get(j.getString("ToID")));
                 j.put("fromUser", userRepository.get(j.getString("FromID")));
-
+                
                 final JSONObject subResult = whisperRepository.get(new Query().setFilter(new PropertyFilter("KeyID", FilterOperator.EQUAL, j.getInt("ID"))));
                 j.put("count", subResult.getJSONArray(Keys.RESULTS).length());
-
+                
                 j.put("type", "w"); // 类型是悄悄话
             }
-
+            
             return ret;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "获取用户 [id=" + userId + "] 悄悄话列表异常", e);
-
+            
             return Collections.emptyList();
         }
     }
@@ -187,24 +188,24 @@ public class ItemService {
             sale.put("DemandOrService", 1); // 服务
 
             final String userId = sale.getString("MemberID");
-
+            
             final JSONObject user = userRepository.get(userId);
-
+            
             final String realName = user.optString("RealName");
             final String mobile = user.optString("mobile");
             final String email = user.optString("email");
-
+            
             sale.put("RealName", realName);
             sale.put("Email", email);
             sale.put("LinkMan", realName);
             sale.put("Mobile", mobile);
-
+            
             itemRepository.add(sale);
-
+            
             return true;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "发布出售 [" + sale.toString() + "] 异常", e);
-
+            
             return false;
         }
     }
@@ -238,25 +239,50 @@ public class ItemService {
             demand.put("DemandOrService", 0); // 需求
 
             final String userId = demand.getString("MemberID");
-
+            
             final JSONObject user = userRepository.get(userId);
-
+            
             final String realName = user.optString("RealName");
             final String mobile = user.optString("mobile");
             final String email = user.optString("email");
-
+            
             demand.put("RealName", realName);
             demand.put("Email", email);
             demand.put("LinkMan", realName);
             demand.put("Mobile", mobile);
-
+            
             itemRepository.add(demand);
-
+            
             return true;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "发布需求 [" + demand.toString() + "] 异常", e);
-
+            
             return false;
+        }
+    }
+
+    /**
+     * 获取指定用户 id 的用户最近发布的一个项目（需求/服务）.
+     *
+     * @param userId 指定用户 id
+     * @return 项目（需求/服务）
+     */
+    public JSONObject getLatestItem(final String userId) {
+        final Query query = new Query();
+        
+        query.setFilter(new PropertyFilter("MemberID", FilterOperator.EQUAL, userId)).addSort("CreateTime", SortDirection.DESCENDING).
+                setPageSize(1);
+        
+        try {
+            final JSONObject result = itemRepository.get(query);
+            
+            final JSONArray results = result.getJSONArray(Keys.RESULTS);
+            
+            return results.optJSONObject(0);
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "获取用户 [id=" + userId + "] 最新项目异常", e);
+            
+            return null;
         }
     }
 
@@ -273,18 +299,18 @@ public class ItemService {
             final List<Filter> filters = new ArrayList<Filter>();
             filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, userId));
             filters.add(new PropertyFilter("DemandOrService", FilterOperator.EQUAL, 1));
-
+            
             final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
             query.setCurrentPageNum(pageNum).setPageSize(XZBServletListener.PAGE_SIZE);
             final JSONObject result = itemRepository.get(query);
-
+            
             final JSONArray results = result.getJSONArray(Keys.RESULTS);
             final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
-
+            
             return ret;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "获取用户 [" + userId + "] 的服务项目异常", e);
-
+            
             return Collections.emptyList();
         }
     }
@@ -302,18 +328,18 @@ public class ItemService {
             final List<Filter> filters = new ArrayList<Filter>();
             filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, userId));
             filters.add(new PropertyFilter("DemandOrService", FilterOperator.EQUAL, 0));
-
+            
             final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
             query.setCurrentPageNum(pageNum).setPageSize(XZBServletListener.PAGE_SIZE);
             final JSONObject result = itemRepository.get(query);
-
+            
             final JSONArray results = result.getJSONArray(Keys.RESULTS);
             final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
-
+            
             return ret;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "获取用户 [" + userId + "] 的需求项目异常", e);
-
+            
             return Collections.emptyList();
         }
     }
@@ -341,7 +367,7 @@ public class ItemService {
             final String universityCode = community.getString("UniversityCode");
             final String collegeCode = community.optString("CollegeCode", "-1");
             final int type = community.getInt("type");
-
+            
             final List<Filter> filters = new ArrayList<Filter>();
             filters.add(new PropertyFilter("AreaCode", FilterOperator.EQUAL, areaCode));
             filters.add(new PropertyFilter("UniversityCode", FilterOperator.EQUAL, universityCode));
@@ -352,20 +378,20 @@ public class ItemService {
             final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
             query.setCurrentPageNum(pageNum).setPageSize(XZBServletListener.PAGE_SIZE);
             final JSONObject result = itemRepository.get(query);
-
+            
             final JSONArray results = result.getJSONArray(Keys.RESULTS);
             final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
-
+            
             for (final JSONObject sale : ret) {
                 final String userId = sale.getString("MemberID");
                 final JSONObject user = userRepository.get(userId);
                 sale.put("userName", user.getString("user_name"));
             }
-
+            
             return ret;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "获取社区圈子中的出售项目异常", e);
-
+            
             return Collections.emptyList();
         }
     }
@@ -393,7 +419,7 @@ public class ItemService {
             final String universityCode = community.getString("UniversityCode");
             final String collegeCode = community.optString("CollegeCode", "-1");
             final int type = community.getInt("type");
-
+            
             final List<Filter> filters = new ArrayList<Filter>();
             filters.add(new PropertyFilter("AreaCode", FilterOperator.EQUAL, areaCode));
             filters.add(new PropertyFilter("UniversityCode", FilterOperator.EQUAL, universityCode));
@@ -404,20 +430,20 @@ public class ItemService {
             final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
             query.setCurrentPageNum(pageNum).setPageSize(XZBServletListener.PAGE_SIZE);
             final JSONObject result = itemRepository.get(query);
-
+            
             final JSONArray results = result.getJSONArray(Keys.RESULTS);
             final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
-
+            
             for (final JSONObject sale : ret) {
                 final String userId = sale.getString("MemberID");
                 final JSONObject user = userRepository.get(userId);
                 sale.put("userName", user.getString("user_name"));
             }
-
+            
             return ret;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "获取社区圈子中的需求项目异常", e);
-
+            
             return Collections.emptyList();
         }
     }
@@ -432,15 +458,15 @@ public class ItemService {
     public JSONObject getSale(final String id) {
         try {
             final JSONObject ret = itemRepository.get(id);
-
+            
             final String userId = ret.getString("MemberID");
             final JSONObject user = userRepository.get(userId);
             ret.put("userName", user.getString("user_name"));
-
+            
             return ret;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "获取出售项目 [id=" + id + "] 异常", e);
-
+            
             return null;
         }
     }
@@ -455,15 +481,15 @@ public class ItemService {
     public JSONObject getDemand(final String id) {
         try {
             final JSONObject ret = itemRepository.get(id);
-
+            
             final String userId = ret.getString("MemberID");
             final JSONObject user = userRepository.get(userId);
             ret.put("userName", user.getString("user_name"));
-
+            
             return ret;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "获取需求项目 [id=" + id + "] 异常", e);
-
+            
             return null;
         }
     }
