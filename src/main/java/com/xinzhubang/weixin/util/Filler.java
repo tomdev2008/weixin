@@ -31,7 +31,7 @@ import org.json.JSONObject;
  * Filler utilities.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.2.1.0, Mar 26, 2014
+ * @version 1.3.1.0, Mar 31, 2014
  * @since 1.0.0
  */
 @Service
@@ -77,6 +77,8 @@ public class Filler {
             dataModel.put("UniversityCode", userInfo.optString("UniversityCode"));
             dataModel.put("College", userInfo.optString("College"));
             dataModel.put("CollegeCode", userInfo.optString("CollegeCode"));
+            
+            dataModel.put("currUser", user);
         }
         
         fillLangs(dataModel);
