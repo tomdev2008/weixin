@@ -18,7 +18,7 @@
             <li class="fn-clear">
                 <img class="list-view" src="/images/default-user-thumbnail.png"/>
                 <div class="list-content">
-                    <div class="fn-clear">
+                    <div class="fn-clear" style="word-wrap: break-word; white-space: normal; word-break: break-all; width: 72%;">
                         <#if user.card.Property == 0>
                         <span class="fn-left ico-qa">学生</span>
                         <#else>
@@ -34,17 +34,12 @@
                         </#if>
                     </div>
                     <div class="ft-gray">
-                        <#if user.community.Area != "">
-                        ${user.community.Area}-${user.community.University}<#if user.community.CollegeCode != "-1">-${user.community.College}</#if>
-                        </#if>
-                    </div>
-                    <div>
                         ${user.card.PropertyTitle}
                     </div>
                     <span<#if isFollow> style="color: #F48A00"</#if> class="ft-green follow" onclick=<#if isLoggedIn>"community.follow(${user.card.ID?c}, this)"<#else>"window.location.href='/login'"</#if>><#if isFollow>取消关注<#else>关注</#if></span>
                 </div>
             </li>
-            <li class="ft-gray">
+            <li class="ft-gray ft-small">
                 ${user.card.PropertyRemark}
             </li>
         </ul>
