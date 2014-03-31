@@ -120,7 +120,7 @@ public class ItemService {
             for (final JSONObject j : results) {
                 boolean duplicated = false;
 
-                for (final JSONObject k : ret) { // 去重
+                for (final JSONObject k : ret) { // 按项目去重
                     if (j.optInt("KeyID") == k.optInt("KeyID")) {
                         duplicated = true;
 
@@ -131,7 +131,24 @@ public class ItemService {
                 if (!duplicated) {
                     j.put("toUser", userRepository.get(j.getString("ToID")));
                     j.put("fromUser", userRepository.get(j.getString("FromID")));
-                    j.put("count", whisperRepository.count(new Query().setFilter(new PropertyFilter("KeyID", FilterOperator.EQUAL, j.getInt("KeyID")))));
+
+                    List<Filter> filters = new ArrayList<Filter>();
+                    filters.add(new PropertyFilter("KeyID", FilterOperator.EQUAL, j.getInt("KeyID")));
+                    filters.add(new PropertyFilter("FromID", FilterOperator.EQUAL, j.getString("FromID")));
+                    filters.add(new PropertyFilter("ToID", FilterOperator.EQUAL, j.getString("ToID")));
+
+                    Query q = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+                    final long c1 = whisperRepository.count(q);
+
+                    filters = new ArrayList<Filter>();
+                    filters.add(new PropertyFilter("KeyID", FilterOperator.EQUAL, j.getInt("KeyID")));
+                    filters.add(new PropertyFilter("FromID", FilterOperator.EQUAL, j.getString("ToID")));
+                    filters.add(new PropertyFilter("ToID", FilterOperator.EQUAL, j.getString("FromID")));
+
+                    q = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+                    final long c2 = whisperRepository.count(q);
+
+                    j.put("count", c1 + c2);
                     j.put("type", "w"); // 类型是悄悄话
 
                     ret.add(j);
@@ -157,21 +174,37 @@ public class ItemService {
     public JSONObject getWhisper(final String id) throws RepositoryException, JSONException {
         final JSONObject result = whisperRepository.get(id);
 
-        final JSONObject subResult = whisperRepository.get(new Query().setFilter(
-                new PropertyFilter("KeyID", FilterOperator.EQUAL, result.getString("KeyID"))));
+        final List<JSONObject> list = new ArrayList<JSONObject>();
+
+        List<Filter> filters = new ArrayList<Filter>();
+        filters.add(new PropertyFilter("KeyID", FilterOperator.EQUAL, result.getInt("KeyID")));
+        filters.add(new PropertyFilter("FromID", FilterOperator.EQUAL, result.getString("FromID")));
+        filters.add(new PropertyFilter("ToID", FilterOperator.EQUAL, result.getString("ToID")));
+
+        Query q = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+        JSONArray array = whisperRepository.get(q).optJSONArray(Keys.RESULTS);
+        list.addAll(CollectionUtils.<JSONObject>jsonArrayToList(array));
+
+        filters = new ArrayList<Filter>();
+        filters.add(new PropertyFilter("KeyID", FilterOperator.EQUAL, result.getInt("KeyID")));
+        filters.add(new PropertyFilter("FromID", FilterOperator.EQUAL, result.getString("ToID")));
+        filters.add(new PropertyFilter("ToID", FilterOperator.EQUAL, result.getString("FromID")));
+
+        q = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+        array = whisperRepository.get(q).optJSONArray(Keys.RESULTS);
+        list.addAll(CollectionUtils.<JSONObject>jsonArrayToList(array));
+
         result.put("toUser", userRepository.get(result.getString("ToID")));
         result.put("fromUser", userRepository.get(result.getString("FromID")));
+        result.put("type", "w");
+        result.put("list", list);
 
-        final JSONArray subResults = subResult.getJSONArray(Keys.RESULTS);
-        final List<JSONObject> ret = CollectionUtils.jsonArrayToList(subResults);
-
-        result.put("list", ret);
-
-        for (int i = 0; i < ret.size(); i++) {
-            final JSONObject j = ret.get(i);
+        for (int i = 0; i < list.size(); i++) {
+            final JSONObject j = list.get(i);
 
             j.put("toUser", userRepository.get(j.getString("ToID")));
             j.put("fromUser", userRepository.get(j.getString("FromID")));
+            j.put("type", "w");
         }
 
         return result;

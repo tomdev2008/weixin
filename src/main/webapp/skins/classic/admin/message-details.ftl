@@ -17,7 +17,11 @@
                         </#if>
                     </div>
                     <div class="ft-gray">
+                        <#if message.type != "gb">
                         ${message.CONTENT}
+                        <#else>
+                        ${message.GBookContent}
+                        </#if>
                     </div>
                     <div class="ft-gray ft-small">
                         ${message.CreateTime?string('yyyy-MM-dd HH:mm:ss')}
@@ -26,7 +30,6 @@
             </li>
         </ul>
         <ul class="list question" style="margin-bottom: 3em">
-            <#if list??>
             <#list list as l>
             <#if message.ID != l.ID>
             <li class="fn-clear<#if currUser.id == l.fromUser.id> my</#if>">
@@ -34,12 +37,16 @@
                 <div class="list-content" style="width: 80%">
                     <div class="fn-clear">
                         <span class="fn-left">${l.fromUser.user_name}</span>
-                         <#if l.fromUser.IDCardStatus != 0>
+                        <#if l.fromUser.IDCardStatus != 0>
                         <span class="ico ico-cater"></span>
                         </#if>
                     </div>
                     <div class="ft-gray">
+                        <#if message.type != "gb">
                         ${l.CONTENT}
+                        <#else>
+                        ${l.GBookContent}
+                        </#if>
                     </div>
                     <div class="ft-gray ft-small">
                         ${l.CreateTime?string('yyyy-MM-dd HH:mm:ss')}
@@ -48,8 +55,11 @@
             </li>
             </#if>
             </#list>
-            </#if>
         </ul>
-        <a class="user-card-msg" href="/whisper?itemID=${message.KeyID?c}&toMemberID=${message.FromID}&id=${message.ID}">回 复</a>
+        <#if message.type != "gb">
+        <a class="user-card-msg" href="/whisper?itemID=${message.KeyID?c}&toMemberID=${message.FromID?c}&id=${message.ID?c}">回 复</a>
+        <#else>
+        <a class="user-card-msg" href="/guest-book?toMemberID=${message.SendID?c}">回 复</a>
+        </#if>
     </body>
 </html>

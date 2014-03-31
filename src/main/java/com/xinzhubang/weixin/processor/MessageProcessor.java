@@ -63,7 +63,7 @@ public class MessageProcessor {
 
     @Inject
     private UserService userService;
-    
+
     @Inject
     private NoticeService noticeService;
 
@@ -259,7 +259,7 @@ public class MessageProcessor {
         final List<JSONObject> whispers = itemService.getWhispersByUserId(userId, pageNum);
         final List<JSONObject> guestBooks = userService.getGuestBooksByUserId(userId, pageNum);
         final List<JSONObject> answers = noticeService.getNotices(userId, 20, pageNum); // 20 提问回答通知
-        
+
         final List<JSONObject> messages = new ArrayList<JSONObject>();
         messages.addAll(whispers);
         messages.addAll(guestBooks);
@@ -334,7 +334,7 @@ public class MessageProcessor {
     }
 
     /**
-     * 展示我的消息详情
+     * 展示我的消息（悄悄话）详情
      *
      * @param context the specified context
      * @param request the specified request
@@ -353,7 +353,40 @@ public class MessageProcessor {
         String id = request.getParameter("id");
         if (StringUtils.isNotEmpty(id)) {
             JSONObject message = itemService.getWhisper(id);
-            
+
+            JSONArray sublist = message.getJSONArray("list");
+            dataModel.put("message", message);
+            dataModel.put("list", (Object) CollectionUtils.jsonArrayToList(sublist));
+        }
+
+        dataModel.put("type", "message");
+
+        filler.fillHeader(request, response, dataModel);
+        filler.fillFooter(dataModel);
+    }
+
+    /**
+     * 展示我的消息（留言）详情.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/admin/message-gb-details", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
+    public void showMyMessageGuestBookDetails(final HTTPRequestContext context,
+                                              final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+        context.setRenderer(renderer);
+        renderer.setTemplateName("/admin/message-details.ftl");
+
+        final Map<String, Object> dataModel = renderer.getDataModel();
+        String id = request.getParameter("id");
+        if (StringUtils.isNotEmpty(id)) {
+            JSONObject message = userService.getGuestBook(id);
+
             JSONArray sublist = message.getJSONArray("list");
             dataModel.put("message", message);
             dataModel.put("list", (Object) CollectionUtils.jsonArrayToList(sublist));

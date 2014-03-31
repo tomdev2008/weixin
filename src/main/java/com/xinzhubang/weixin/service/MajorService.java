@@ -95,6 +95,7 @@ public class MajorService {
 
             ret = new ArrayList<JSONObject>();
 
+            // XXX: Performance Issue
             for (final JSONObject college : results) {
                 final JSONObject subResult = schoolRepository.get(new Query().setFilter(new PropertyFilter("ID", FilterOperator.EQUAL,
                                                                                                            college.optString("ParentID"))));

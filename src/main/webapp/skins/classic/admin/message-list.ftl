@@ -32,13 +32,14 @@
                             ${msg.PostTime?string('yyyy-MM-dd HH:mm:ss')}
                         </span>
                         <a href="/guest-book?toMemberID=${msg.SendID?c}" class="fn-right">回复</a>
+                        <a href="/admin/message-gb-details?id=${msg.ID?c}" class="fn-right">${msg.count}条信息 &nbsp; &nbsp;</a>
                         </#if>
                         <#if msg.type == "w">
                         <span class="ft-gray ft-small fn-left">
                             ${msg.CreateTime?string('yyyy-MM-dd HH:mm:ss')}
                         </span>
-                        <a href="/whisper?itemID=${msg.KeyID?c}&toMemberID=${msg.FromID?c}&id=${msg.ID}" class="fn-right">回复</a>
-                        <a href="/admin/message-details?id=${msg.ID}" class="fn-right">${msg.count}条信息 &nbsp; &nbsp;</a>
+                        <a href="/whisper?itemID=${msg.KeyID?c}&toMemberID=${msg.FromID?c}&id=${msg.ID?c}" class="fn-right">回复</a>
+                        <a href="/admin/message-details?id=${msg.ID?c}" class="fn-right">${msg.count}条信息 &nbsp; &nbsp;</a>
                         </#if>
                         <#if msg.type == "a">
                         <span class="ft-gray ft-small fn-left">

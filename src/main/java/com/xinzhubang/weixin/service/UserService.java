@@ -54,7 +54,7 @@ import org.json.JSONObject;
  * 用户服务.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.3.3.0, Mar 31, 2014
+ * @version 1.3.4.0, Mar 31, 2014
  * @since 1.0.0
  */
 @Service
@@ -84,6 +84,7 @@ public class UserService {
      * 根据用户 id 获取用户的留言.
      *
      * @param userId
+     * @param pageNum
      * @return
      */
     public List<JSONObject> getGuestBooksByUserId(final String userId, final int pageNum) {
@@ -93,23 +94,102 @@ public class UserService {
 
             final JSONObject result = guestBookRepository.get(query);
 
-            final JSONArray results = result.getJSONArray(Keys.RESULTS);
-            final List<JSONObject> ret = CollectionUtils.jsonArrayToList(results);
+            final List<JSONObject> results = CollectionUtils.jsonArrayToList(result.getJSONArray(Keys.RESULTS));
+            final List<JSONObject> ret = new ArrayList<JSONObject>();
 
-            for (final JSONObject j : ret) {
-                j.put("toUser", userRepository.get(j.getString("MemberID")));
-                j.put("fromUser", userRepository.get(j.getString("SendID")));
-                j.put("CreateTime", j.optString("PostTime"));
+            for (final JSONObject j : results) {
+                boolean duplicated = false;
 
-                j.put("type", "gb"); // 类型是留言
+                for (final JSONObject k : ret) { // 按人去重
+                    if (j.optInt("MemberID") == k.optInt("MemberID")) {
+                        duplicated = true;
+
+                        break;
+                    }
+                }
+
+                if (!duplicated) {
+                    j.put("toUser", userRepository.get(j.getString("MemberID")));
+                    j.put("fromUser", userRepository.get(j.getString("SendID")));
+                    j.put("CreateTime", j.opt("PostTime"));
+
+                    j.put("type", "gb"); // 类型是留言
+
+                    List<Filter> filters = new ArrayList<Filter>();
+                    filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, j.getString("MemberID")));
+                    filters.add(new PropertyFilter("SendID", FilterOperator.EQUAL, j.getString("SendID")));
+
+                    Query q = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+                    final long c1 = guestBookRepository.count(q);
+
+                    filters = new ArrayList<Filter>();
+                    filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, j.getString("SendID")));
+                    filters.add(new PropertyFilter("SendID", FilterOperator.EQUAL, j.getString("MemberID")));
+
+                    q = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+                    final long c2 = guestBookRepository.count(q);
+
+                    j.put("count", c1 + c2);
+
+                    ret.add(j);
+                }
             }
 
             return ret;
+
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "获取用户 [id=" + userId + "] 悄悄话列表异常", e);
 
             return Collections.emptyList();
         }
+    }
+
+    /**
+     * 根据留言 id 获取留言详情.
+     *
+     * @param id
+     * @return
+     * @throws RepositoryException
+     * @throws JSONException
+     */
+    public JSONObject getGuestBook(final String id) throws RepositoryException, JSONException {
+        final JSONObject result = guestBookRepository.get(id);
+
+        final List<JSONObject> list = new ArrayList<JSONObject>();
+
+        List<Filter> filters = new ArrayList<Filter>();
+        filters.add(new PropertyFilter("SendID", FilterOperator.EQUAL, result.getString("SendID")));
+        filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, result.getString("MemberID")));
+
+        Query q = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+        JSONArray array = guestBookRepository.get(q).optJSONArray(Keys.RESULTS);
+        list.addAll(CollectionUtils.<JSONObject>jsonArrayToList(array));
+
+        filters = new ArrayList<Filter>();
+        filters.add(new PropertyFilter("SendID", FilterOperator.EQUAL, result.getString("MemberID")));
+        filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, result.getString("SendID")));
+
+        q = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+        array = guestBookRepository.get(q).optJSONArray(Keys.RESULTS);
+        list.addAll(CollectionUtils.<JSONObject>jsonArrayToList(array));
+
+        result.put("toUser", userRepository.get(result.getString("MemberID")));
+        result.put("fromUser", userRepository.get(result.getString("SendID")));
+        result.put("type", "gb");
+        result.put("list", list);
+
+        for (int i = 0; i < list.size(); i++) {
+            final JSONObject j = list.get(i);
+
+            j.put("toUser", userRepository.get(j.getString("MemberID")));
+            j.put("fromUser", userRepository.get(j.getString("SendID")));
+            j.put("type", "gb");
+            j.put("CreateTime", j.opt("PostTime"));
+        }
+        
+        result.put("CreateTime", result.opt("PostTime"));
+
+        return result;
     }
 
     /**
@@ -165,7 +245,7 @@ public class UserService {
             final List<Filter> filters = new ArrayList<Filter>();
             filters.add(new PropertyFilter("AreaCode", FilterOperator.EQUAL, areaCode));
             filters.add(new PropertyFilter("UniversityCode", FilterOperator.EQUAL, universityCode));
-            
+
             if (!"-1".equals(collegeCode)) {
                 filters.add(new PropertyFilter("CollegeCode", FilterOperator.EQUAL, collegeCode));
             }
@@ -486,7 +566,7 @@ public class UserService {
         try {
             final String userId = userCardAttention.optString("MemberID");
             final String cardId = userCardAttention.optString("ItemID");
-            
+
             final List<Filter> filters = new ArrayList<Filter>();
             filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, userId));
             filters.add(new PropertyFilter("ItemID", FilterOperator.EQUAL, cardId));
@@ -497,7 +577,7 @@ public class UserService {
             if (null != result.optJSONArray(Keys.RESULTS).optJSONObject(0)) { // 已经关注过了
                 return true;
             }
-            
+
             userCardAttention.put("CollectionType", 3);
 
             userCollectionRepository.add(userCardAttention);
