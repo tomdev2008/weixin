@@ -9,7 +9,7 @@
         <nav>
             <ul class="fn-clear">
                 <li <#if type==1>class="current"</#if>>
-                    <span onclick="window.location='/search'">
+                    <span onclick="window.location = '/search'">
                         学科门类<span class="ico ico-arrow-down"></span>
                     </span>
                 </li>
@@ -25,18 +25,15 @@
                 </li>
             </ul>
         </nav>
-        <#if list??>
         <ul class="list">
-                <#list list as l>            
-                    <li>
-                        <#if type!=3><a href="/search?<#if type==1>id=${l.ID}</#if><#if type==2>id=${l.MajorCode}</#if>&type=${type}"></#if>
-                            <#if type==1>${l.MajorName}</#if>
-                            <#if type==2>${l.MajorName}</#if>
-                            <#if type==3>${l.Name}</#if>
-                        <#if type!=3></a></#if>
-                    </li>
-                </#list>
-            </ul>
-        </#if>
+            <#list list as l>            
+            <li>
+                <#if type == 1><a href="/search?id=${l.ID?c}&type=${type}">${l.MajorName}</a></#if>
+                <#if type == 2><a href="/search?id=${l.MajorCode}&type=${type}">${l.MajorName}</a></#if>
+                <#if type == 3><a href="/search?id=${l.MajorCode}&type=${type}">${l.Name}</a></#if>
+                <#if type == 4>${l.Name}</#if>
+            </li>
+            </#list>
+        </ul>
     </body>
 </html>

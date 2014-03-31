@@ -13,19 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.xinzhubang.weixin.service;
 
 import com.xinzhubang.weixin.repository.MajorRepository;
 import com.xinzhubang.weixin.repository.SchoolRepository;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.inject.Inject;
 import org.apache.commons.lang.StringUtils;
 import org.b3log.latke.Keys;
@@ -45,7 +38,7 @@ import org.json.JSONObject;
  *
  * @author 赵晶
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.1.0, Mar 29, 2014
+ * @version 1.1.1.0, Mar 31, 2014
  * @since 1.0.0
  */
 @Service
@@ -77,22 +70,57 @@ public class MajorService {
             ret = CollectionUtils.jsonArrayToList(results);
         } else if (type == 2) {
             final JSONObject result = schoolRepository.get(new Query().setFilter(new PropertyFilter("MajorCode", FilterOperator.LIKE, id + "%")));
-            final JSONArray results = result.getJSONArray(Keys.RESULTS);
-            
-            ret = CollectionUtils.jsonArrayToList(results);
-            
-            Set<String> sets = new HashSet<String>();
-            
-            for (final JSONObject j : ret) {
-                sets.add(j.getString("Name"));
-            }
-            
+            final List<JSONObject> results = CollectionUtils.jsonArrayToList(result.getJSONArray(Keys.RESULTS));
+
             ret = new ArrayList<JSONObject>();
-            
-            for (final String s : sets) {
-                JSONObject j = new JSONObject();
-                j.put("Name", s);
-                ret.add(j);
+
+            for (final JSONObject j : results) {
+                boolean duplicated = false;
+
+                for (final JSONObject k : ret) {
+                    if (j.optString("Name").equals(k.optString("Name"))) {
+                        duplicated = true;
+
+                        break;
+                    }
+                }
+
+                if (!duplicated) {
+                    ret.add(j);
+                }
+            }
+        } else if (3 == type) {
+            final JSONObject result = schoolRepository.get(new Query().setFilter(new PropertyFilter("MajorCode", FilterOperator.EQUAL, id)));
+            final List<JSONObject> results = CollectionUtils.jsonArrayToList(result.getJSONArray(Keys.RESULTS));
+
+            ret = new ArrayList<JSONObject>();
+
+            for (final JSONObject college : results) {
+                final JSONObject subResult = schoolRepository.get(new Query().setFilter(new PropertyFilter("ID", FilterOperator.EQUAL,
+                                                                                                           college.optString("ParentID"))));
+                final List<JSONObject> subResults = CollectionUtils.jsonArrayToList(subResult.getJSONArray(Keys.RESULTS));
+
+                for (final JSONObject i : subResults) {
+                    final JSONObject subResult2 = schoolRepository.get(new Query().setFilter(new PropertyFilter("ID", FilterOperator.EQUAL,
+                                                                                                                i.optString("ParentID"))));
+                    final List<JSONObject> subResults2 = CollectionUtils.jsonArrayToList(subResult2.getJSONArray(Keys.RESULTS));
+
+                    for (final JSONObject j : subResults2) {
+                        boolean duplicated = false;
+
+                        for (final JSONObject k : ret) {
+                            if (j.optString("Name").equals(k.optString("Name"))) {
+                                duplicated = true;
+
+                                break;
+                            }
+                        }
+
+                        if (!duplicated) {
+                            ret.add(j);
+                        }
+                    }
+                }
             }
         }
 
