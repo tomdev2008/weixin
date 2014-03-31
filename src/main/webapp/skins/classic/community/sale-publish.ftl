@@ -5,11 +5,13 @@
         <@meta title="发出售 - 新助邦"/>
     </head>
     <body>
-        <header>
-            <#if Area != "">
-            ${Area}-${University}<#if CollegeCode != "-1">-${College}</#if>
-            </#if>
-            <a href="/admin/set-community">圈子设置</a>
+        <header class="fn-clear">
+            <div class="fn-left" style="width: 75%;">         
+                <#if Area != "">
+                ${Area}-${University}<#if CollegeCode != "-1">-${College}</#if>
+                </#if>
+            </div>
+            <a class="fn-right" href="/admin/set-community">圈子设置</a>
         </header>
         <#include "../common/community-nav.ftl">
         <div class="sub-nav">
