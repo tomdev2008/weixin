@@ -111,7 +111,7 @@ var community = {
                 success: function(result, textStatus) {
                     if (result.sc) {
                         var searchs = window.location.search.split("=");
-                        if (searchs[searchs.length - 2] === "id") {
+                        if (searchs[searchs.length - 2].indexOf("id") > -1) {
                             window.location = '/admin/message-details?id=' + searchs[searchs.length - 1];
                         } else {
                             community.cancel();
