@@ -165,7 +165,10 @@ public class UserService {
             final List<Filter> filters = new ArrayList<Filter>();
             filters.add(new PropertyFilter("AreaCode", FilterOperator.EQUAL, areaCode));
             filters.add(new PropertyFilter("UniversityCode", FilterOperator.EQUAL, universityCode));
-            filters.add(new PropertyFilter("CollegeCode", FilterOperator.EQUAL, collegeCode));
+            
+            if (!"-1".equals(collegeCode)) {
+                filters.add(new PropertyFilter("CollegeCode", FilterOperator.EQUAL, collegeCode));
+            }
 
             final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
             query.setCurrentPageNum(pageNum).setPageSize(XZBServletListener.PAGE_SIZE * 3);

@@ -123,7 +123,7 @@ public class ItemService {
                 for (final JSONObject k : ret) { // 去重
                     if (j.optInt("KeyID") == k.optInt("KeyID")) {
                         duplicated = true;
-                        
+
                         break;
                     }
                 }
@@ -133,7 +133,7 @@ public class ItemService {
                     j.put("fromUser", userRepository.get(j.getString("FromID")));
                     j.put("count", whisperRepository.count(new Query().setFilter(new PropertyFilter("KeyID", FilterOperator.EQUAL, j.getInt("KeyID")))));
                     j.put("type", "w"); // 类型是悄悄话
-                    
+
                     ret.add(j);
                 }
             }
@@ -389,7 +389,9 @@ public class ItemService {
             final List<Filter> filters = new ArrayList<Filter>();
             filters.add(new PropertyFilter("AreaCode", FilterOperator.EQUAL, areaCode));
             filters.add(new PropertyFilter("UniversityCode", FilterOperator.EQUAL, universityCode));
-            filters.add(new PropertyFilter("CollegeCode", FilterOperator.EQUAL, collegeCode));
+            if (!"-1".equals(collegeCode)) {
+                filters.add(new PropertyFilter("CollegeCode", FilterOperator.EQUAL, collegeCode));
+            }
             filters.add(new PropertyFilter("ItemType", FilterOperator.EQUAL, type));
             filters.add(new PropertyFilter("DemandOrService", FilterOperator.EQUAL, 1)); // 服务
 
@@ -442,7 +444,9 @@ public class ItemService {
             final List<Filter> filters = new ArrayList<Filter>();
             filters.add(new PropertyFilter("AreaCode", FilterOperator.EQUAL, areaCode));
             filters.add(new PropertyFilter("UniversityCode", FilterOperator.EQUAL, universityCode));
-            filters.add(new PropertyFilter("CollegeCode", FilterOperator.EQUAL, collegeCode));
+            if (!"-1".equals(collegeCode)) {
+                filters.add(new PropertyFilter("CollegeCode", FilterOperator.EQUAL, collegeCode));
+            }
             filters.add(new PropertyFilter("ItemType", FilterOperator.EQUAL, type));
             filters.add(new PropertyFilter("DemandOrService", FilterOperator.EQUAL, 0)); // 需求
 

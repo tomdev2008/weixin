@@ -183,7 +183,10 @@ public class QuestionService {
             final List<Filter> filters = new ArrayList<Filter>();
             filters.add(new PropertyFilter("AreaCode", FilterOperator.EQUAL, areaCode));
             filters.add(new PropertyFilter("UniversityCode", FilterOperator.EQUAL, universityCode));
-            filters.add(new PropertyFilter("CollegeCode", FilterOperator.EQUAL, collegeCode));
+
+            if (!"-1".equals(collegeCode)) {
+                filters.add(new PropertyFilter("CollegeCode", FilterOperator.EQUAL, collegeCode));
+            }
 
             final String type = community.optString("type");
             if ("1".equals(type)) { // 最新
