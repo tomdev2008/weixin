@@ -16,7 +16,7 @@
                 </a>
                 <div class="list-content">
                     <a href="/user-card?type${type}&userName=${followingUser.userName}">
-                        <div class="fn-clear">
+                        <div class="fn-clear" style="word-wrap: break-word; white-space: normal; word-break: break-all; width: 72%;">
                             <#if followingUser.Property == 0>
                             <span class="fn-left ico-qa">学生</span>
                             <#else>
@@ -71,7 +71,7 @@
                         + '</a>'
                         + '<div class="list-content">'
                         + '<a href="/user-card?type=${type}&userName=' + obj.userName + '">'
-                        + '<div class="fn-clear">' + type
+                        + '<div class="fn-clear" style="word-wrap: break-word; white-space: normal; word-break: break-all; width: 72%;">' + type
                         + '<span class="fn-left ft-dark">&nbsp;' + obj.userName + '</span>'
                         + identification
                         + '</div>'
