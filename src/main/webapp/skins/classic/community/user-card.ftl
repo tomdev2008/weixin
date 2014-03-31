@@ -5,11 +5,13 @@
         <@meta title="${user.card.PropertyTitle} - 新助邦"/>
     </head>
     <body>
-        <header>
-            <#if Area != "">
-            ${Area}-${University}<#if CollegeCode != "-1">-${College}</#if>
-            </#if>
-            <a href="/admin/set-community">圈子设置</a>
+        <header class="fn-clear">
+            <div class="fn-left" style="width: 75%;">         
+                <#if Area != "">
+                ${Area}-${University}<#if CollegeCode != "-1">-${College}</#if>
+                </#if>
+            </div>
+            <a class="fn-right" href="/admin/set-community">圈子设置</a>
         </header>
         <#include "../common/community-nav.ftl">
         <ul class="list">
@@ -79,7 +81,7 @@
             </li>
             </#list>
         </ul>
-        <a class="ft-green user-card-msg" href="/guest-book?toMemberID=${user.id?c}&form=user">
+        <a class="user-card-msg" href="/guest-book?toMemberID=${user.id?c}&form=user">
             给 Ta 留言
         </a>
         <script src="/js/lib/jquery-2.1.0.min.js"></script>
