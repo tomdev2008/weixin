@@ -32,7 +32,7 @@
                             ${userCard.PropertyTitle}
                         </div>
                     </a>
-                    <span class="ft-green follow"<#if userCard.isFollow> style="color: #F48A00"</#if> onclick=<#if isLoggedIn>"community.follow(${userCard.T_User_ID?c}, this)"<#else>"window.location.href='/login'"</#if>><#if userCard.isFollow>取消关注<#else>关注</#if></span>
+                    <span class="ft-green follow"<#if userCard.isFollow> style="color: #F48A00"</#if> onclick=<#if isLoggedIn>"community.follow(${userCard.ID?c}, this)"<#else>"window.location.href='/login'"</#if>><#if userCard.isFollow>取消关注<#else>关注</#if></span>
                 </div>
             </li>
             </#list>

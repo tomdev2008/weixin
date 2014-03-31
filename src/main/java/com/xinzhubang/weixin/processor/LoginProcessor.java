@@ -24,6 +24,8 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.b3log.latke.Keys;
+import org.b3log.latke.mail.MailService;
+import org.b3log.latke.mail.MailServiceFactory;
 import org.b3log.latke.model.User;
 import org.b3log.latke.servlet.HTTPRequestContext;
 import org.b3log.latke.servlet.HTTPRequestMethod;
@@ -52,6 +54,8 @@ public class LoginProcessor {
 
     @Inject
     private UserService userService;
+
+    private final MailService mailService = MailServiceFactory.getMailService();
 
     /**
      * 展示登录页面.
@@ -147,6 +151,34 @@ public class LoginProcessor {
     }
 
     /**
+     * 忘记密码.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/forget-password", method = HTTPRequestMethod.POST)
+    public void forgetPwd(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final JSONRenderer renderer = new JSONRenderer();
+        context.setRenderer(renderer);
+        final JSONObject ret = new JSONObject();
+        ret.put(Keys.STATUS_CODE, true);
+        renderer.setJSONObject(ret);
+
+        final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
+        final String email = requestJSONObject.getString("email");
+
+        final MailService.Message message = new MailService.Message();
+        message.addRecipient(email);
+        message.setSubject("新助邦 - 找回密码");
+        message.setHtmlBody("邮件发送测试");
+
+        // mailService.send(message);
+    }
+
+    /**
      * 展示注册页面.
      *
      * @param context the specified context
@@ -198,7 +230,7 @@ public class LoginProcessor {
         }
 
         requestJSONObject.put("password", DESs.encrypt(password, "XHJY"));
-        
+
         userService.addUser(requestJSONObject);
         ret.put(Keys.STATUS_CODE, true);
         ret.put(Keys.MSG, "注册成功，请登录！");

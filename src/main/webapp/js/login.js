@@ -52,14 +52,14 @@ var login = {
             tip.show("注册失败", "帐号不能为空");
         } else if ($.trim($("#password").val()).length === 0) {
             tip.show("注册失败", "密码不能为空");
-        }else if ($.trim($("#account").val()).length === 0) {
+        } else if ($.trim($("#account").val()).length === 0) {
             tip.show("注册失败", "邮箱不能为空");
-        }else if ($.trim($("#confirmPassword").val()).length === 0) {
+        } else if ($.trim($("#confirmPassword").val()).length === 0) {
             tip.show("注册失败", "确认密码不能为空");
-        }else if ($.trim($("#confirmPassword").val())!== $.trim($("#password").val())) {
+        } else if ($.trim($("#confirmPassword").val()) !== $.trim($("#password").val())) {
             tip.show("注册失败", "两次输入的密码不一致，请重新输入！");
         } else {
-              var requestJSONObject = {
+            var requestJSONObject = {
                 email: $.trim($("#email").val()),
                 user_name: $.trim($("#account").val()),
                 password: $.trim($("#password").val())
@@ -73,7 +73,7 @@ var login = {
                 success: function(result, textStatus) {
                     if (result.sc) {
                         tip.show("注册成功！", result.msg);
-                        $("#tipContent").next().text("GO").attr("onclick", "window.location='/login'");                       
+                        $("#tipContent").next().text("GO").attr("onclick", "window.location='/login'");
                     } else {
                         tip.show("登录失败", result.msg);
                     }
@@ -85,7 +85,21 @@ var login = {
         if ($.trim($("#email").val()).length === 0) {
             tip.show("找回密码失败", "邮箱不能为空");
         } else {
-
+            var requestJSONObject = {
+                email: $.trim($("#email").val())
+            };
+            
+            $.ajax({
+                url: "/forget-password",
+                type: "POST",
+                cache: false,
+                data: JSON.stringify(requestJSONObject),
+                success: function(result, textStatus) {
+                    if (result.sc) {
+                        
+                    }
+                }
+            });
         }
     }
 };

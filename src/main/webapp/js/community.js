@@ -152,11 +152,11 @@ var community = {
             });
         }
     },
-    follow: function(userId, it) {
+    follow: function(userCardId, it) {
         var $it = $(it),
-                url = "/follow/user?id=" + userId;
+                url = "/follow/user?id=" + userCardId;
         if ($it.text() !== "关注") {
-            url = "/unfollow/user?id=" + userId;
+            url = "/unfollow/user?id=" + userCardId;
         }
 
         $.ajax({
@@ -188,8 +188,7 @@ var community = {
             data: JSON.stringify(requestJSONObject),
             success: function(result, textStatus) {
                 if (result.sc) {
-                    tip.show("答案采纳成功！");
-                    $("#tipContent").next().text("GO").attr("onclick", "window.location='question-details?id=" + sc.qid + "'");
+                    window.location = '/question-details?id=' + qid;
                 } else {
                     tip.show("提示", result.msg);
                 }

@@ -36,7 +36,7 @@
                             </#if>
                         </div>
                     </a>
-                    <span class="ft-green follow" style="color: #F48A00" onclick=<#if isLoggedIn>"community.follow(${followingUser.T_User_ID?c}, this)"<#else>"window.location.href='/login'"</#if>><#if followingUser.isFollow>取消关注<#else>关注</#if></span>
+                    <span class="ft-green follow" style="color: #F48A00" onclick=<#if isLoggedIn>"community.follow(${followingUser.ID?c}, this)"<#else>"window.location.href='/login'"</#if>><#if followingUser.isFollow>取消关注<#else>关注</#if></span>
                 </div>
             </li>
             </#list>

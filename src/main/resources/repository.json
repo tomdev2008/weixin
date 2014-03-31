@@ -1,6 +1,6 @@
 {
     "description": "Description of repository structures, for generation (DDL: http://en.wikipedia.org/wiki/Data_Definition_Language) of the relational database table and persistence validation.",
-    "version": "1.3.1.0, Mar 25, 2014",
+    "version": "1.4.1.0, Mar 31, 2014",
     "authors": ["Liang Ding"],
     "since": "1.0.0",
     "repositories": [
@@ -471,15 +471,30 @@
             ]
         },
         {
-            "name": "UserAttention",
+            "name": "UserCollection",
             "keys": [
                 {
                     "name": "MemberID",
                     "type": "int"
                 },
                 {
-                    "name": "AttentionMemberID",
+                    "name": "ItemID",
                     "type": "int"
+                },
+                {
+                    "name": "CollectionType",
+                    "type": "int"
+                },
+                {
+                    "name": "Memo",
+                    "type": "String",
+                    "length": 500,
+                    "nullable": true
+                },
+                {
+                    "name": "AddDatetime",
+                    "type": "Datetime",
+                    "nullable": true
                 }
             ]
         },

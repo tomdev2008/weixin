@@ -168,9 +168,9 @@ public class UserProcessor {
         }
 
         for (final JSONObject userCard : userCards) {
-            final String uId = userCard.optString("T_User_ID");
+            final String cardId = userCard.optString("ID");
             if (null != currUser) {
-                userCard.put("isFollow", userService.isFollow(currUser.optString("id"), uId));
+                userCard.put("isFollow", userService.isFollow(currUser.optString("id"), cardId));
             } else {
                 userCard.put("isFollow", false);
             }
@@ -503,13 +503,13 @@ public class UserProcessor {
         final JSONObject user = (JSONObject) request.getAttribute("user");
         final String memberId = user.optString("id");
 
-        final String attentionMemberId = request.getParameter("id");
+        final String attentionCardId = request.getParameter("id");
 
         final JSONObject userAttention = new JSONObject();
         userAttention.put("MemberID", Integer.valueOf(memberId));
-        userAttention.put("AttentionMemberID", Integer.valueOf(attentionMemberId));
+        userAttention.put("ItemID", Integer.valueOf(attentionCardId));
 
-        final boolean succ = userService.addUserAttention(userAttention);
+        final boolean succ = userService.addUserCardAttention(userAttention);
 
         ret.put(Keys.STATUS_CODE, succ);
         if (!succ) {
@@ -538,9 +538,9 @@ public class UserProcessor {
         final JSONObject user = (JSONObject) request.getAttribute("user");
         final String memberId = user.optString("id");
 
-        final String attentionMemberId = request.getParameter("id");
+        final String attentionCardId = request.getParameter("id");
 
-        final boolean succ = userService.removeUserAttention(Integer.valueOf(memberId), Integer.valueOf(attentionMemberId));
+        final boolean succ = userService.removeUserAttention(memberId, attentionCardId);
 
         ret.put(Keys.STATUS_CODE, succ);
         if (!succ) {

@@ -20,17 +20,17 @@ import org.b3log.latke.repository.AbstractRepository;
 import org.b3log.latke.repository.annotation.Repository;
 
 /**
- * 用户关注数据存取.
+ * 用户收藏数据存取.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.0.0, Mar 18, 2014
+ * @version 1.0.0.0, Mar 31, 2014
  * @since 1.0.0
  */
 @Repository
-public class UserAttentionRepository extends AbstractRepository {
+public class UserCollectionRepository extends AbstractRepository {
 
-    public UserAttentionRepository() {
-        super("UserAttention");
+    public UserCollectionRepository() {
+        super("UserCollection");
     }
     
 }

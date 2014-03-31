@@ -18,7 +18,7 @@ package com.xinzhubang.weixin.service;
 import com.xinzhubang.weixin.XZBServletListener;
 import com.xinzhubang.weixin.repository.GuestBookRepository;
 import com.xinzhubang.weixin.repository.SchoolRepository;
-import com.xinzhubang.weixin.repository.UserAttentionRepository;
+import com.xinzhubang.weixin.repository.UserCollectionRepository;
 import com.xinzhubang.weixin.repository.UserCardRepository;
 import com.xinzhubang.weixin.repository.UserInfoRepository;
 import com.xinzhubang.weixin.repository.UserRepository;
@@ -54,7 +54,7 @@ import org.json.JSONObject;
  * 用户服务.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.3.2.0, Mar 29, 2014
+ * @version 1.3.3.0, Mar 31, 2014
  * @since 1.0.0
  */
 @Service
@@ -72,7 +72,7 @@ public class UserService {
     private UserInfoRepository userInfoRepository;
 
     @Inject
-    private UserAttentionRepository userAttentionRepository;
+    private UserCollectionRepository userCollectionRepository;
 
     @Inject
     private SchoolRepository schoolRepository;
@@ -100,7 +100,7 @@ public class UserService {
                 j.put("toUser", userRepository.get(j.getString("MemberID")));
                 j.put("fromUser", userRepository.get(j.getString("SendID")));
                 j.put("CreateTime", j.optString("PostTime"));
-                
+
                 j.put("type", "gb"); // 类型是留言
             }
 
@@ -207,18 +207,17 @@ public class UserService {
             final Query query = new Query().setFilter(new PropertyFilter("MemberID", FilterOperator.EQUAL, userId));
             query.setCurrentPageNum(pageNum).setPageSize(XZBServletListener.PAGE_SIZE);
 
-            final JSONObject result = userAttentionRepository.get(query);
+            final JSONObject result = userCollectionRepository.get(query);
 
             final List<JSONObject> ret = new ArrayList<JSONObject>();
 
             final JSONArray attentions = result.optJSONArray(Keys.RESULTS);
             for (int i = 0; i < attentions.length(); i++) {
                 final JSONObject attention = attentions.optJSONObject(i);
-                final String followingUserId = attention.optString("AttentionMemberID");
+                final String followingCardId = attention.optString("ItemID");
 
-                final List<JSONObject> userCards = getUserCard(followingUserId, "a");
-
-                for (final JSONObject card : userCards) {
+                final JSONObject card = getUserCard(followingCardId);
+                if (null != card) {
                     ret.add(card);
                 }
             }
@@ -240,6 +239,29 @@ public class UserService {
             LOGGER.log(Level.ERROR, "获取用户关注列表异常", e);
 
             return Collections.emptyList();
+        }
+    }
+
+    public JSONObject getUserCard(final String cardId) {
+        try {
+            final JSONObject ret = userCardRepository.get(cardId);
+
+            if (null == ret) {
+                return null;
+            }
+
+            final String userId = ret.optString("T_User_ID");
+
+            final JSONObject user = userRepository.get(userId);
+            ret.put("userName", user.optString("user_name"));
+            ret.put("nickName", user.optString("nick_name"));
+            ret.put("Memberlevels", user.optString("Memberlevels"));
+
+            return ret;
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "查询用户名片 [cardId=" + cardId + "] 异常", e);
+
+            return null;
         }
     }
 
@@ -432,54 +454,76 @@ public class UserService {
         return id;
     }
 
-    public boolean isFollow(final String memberId, final String attentionMemberId) {
+    public boolean isFollow(final String memberId, final String attentionCardId) {
         try {
             final List<Filter> filters = new ArrayList<Filter>();
             filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, memberId));
-            filters.add(new PropertyFilter("AttentionMemberID", FilterOperator.EQUAL, attentionMemberId));
+            filters.add(new PropertyFilter("ItemID", FilterOperator.EQUAL, attentionCardId));
 
             final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
 
-            final JSONObject result = userAttentionRepository.get(query);
+            final JSONObject result = userCollectionRepository.get(query);
 
             return null != result.optJSONArray(Keys.RESULTS).optJSONObject(0);
         } catch (final RepositoryException e) {
-            LOGGER.log(Level.ERROR, "查询用户关注 [memberId=" + memberId + ", attentionMemberId=" + attentionMemberId + "] 异常", e);
+            LOGGER.log(Level.ERROR, "查询用户名片关注 [memberId=" + memberId + ", attentionCardId=" + attentionCardId + "] 异常", e);
 
             return false;
         }
     }
 
+    /**
+     * 用户名片关注（名片收藏）.
+     *
+     * @param userCardAttention
+     * @return
+     */
     @Transactional
-    public boolean addUserAttention(final JSONObject userAttention) {
+    public boolean addUserCardAttention(final JSONObject userCardAttention) {
         try {
-            userAttentionRepository.add(userAttention);
-
-            return true;
-        } catch (final RepositoryException e) {
-            LOGGER.log(Level.ERROR, "添加用户关注 [" + userAttention.toString() + "] 异常", e);
-
-            return false;
-        }
-    }
-
-    @Transactional
-    public boolean removeUserAttention(final int memberId, final int attentionMemberId) {
-        try {
+            final String userId = userCardAttention.optString("MemberID");
+            final String cardId = userCardAttention.optString("ItemID");
+            
             final List<Filter> filters = new ArrayList<Filter>();
-            filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, memberId));
-            filters.add(new PropertyFilter("AttentionMemberID", FilterOperator.EQUAL, attentionMemberId));
+            filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, userId));
+            filters.add(new PropertyFilter("ItemID", FilterOperator.EQUAL, cardId));
 
             final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
 
-            final JSONObject result = userAttentionRepository.get(query);
-            final JSONObject attention = result.optJSONArray(Keys.RESULTS).optJSONObject(0);
+            final JSONObject result = userCollectionRepository.get(query);
+            if (null != result.optJSONArray(Keys.RESULTS).optJSONObject(0)) { // 已经关注过了
+                return true;
+            }
+            
+            userCardAttention.put("CollectionType", 3);
 
-            userAttentionRepository.remove(attention.optString("ID"));
+            userCollectionRepository.add(userCardAttention);
 
             return true;
         } catch (final RepositoryException e) {
-            LOGGER.log(Level.ERROR, "移除用户关注 [memberId=" + memberId + ", attentionMemberId=" + attentionMemberId + "] 异常", e);
+            LOGGER.log(Level.ERROR, "添加用户名片关注 [" + userCardAttention.toString() + "] 异常", e);
+
+            return false;
+        }
+    }
+
+    @Transactional
+    public boolean removeUserAttention(final String memberId, final String attentionCardId) {
+        try {
+            final List<Filter> filters = new ArrayList<Filter>();
+            filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, memberId));
+            filters.add(new PropertyFilter("ItemID", FilterOperator.EQUAL, attentionCardId));
+
+            final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+
+            final JSONObject result = userCollectionRepository.get(query);
+            final JSONObject attention = result.optJSONArray(Keys.RESULTS).optJSONObject(0);
+
+            userCollectionRepository.remove(attention.optString("ID"));
+
+            return true;
+        } catch (final RepositoryException e) {
+            LOGGER.log(Level.ERROR, "移除用户关注 [memberId=" + memberId + ", attentionCardId=" + attentionCardId + "] 异常", e);
 
             return false;
         }
