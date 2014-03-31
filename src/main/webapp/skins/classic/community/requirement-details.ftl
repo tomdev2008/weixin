@@ -59,11 +59,11 @@
                 </div>
             </div>
             <div class="fn-clear">
-                <button class="button fn-left" 
-                        onclick="window.location = '/whisper?itemID=${requirement.ID?c}&toMemberID=${requirement.MemberID?c}'">说悄悄话</button>
                 <#if requirement.MemberID == currUser.id>
                 <button class="button fn-right" onclick='tip.show("温馨提示", "功能正在开发中，敬请期待");'>补充说明</button>
                 <#else>
+                <button class="button fn-left" 
+                        onclick="window.location = '/whisper?itemID=${requirement.ID?c}&toMemberID=${requirement.MemberID?c}'">说悄悄话</button>
                 <#if requirement.ItemType != 1>
                 <button class="button fn-right" onclick='tip.show("温馨提示", "功能正在开发中，敬请期待");'>我要投标</button>
                 </#if>
