@@ -53,7 +53,7 @@
                             ${a.AddTime?string('yyyy-MM-dd')}
                         </span>
                         <#if a.Best == 0>
-                        <#if 0 == question.BestAnswer>
+                        <#if 0 == question.BestAnswer && currUser.id?c == question.AddUserID?c>
                         <span onclick="community.questionAccept(${question.ID?c}, ${a.ID?c})" class="ft-green fn-right question-accept">采纳</span>
                         </#if>
                         <#else>
