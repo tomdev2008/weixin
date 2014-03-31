@@ -29,9 +29,9 @@
             <#if list??>
             <#list list as l>
             <#if message.ID != l.ID>
-            <li class="fn-clear">
+            <li class="fn-clear<#if currUser.id == l.fromUser.id> my</#if>">
                 <img class="list-view" src="/images/default-user-thumbnail.png"/>
-                <div class="list-content">
+                <div class="list-content" style="width: 80%">
                     <div class="fn-clear">
                         <span class="fn-left">${l.fromUser.user_name}</span>
                          <#if l.fromUser.IDCardStatus != 0>

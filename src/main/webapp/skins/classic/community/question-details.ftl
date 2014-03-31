@@ -65,7 +65,7 @@
             </#list>
             </#if>
         </ul>
-        <a class="ft-green user-card-msg" href="/question-answer?id=${question.ID?c}">回 答</a>
+        <a class="user-card-msg" href="/question-answer?id=${question.ID?c}">回 答</a>
         <#include "../common/tip.ftl">
         <script src="/js/lib/jquery-2.1.0.min.js"></script>
         <script src="/js/common.js"></script>

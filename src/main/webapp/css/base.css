@@ -414,6 +414,20 @@ footer {
     text-align: center;
     cursor: pointer;
 }
+
+.list .my {
+}
+
+.list .my .list-view {
+    float: right;
+}
+
+.list .my .list-content {
+    float: right;
+    padding: 0 0.85em;
+    max-width: 80%;
+    width: auto !important;
+}
 /* end list */
 
 /* start sale */
