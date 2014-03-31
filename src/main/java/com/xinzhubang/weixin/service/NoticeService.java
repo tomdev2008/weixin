@@ -23,12 +23,16 @@ package com.xinzhubang.weixin.service;
 import com.xinzhubang.weixin.XZBServletListener;
 import com.xinzhubang.weixin.repository.NoticeRepository;
 import com.xinzhubang.weixin.repository.UserRepository;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 import org.b3log.latke.Keys;
 import org.b3log.latke.logging.Level;
 import org.b3log.latke.logging.Logger;
+import org.b3log.latke.repository.CompositeFilter;
+import org.b3log.latke.repository.CompositeFilterOperator;
+import org.b3log.latke.repository.Filter;
 import org.b3log.latke.repository.FilterOperator;
 import org.b3log.latke.repository.PropertyFilter;
 import org.b3log.latke.repository.Query;
@@ -53,18 +57,26 @@ public class NoticeService {
 
     @Inject
     private NoticeRepository noticeRepository;
+
     @Inject
     private UserRepository userRepository;
+
     /**
      * 获取通知列表.
      *
+     * @param toUserId 接收者 id
      * @param msgType
      * @param pageNum
      * @return
      */
-    public List<JSONObject> getNotices(final int msgType, final int pageNum) {
+    public List<JSONObject> getNotices(final String toUserId, final int msgType, final int pageNum) {
         try {
-            final Query query = new Query().setFilter(new PropertyFilter("MsgType", FilterOperator.EQUAL, msgType));
+            final List<Filter> filters = new ArrayList<Filter>();
+            filters.add(new PropertyFilter("MsgType", FilterOperator.EQUAL, msgType));
+            filters.add(new PropertyFilter("ReviceID", FilterOperator.EQUAL, toUserId));
+
+            final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+
             query.setCurrentPageNum(pageNum).setPageSize(XZBServletListener.PAGE_SIZE);
 
             query.addSort("PostTime", SortDirection.DESCENDING);

@@ -153,6 +153,21 @@ public class QuestionService {
             question.put("BestAnswerTime", new Timestamp(System.currentTimeMillis()));
 
             questionRepository.update(questionId + "", question);
+
+            // 3. 添加一条通知
+            final JSONObject notice = new JSONObject();
+            final int answerUserId = answer.optInt("AddUserID");
+            final int questonUserId = question.optInt("AddUserID");
+            final String content = "您对提问 \"" + question.optString("Title") + "\" 的回答已被采纳";
+
+            notice.put("MemberID", questonUserId);
+            notice.put("ReviceID", answerUserId);
+            notice.put("NoticeContent", content);
+            notice.put("IsRead", 0); // 默认已读
+            notice.put("MsgType", 20);
+            notice.put("CorrID", questionId);
+
+            noticeService.addNotice(notice);
         } catch (final Exception ex) {
             LOGGER.log(Level.ERROR, "保存回答出错！", ex);
         }
