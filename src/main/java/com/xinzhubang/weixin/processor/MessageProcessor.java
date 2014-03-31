@@ -17,6 +17,7 @@ package com.xinzhubang.weixin.processor;
 
 import com.xinzhubang.weixin.processor.advice.LoginCheck;
 import com.xinzhubang.weixin.service.ItemService;
+import com.xinzhubang.weixin.service.NoticeService;
 import com.xinzhubang.weixin.service.UserService;
 import com.xinzhubang.weixin.util.Filler;
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ import org.json.JSONObject;
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.2.0.0, Mar 24, 2014
+ * @version 1.3.0.0, Mar 31, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -62,6 +63,9 @@ public class MessageProcessor {
 
     @Inject
     private UserService userService;
+    
+    @Inject
+    private NoticeService noticeService;
 
     /**
      * 展示发送悄悄话页面.
@@ -254,9 +258,12 @@ public class MessageProcessor {
 
         final List<JSONObject> whispers = itemService.getWhispersByUserId(userId, pageNum);
         final List<JSONObject> guestBooks = userService.getGuestBooksByUserId(userId, pageNum);
+        final List<JSONObject> answers = noticeService.getNotices(20, pageNum); // 20 提问回答通知
+        
         final List<JSONObject> messages = new ArrayList<JSONObject>();
         messages.addAll(whispers);
         messages.addAll(guestBooks);
+        messages.addAll(answers);
 
         Collections.sort(messages, new Comparator<JSONObject>() {
 

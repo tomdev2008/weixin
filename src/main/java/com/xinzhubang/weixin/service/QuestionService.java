@@ -51,7 +51,7 @@ import org.json.JSONObject;
  * 用户提问。
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.4.0, Mar 29, 2014
+ * @version 1.2.4.0, Mar 31, 2014
  * @since 1.0.0
  */
 @Service
@@ -67,6 +67,9 @@ public class QuestionService {
 
     @Inject
     private AnswerRepository answerRepository;
+
+    @Inject
+    private NoticeService noticeService;
 
     /**
      * 添加提问
@@ -100,6 +103,24 @@ public class QuestionService {
             answer.put("Agree", 0);
 
             answerRepository.add(answer);
+
+            final int questionId = answer.optInt("QID");
+            final JSONObject question = questionRepository.get(questionId + "");
+
+            // 添加一条通知
+            final JSONObject notice = new JSONObject();
+            final int memberId = answer.optInt("AddUserID");
+            final int reviceId = question.optInt("AddUserID");
+            final String content = "您的提问 \"" + question.optString("Title") + "\" 收到了一条回答";
+
+            notice.put("MemberID", memberId);
+            notice.put("ReviceID", reviceId);
+            notice.put("NoticeContent", content);
+            notice.put("IsRead", 0); // 默认已读
+            notice.put("MsgType", 20);
+            notice.put("CorrID", questionId);
+
+            noticeService.addNotice(notice);
         } catch (RepositoryException ex) {
             LOGGER.log(Level.ERROR, "保存回答出错！", ex);
 
@@ -248,10 +269,10 @@ public class QuestionService {
 
     /**
      * 获取指定 id 问题的答案列表.
-     * 
+     *
      * @param id 指定 id 问题
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
     public List<JSONObject> getAnswerByQuestionId(final String id) throws Exception {
         final Query query = new Query().setFilter(new PropertyFilter("QID", FilterOperator.EQUAL, id));

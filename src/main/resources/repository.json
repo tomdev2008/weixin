@@ -1,6 +1,6 @@
 {
     "description": "Description of repository structures, for generation (DDL: http://en.wikipedia.org/wiki/Data_Definition_Language) of the relational database table and persistence validation.",
-    "version": "1.4.1.0, Mar 31, 2014",
+    "version": "1.5.1.0, Mar 31, 2014",
     "authors": ["Liang Ding"],
     "since": "1.0.0",
     "repositories": [
@@ -625,6 +625,42 @@
                     "name": "AuditingTime",
                     "type": "Datetime",
                     "nullable": true
+                }
+            ]
+        },
+        {
+            "name": "MNotice",
+            "keys": [
+                {
+                    "name": "MemberID",
+                    "type": "int"
+                },
+                {
+                    "name": "ReviceID",
+                    "type": "int"
+                },
+                {
+                    "name": "NoticeContent",
+                    "type": "String",
+                    "length": 500
+                },
+                {
+                    "name": "IsRead",
+                    "type": "int"
+                },
+                {
+                    "name": "PostIP",
+                    "type": "String",
+                    "length": 50,
+                    "nullable": true
+                },
+                {
+                    "name": "MsgType",
+                    "type": "int"
+                },
+                {
+                    "name": "CorrID",
+                    "type": "int"
                 }
             ]
         },

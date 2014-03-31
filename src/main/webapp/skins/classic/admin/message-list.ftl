@@ -15,6 +15,7 @@
                     <div class="fn-clear">
                         <#if msg.type == "gb"><span class="fn-left ico-qa">留言</span></#if>
                         <#if msg.type == "w"><span class="fn-left ico-resource">悄悄话</span></#if>
+                        <#if msg.type == "a"><span class="fn-left ico-school">问答</span></#if>
                         <span class="fn-left">&nbsp;${msg.fromUser.user_name}</span>
                         <#if msg.fromUser.IDCardStatus != 0>
                         <span class="ico ico-cater"></span>
@@ -23,6 +24,7 @@
                     <div class="ft-gray">
                         <#if msg.type == "w">${msg.CONTENT}</#if>
                         <#if msg.type == "gb">${msg.GBookContent}</#if>
+                        <#if msg.type == "a">${msg.NoticeContent}</#if>
                     </div>
                     <div class="fn-clear">
                         <#if msg.type == "gb">
@@ -37,6 +39,12 @@
                         </span>
                         <a href="/whisper?itemID=${msg.KeyID?c}&toMemberID=${msg.FromID?c}&id=${msg.ID}" class="fn-right">回复</a>
                         <a href="/admin/message-details?id=${msg.ID}" class="fn-right">${msg.count}条信息 &nbsp; &nbsp;</a>
+                        </#if>
+                        <#if msg.type == "a">
+                        <span class="ft-gray ft-small fn-left">
+                            ${msg.PostTime?string('yyyy-MM-dd HH:mm:ss')}
+                        </span>
+                        <a href="/question-details?id=${msg.CorrID?c}" class="fn-right">查看</a>
                         </#if>
                     </div>
                 </div>
