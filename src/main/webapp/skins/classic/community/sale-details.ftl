@@ -15,7 +15,7 @@
                     <a href="/partner-list">合作方列表</a>
                 </li>
                 <li style="text-align: right">
-                   &nbsp;
+                    &nbsp;
                 </li>
                 <li>
                     <a class="last" href="/sale-publish">发出售</a>
@@ -60,10 +60,14 @@
             </div>
             <div class="fn-clear">
                 <button class="button fn-left" onclick="window.location = '/whisper?itemID=${sale.ID?c}&toMemberID=${sale.MemberID?c}'">说悄悄话</button>
+                <#if sale.MemberID == currUser.id>
+                <button class="button fn-right" onclick='tip.show("温馨提示", "功能正在开发中，敬请期待");'>补充说明</button>
+                <#else>
                 <#if sale.ItemType == 1>
                 <button class="button fn-right" onclick='tip.show("温馨提示", "功能正在开发中，敬请期待");'>我要购买</button>
                 <#else>
                 <button class="button fn-right" onclick='tip.show("温馨提示", "功能正在开发中，敬请期待");'>我要试听</button>
+                </#if>
                 </#if>
             </div>
         </div>

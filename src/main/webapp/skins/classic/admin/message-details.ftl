@@ -6,7 +6,7 @@
     </head>
     <body>
         <#include "../common/admin-nav.ftl">
-        <ul class="list">
+        <ul class="list question">
             <li class="fn-clear">
                 <img class="list-view" src="/images/default-user-thumbnail.png"/>
                 <div class="list-content">

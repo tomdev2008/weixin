@@ -78,6 +78,13 @@
                             + obj.FromID + '&id=' + obj.ID + '" class="fn-right">回复</a>'
                             + '<a href="/admin/message-details?id=' + obj.ID + '" class="fn-right">'
                             + obj.count + '条信息 &nbsp; &nbsp;</a>';
+                } else if (obj.type === "a") {
+                    type = '<span class="fn-left ico-school">问答</span>';
+                    content = obj.NoticeContent;
+                    infoHTML = '<span class="ft-gray ft-small fn-left">'
+                            + obj.PostTime
+                            + '</span>'
+                            + '<a href="/question-details?id=' + obj.CorrID + '" class="fn-right">查看</a>';
                 }
 
                 var liHTML = '<li class="fn-clear">'
