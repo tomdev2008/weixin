@@ -190,7 +190,7 @@ public class UserService {
         result.put("toUser", userRepository.get(memberId));
         result.put("fromUser", userRepository.get(sendId));
         result.put("type", "gb");
-        result.put("list", list);
+        result.put("list", (Object) list);
 
         for (final JSONObject j : list) {
             j.put("toUser", userRepository.get(j.getString("MemberID")));
@@ -198,7 +198,7 @@ public class UserService {
             j.put("type", "gb");
             j.put("CreateTime", j.opt("PostTime"));
         }
-        
+
         Collections.sort(list, new Comparator<JSONObject>() {
 
             @Override

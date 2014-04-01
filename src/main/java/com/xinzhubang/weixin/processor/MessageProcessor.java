@@ -387,9 +387,10 @@ public class MessageProcessor {
         if (StringUtils.isNotEmpty(id)) {
             JSONObject message = userService.getGuestBook(id);
 
-            JSONArray sublist = message.getJSONArray("list");
+            @SuppressWarnings("unchecked")
+            final List<JSONObject> sublist = (List<JSONObject>) message.get("list");
             dataModel.put("message", message);
-            dataModel.put("list", (Object) CollectionUtils.jsonArrayToList(sublist));
+            dataModel.put("list", (Object) sublist);
         }
 
         dataModel.put("type", "message");
