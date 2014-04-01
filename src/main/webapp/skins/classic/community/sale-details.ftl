@@ -36,25 +36,28 @@
                         </#if>
                         ${sale.Name}
                     </div>
-                    <div class="ft-gray">
-                        ${sale.ItemContent}
-                    </div>
-                    <div class="ft-gray">
+                    <div class="ft-gray ft-small">
                         <#if sale.Area != "">
+                        &nbsp; &nbsp;  &nbsp; &nbsp;&nbsp;
                         ${sale.Area}-${sale.University}<#if sale.CollegeCode != "-1">-${sale.College}</#if>
                         </#if>
                     </div>
                     <div class="fn-clear">
-                        <span class="ft-gray fn-left">${sale.userName}</span>
+                        <span class="fn-left"> &nbsp; &nbsp; &nbsp; &nbsp;${sale.userName}</span>
                         <#if sale.IDCardStatus != 0>
                         <span class="ico ico-cater"></span>
                         </#if>
-                    </div>
-                    <div class="fn-clear">
-                        <span class="ft-gray ft-small fn-left">
-                            ${sale.CreateTime?string('yyyy-MM-dd')} &nbsp; 浏览 ${sale.ClickCount}
-                        </span>
+                        <#if sale.user.Memberlevels != "">
+                        <span class="fn-left">&nbsp;</span>
+                        <span class="fn-left ico-school">${sale.user.Memberlevels}</span>
+                        </#if>
                         <span class="ft-green fn-right">￥${sale.Price}</span>
+                    </div>
+                    <div class="ft-gray">
+                        ${sale.ItemContent}
+                    </div>
+                    <div class="ft-gray ft-small">
+                        ${sale.CreateTime?string('yyyy-MM-dd')} &nbsp; 浏览 ${sale.ClickCount}
                     </div>
                 </div>
             </div>

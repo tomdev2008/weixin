@@ -36,25 +36,28 @@
                         </#if>
                         ${requirement.Name}
                     </div>
-                    <div class="ft-gray">
-                        ${requirement.ItemContent}
-                    </div>
-                    <div class="ft-gray">
+                    <div class="ft-gray ft-small">
                         <#if requirement.Area != "">
+                         &nbsp; &nbsp;  &nbsp; &nbsp;&nbsp; 
                         ${requirement.Area}-${requirement.University}<#if requirement.CollegeCode != "-1">-${requirement.College}</#if>
                         </#if>
                     </div>
                     <div class="fn-clear">
-                        <span class="ft-gray fn-left">${requirement.userName}</span>
+                        <span class="fn-left ft-small"> &nbsp; &nbsp;  &nbsp; &nbsp;&nbsp; ${requirement.userName}</span>
                         <#if requirement.IDCardStatus != 0>
                         <span class="ico ico-cater"></span>
                         </#if>
-                    </div>
-                    <div class="fn-clear">
-                        <span class="ft-gray ft-small fn-left">
-                            ${requirement.CreateTime?string('yyyy-MM-dd')} &nbsp; 浏览：${requirement.ClickCount}
-                        </span>
+                        <#if requirement.user.Memberlevels != "">
+                        <span class="fn-left">&nbsp;</span>
+                        <span class="fn-left ico-school">${requirement.user.Memberlevels}</span>
+                        </#if>
                         <span class="ft-green fn-right">￥${requirement.Price}</span>
+                    </div>
+                    <div class="ft-gray">
+                        ${requirement.ItemContent}
+                    </div>
+                    <div class="ft-gray ft-small">
+                        ${requirement.CreateTime?string('yyyy-MM-dd')} &nbsp; 浏览：${requirement.ClickCount}
                     </div>
                 </div>
             </div>
