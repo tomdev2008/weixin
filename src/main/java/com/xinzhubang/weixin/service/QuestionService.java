@@ -100,14 +100,19 @@ public class QuestionService {
     @Transactional
     public boolean addAnswer(final JSONObject answer) {
         try {
+            // 1. 添加回答
             answer.put("Agree", 0);
 
             answerRepository.add(answer);
 
+            // 2. 更新问题的最近回答时间
             final int questionId = answer.optInt("QID");
             final JSONObject question = questionRepository.get(questionId + "");
+            question.put("LastAnswerTime", new Timestamp(System.currentTimeMillis()));
 
-            // 添加一条通知
+            questionRepository.update(questionId + "", question);
+
+            // 3. 添加一条通知
             final JSONObject notice = new JSONObject();
             final int memberId = answer.optInt("AddUserID");
             final int reviceId = question.optInt("AddUserID");
@@ -215,7 +220,7 @@ public class QuestionService {
             final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
             query.setCurrentPageNum(pageNum).setPageSize(XZBServletListener.PAGE_SIZE);
 
-            query.addSort("AddTime", SortDirection.DESCENDING);
+            query.addSort("LastAnswerTime", SortDirection.DESCENDING).addSort("AddTime", SortDirection.DESCENDING);
 
             final JSONObject result = questionRepository.get(query);
 
