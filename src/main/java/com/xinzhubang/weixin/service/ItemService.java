@@ -129,11 +129,15 @@ public class ItemService {
                 }
 
                 if (!duplicated) {
+                    final int keyId = j.getInt("KeyID");
+                    final JSONObject item = itemRepository.get(keyId + "");
+                    j.put("item", item);
+                            
                     j.put("toUser", userRepository.get(j.getString("ToID")));
                     j.put("fromUser", userRepository.get(j.getString("FromID")));
 
                     List<Filter> filters = new ArrayList<Filter>();
-                    filters.add(new PropertyFilter("KeyID", FilterOperator.EQUAL, j.getInt("KeyID")));
+                    filters.add(new PropertyFilter("KeyID", FilterOperator.EQUAL, keyId));
                     filters.add(new PropertyFilter("FromID", FilterOperator.EQUAL, j.getString("FromID")));
                     filters.add(new PropertyFilter("ToID", FilterOperator.EQUAL, j.getString("ToID")));
 
@@ -141,7 +145,7 @@ public class ItemService {
                     final long c1 = whisperRepository.count(q);
 
                     filters = new ArrayList<Filter>();
-                    filters.add(new PropertyFilter("KeyID", FilterOperator.EQUAL, j.getInt("KeyID")));
+                    filters.add(new PropertyFilter("KeyID", FilterOperator.EQUAL, keyId));
                     filters.add(new PropertyFilter("FromID", FilterOperator.EQUAL, j.getString("ToID")));
                     filters.add(new PropertyFilter("ToID", FilterOperator.EQUAL, j.getString("FromID")));
 
@@ -173,11 +177,15 @@ public class ItemService {
      */
     public JSONObject getWhisper(final String id) throws RepositoryException, JSONException {
         final JSONObject result = whisperRepository.get(id);
+        
+        final int keyId = result.getInt("KeyID");
+        final JSONObject item = itemRepository.get(keyId + "");
+        result.put("item", item);
 
         final List<JSONObject> list = new ArrayList<JSONObject>();
 
         List<Filter> filters = new ArrayList<Filter>();
-        filters.add(new PropertyFilter("KeyID", FilterOperator.EQUAL, result.getInt("KeyID")));
+        filters.add(new PropertyFilter("KeyID", FilterOperator.EQUAL, keyId));
         filters.add(new PropertyFilter("FromID", FilterOperator.EQUAL, result.getString("FromID")));
         filters.add(new PropertyFilter("ToID", FilterOperator.EQUAL, result.getString("ToID")));
 
@@ -186,7 +194,7 @@ public class ItemService {
         list.addAll(CollectionUtils.<JSONObject>jsonArrayToList(array));
 
         filters = new ArrayList<Filter>();
-        filters.add(new PropertyFilter("KeyID", FilterOperator.EQUAL, result.getInt("KeyID")));
+        filters.add(new PropertyFilter("KeyID", FilterOperator.EQUAL, keyId));
         filters.add(new PropertyFilter("FromID", FilterOperator.EQUAL, result.getString("ToID")));
         filters.add(new PropertyFilter("ToID", FilterOperator.EQUAL, result.getString("FromID")));
 
@@ -199,9 +207,7 @@ public class ItemService {
         result.put("type", "w");
         result.put("list", list);
 
-        for (int i = 0; i < list.size(); i++) {
-            final JSONObject j = list.get(i);
-
+        for (final JSONObject j : list) {
             j.put("toUser", userRepository.get(j.getString("ToID")));
             j.put("fromUser", userRepository.get(j.getString("FromID")));
             j.put("type", "w");

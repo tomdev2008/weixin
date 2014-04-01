@@ -22,7 +22,7 @@
                         </#if>
                     </div>
                     <div class="ft-gray">
-                        <#if msg.type == "w">${msg.CONTENT}</#if>
+                        <#if msg.type == "w">(${msg.item.Area}-${msg.item.University}<#if msg.item.CollegeCode != "-1">-${msg.item.College}</#if>) ${msg.item.Name}</#if>
                         <#if msg.type == "gb">${msg.GBookContent}</#if>
                         <#if msg.type == "a">${msg.NoticeContent}</#if>
                     </div>
