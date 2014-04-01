@@ -222,6 +222,7 @@ public class SaleProcessor {
      * @throws Exception exception
      */
     @RequestProcessing(value = "/sale-details", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
     public void showDetails(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();

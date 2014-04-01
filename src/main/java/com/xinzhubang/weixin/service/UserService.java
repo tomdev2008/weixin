@@ -25,6 +25,7 @@ import com.xinzhubang.weixin.repository.UserRepository;
 import com.xinzhubang.weixin.util.Sessions;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
@@ -197,7 +198,17 @@ public class UserService {
             j.put("type", "gb");
             j.put("CreateTime", j.opt("PostTime"));
         }
+        
+        Collections.sort(list, new Comparator<JSONObject>() {
 
+            @Override
+            public int compare(final JSONObject o1, final JSONObject o2) {
+                final String t1 = o1.optString("CreateTime");
+                final String t2 = o2.optString("CreateTime");
+
+                return t2.compareTo(t1);
+            }
+        });
 
         result.put("CreateTime", result.opt("PostTime"));
 
