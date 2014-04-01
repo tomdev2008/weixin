@@ -310,7 +310,11 @@ public class UserService {
      */
     public List<JSONObject> getFollowingUsers(final String userId, final int pageNum) {
         try {
-            final Query query = new Query().setFilter(new PropertyFilter("MemberID", FilterOperator.EQUAL, userId));
+            final List<Filter> filters = new ArrayList<Filter>();
+            filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, userId));
+            filters.add(new PropertyFilter("CollectionType", FilterOperator.EQUAL, 3));
+
+            final Query query = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
             query.setCurrentPageNum(pageNum).setPageSize(XZBServletListener.PAGE_SIZE);
 
             final JSONObject result = userCollectionRepository.get(query);
