@@ -23,6 +23,7 @@ import com.xinzhubang.weixin.repository.WhisperRepository;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.inject.Inject;
 import org.b3log.latke.Keys;
@@ -132,7 +133,7 @@ public class ItemService {
                     final int keyId = j.getInt("KeyID");
                     final JSONObject item = itemRepository.get(keyId + "");
                     j.put("item", item);
-                            
+
                     j.put("toUser", userRepository.get(j.getString("ToID")));
                     j.put("fromUser", userRepository.get(j.getString("FromID")));
 
@@ -177,7 +178,7 @@ public class ItemService {
      */
     public JSONObject getWhisper(final String id) throws RepositoryException, JSONException {
         final JSONObject result = whisperRepository.get(id);
-        
+
         final int keyId = result.getInt("KeyID");
         final JSONObject item = itemRepository.get(keyId + "");
         result.put("item", item);
@@ -205,7 +206,18 @@ public class ItemService {
         result.put("toUser", userRepository.get(result.getString("ToID")));
         result.put("fromUser", userRepository.get(result.getString("FromID")));
         result.put("type", "w");
-        result.put("list", list);
+        result.put("list", (Object) list);
+
+        Collections.sort(list, new Comparator<JSONObject>() {
+
+            @Override
+            public int compare(final JSONObject o1, final JSONObject o2) {
+                final String t1 = o1.optString("CreateTime");
+                final String t2 = o2.optString("CreateTime");
+
+                return t2.compareTo(t1);
+            }
+        });
 
         for (final JSONObject j : list) {
             j.put("toUser", userRepository.get(j.getString("ToID")));
@@ -524,7 +536,7 @@ public class ItemService {
 
             final String userId = ret.getString("MemberID");
             final JSONObject user = userRepository.get(userId);
-            
+
             ret.put("user", user);
 
             ret.put("userName", user.getString("user_name"));

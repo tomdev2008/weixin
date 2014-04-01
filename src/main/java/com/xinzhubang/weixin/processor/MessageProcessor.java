@@ -38,10 +38,8 @@ import org.b3log.latke.servlet.annotation.RequestProcessor;
 import org.b3log.latke.servlet.renderer.JSONRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.AbstractFreeMarkerRenderer;
 import org.b3log.latke.servlet.renderer.freemarker.FreeMarkerRenderer;
-import org.b3log.latke.util.CollectionUtils;
 import org.b3log.latke.util.Requests;
 import org.b3log.latke.util.Strings;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -49,7 +47,7 @@ import org.json.JSONObject;
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.3.2.0, Apr 1, 2014
+ * @version 1.3.3.0, Apr 1, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -351,11 +349,11 @@ public class MessageProcessor {
 
         final Map<String, Object> dataModel = renderer.getDataModel();
         final String id = request.getParameter("id");
+        
         JSONObject message = itemService.getWhisper(id);
 
-        JSONArray sublist = message.getJSONArray("list");
         dataModel.put("message", message);
-        dataModel.put("list", (Object) CollectionUtils.jsonArrayToList(sublist));
+        dataModel.put("list", message.get("list"));
 
         dataModel.put("type", "message");
 
