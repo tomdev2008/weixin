@@ -115,19 +115,26 @@ public class UserService {
 
                     j.put("type", "gb"); // 类型是留言
 
+                    final String memberId = j.getString("MemberID");
+                    final String sendId = j.getString("SendID");
+
                     List<Filter> filters = new ArrayList<Filter>();
-                    filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, j.getString("MemberID")));
-                    filters.add(new PropertyFilter("SendID", FilterOperator.EQUAL, j.getString("SendID")));
+                    filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, memberId));
+                    filters.add(new PropertyFilter("SendID", FilterOperator.EQUAL, sendId));
 
                     Query q = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
                     final long c1 = guestBookRepository.count(q);
 
-                    filters = new ArrayList<Filter>();
-                    filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, j.getString("SendID")));
-                    filters.add(new PropertyFilter("SendID", FilterOperator.EQUAL, j.getString("MemberID")));
+                    long c2 = 0;
+                    // 自己留言给自己，查一次就行，互相留言要反过来再查一次
+                    if (!sendId.equals(memberId)) {
+                        filters = new ArrayList<Filter>();
+                        filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, sendId));
+                        filters.add(new PropertyFilter("SendID", FilterOperator.EQUAL, memberId));
 
-                    q = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
-                    final long c2 = guestBookRepository.count(q);
+                        q = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+                        c2 = guestBookRepository.count(q);
+                    }
 
                     j.put("count", c1 + c2);
 
@@ -155,38 +162,43 @@ public class UserService {
     public JSONObject getGuestBook(final String id) throws RepositoryException, JSONException {
         final JSONObject result = guestBookRepository.get(id);
 
+        final String sendId = result.getString("SendID");
+        final String memberId = result.getString("MemberID");
+
         final List<JSONObject> list = new ArrayList<JSONObject>();
 
         List<Filter> filters = new ArrayList<Filter>();
-        filters.add(new PropertyFilter("SendID", FilterOperator.EQUAL, result.getString("SendID")));
-        filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, result.getString("MemberID")));
+        filters.add(new PropertyFilter("SendID", FilterOperator.EQUAL, sendId));
+        filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, memberId));
 
         Query q = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
         JSONArray array = guestBookRepository.get(q).optJSONArray(Keys.RESULTS);
         list.addAll(CollectionUtils.<JSONObject>jsonArrayToList(array));
 
-        filters = new ArrayList<Filter>();
-        filters.add(new PropertyFilter("SendID", FilterOperator.EQUAL, result.getString("MemberID")));
-        filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, result.getString("SendID")));
+        // 自己留言给自己，查一次就行，互相留言要反过来再查一次
+        if (!sendId.equals(memberId)) {
+            filters = new ArrayList<Filter>();
+            filters.add(new PropertyFilter("SendID", FilterOperator.EQUAL, memberId));
+            filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, sendId));
 
-        q = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
-        array = guestBookRepository.get(q).optJSONArray(Keys.RESULTS);
-        list.addAll(CollectionUtils.<JSONObject>jsonArrayToList(array));
+            q = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+            array = guestBookRepository.get(q).optJSONArray(Keys.RESULTS);
+            list.addAll(CollectionUtils.<JSONObject>jsonArrayToList(array));
+        }
 
-        result.put("toUser", userRepository.get(result.getString("MemberID")));
-        result.put("fromUser", userRepository.get(result.getString("SendID")));
+        result.put("toUser", userRepository.get(memberId));
+        result.put("fromUser", userRepository.get(sendId));
         result.put("type", "gb");
         result.put("list", list);
 
-        for (int i = 0; i < list.size(); i++) {
-            final JSONObject j = list.get(i);
-
+        for (final JSONObject j : list) {
             j.put("toUser", userRepository.get(j.getString("MemberID")));
             j.put("fromUser", userRepository.get(j.getString("SendID")));
             j.put("type", "gb");
             j.put("CreateTime", j.opt("PostTime"));
         }
-        
+
+
         result.put("CreateTime", result.opt("PostTime"));
 
         return result;

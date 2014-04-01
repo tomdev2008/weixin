@@ -518,6 +518,9 @@ public class ItemService {
 
             final String userId = ret.getString("MemberID");
             final JSONObject user = userRepository.get(userId);
+            
+            ret.put("user", user);
+
             ret.put("userName", user.getString("user_name"));
             ret.put("IDCardStatus", user.optInt("IDCardStatus"));
 
@@ -542,6 +545,9 @@ public class ItemService {
 
             final String userId = ret.getString("MemberID");
             final JSONObject user = userRepository.get(userId);
+
+            ret.put("user", user);
+
             ret.put("userName", user.getString("user_name"));
             ret.put("IDCardStatus", user.optInt("IDCardStatus"));
 
