@@ -30,13 +30,14 @@ import org.b3log.latke.service.ServiceException;
 import org.b3log.latke.servlet.HTTPRequestContext;
 import org.b3log.latke.servlet.advice.BeforeRequestProcessAdvice;
 import org.b3log.latke.servlet.advice.RequestProcessAdviceException;
+import org.b3log.latke.util.Strings;
 import org.json.JSONObject;
 
 /**
  * 登录检查，如果登录了，则把当前登录用户放到请求对象的属性里，属性名 "user".
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.0.0, Mar 14, 2014
+ * @version 1.1.0.0, Apr 2, 2014
  * @since 1.0.0
  */
 @Named
@@ -55,23 +56,41 @@ public class LoginCheck extends BeforeRequestProcessAdvice {
     public void doAdvice(final HTTPRequestContext context, final Map<String, Object> args) throws RequestProcessAdviceException {
         final HttpServletRequest request = context.getRequest();
 
-        final JSONObject exception = new JSONObject();
-        exception.put(Keys.MSG, HttpServletResponse.SC_FORBIDDEN);
-        exception.put(Keys.STATUS_CODE, HttpServletResponse.SC_FORBIDDEN);
+        final JSONObject exception403 = new JSONObject();
+        exception403.put(Keys.MSG, HttpServletResponse.SC_FORBIDDEN);
+        exception403.put(Keys.STATUS_CODE, HttpServletResponse.SC_FORBIDDEN);
+        
+        final JSONObject exception412 = new JSONObject();
+        exception412.put(Keys.MSG, HttpServletResponse.SC_PRECONDITION_FAILED);
+        exception412.put(Keys.STATUS_CODE, HttpServletResponse.SC_PRECONDITION_FAILED);
 
         try {
+            // 未登录：403
             JSONObject currentUser = userService.getCurrentUser(request);
             if (null == currentUser && !userService.tryLogInWithCookie(request, context.getResponse())) {
-                throw new RequestProcessAdviceException(exception);
+                throw new RequestProcessAdviceException(exception403);
             }
             
             currentUser = userService.getCurrentUser(request);
 
             request.setAttribute(User.USER, currentUser);
+            
+            // 未设置圈子：412
+            final String requestURI = request.getRequestURI();
+            if ("/admin/set-community".equals(requestURI) ||
+                "/admin/user-card".equals(requestURI)) {
+                return;
+            }
+            
+            final JSONObject community = userService.getUserInfo(currentUser.optString("id"));
+            if (Strings.isEmptyOrNull(community.optString("Area"))) {
+                throw new RequestProcessAdviceException(exception412);
+            }
+            
         } catch (final ServiceException e) {
             LOGGER.log(Level.ERROR, "登录检查异常");
 
-            throw new RequestProcessAdviceException(exception);
+            throw new RequestProcessAdviceException(exception403);
         }
     }
 }

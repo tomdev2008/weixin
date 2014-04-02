@@ -55,7 +55,7 @@ import org.json.JSONObject;
  * 用户服务.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.3.4.0, Mar 31, 2014
+ * @version 1.3.5.0, Apr 2, 2014
  * @since 1.0.0
  */
 @Service
@@ -427,7 +427,7 @@ public class UserService {
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "查询用户名片 [userId=" + userId + ", type=" + type + "] 异常", e);
 
-            return null;
+            return Collections.emptyList();
         }
     }
 
@@ -474,6 +474,7 @@ public class UserService {
                 property.put("PropertyTitle", userCard.optString("PropertyTitle"));
                 property.put("PropertyRemark", userCard.optString("PropertyRemark"));
                 property.put("Property", userCard.optInt("Property"));
+                property.put("T_User_ID", userId);
 
                 userCardRepository.add(property);
             }

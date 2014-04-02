@@ -19,6 +19,7 @@ import com.xinzhubang.weixin.service.UserService;
 import com.xinzhubang.weixin.util.DESs;
 import com.xinzhubang.weixin.util.Filler;
 import com.xinzhubang.weixin.util.Sessions;
+import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -43,7 +44,7 @@ import org.json.JSONObject;
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.2.3.0, Apr 2, 2014
+ * @version 1.3.3.0, Apr 2, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -101,7 +102,7 @@ public class LoginProcessor {
         final JSONObject ret = new JSONObject();
         ret.put(Keys.STATUS_CODE, true);
         renderer.setJSONObject(ret);
-        
+
         final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
         final String userName = requestJSONObject.optString("userName");
         final String password = requestJSONObject.optString("password");
@@ -116,18 +117,41 @@ public class LoginProcessor {
             return;
         }
 
+        final String userId = user.optString("id");
+
         user.put(User.USER_EMAIL, user.getString("email"));
         user.put(User.USER_PASSWORD, user.getString("password"));
-        user.put("userId", user.optString("id"));
+        user.put("userId", userId);
 
         Sessions.login(request, response, user);
 
+        // 查询用户是否设置过选择的名片
+        final List<JSONObject> userCards = userService.getUserCard(userId, cardType);
+        
+        if (userCards.isEmpty()) { // 没有设置过选择的名片
+            // 默认创建
+            final JSONObject userCard = new JSONObject();
+            userCard.put("nickName", userName);
+            userCard.put("PropertyTitle", "");
+            userCard.put("PropertyRemark", "");
+            userCard.put("Property", "teacher".equals(cardType) ? 1 : 0);
+
+            userCard.put("T_User_ID", Integer.valueOf(userId));
+
+            userService.setUserCard(userCard);
+        }
+        
+        if ("/admin/user-card".equals(go)) {
+            ret.put("go", go + "?type=" + cardType);
+            
+            return;
+        }
+        
         // 查询用户是否已经设置过圈子
-        final JSONObject community = userService.getUserInfo(user.optString("id"));
+        final JSONObject community = userService.getUserInfo(userId);
+
         if (Strings.isEmptyOrNull(community.optString("Area"))) { // 如果用户还没有设置过圈子
             ret.put("go", "/admin/set-community");
-        } else {
-            ret.put("go", go + "?type=" + cardType);
         }
     }
 
