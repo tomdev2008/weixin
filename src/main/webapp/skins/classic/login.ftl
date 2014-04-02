@@ -17,8 +17,8 @@
                 </label>
             </div>
             <div>
-                <label class="ft-green"><input type="radio" checked="checked" name="cardType"/>学生身份</label>
-                <label class="ft-green"><input type="radio" name="cardType"/>老师身份（或学长）</label>
+                <label class="ft-green"><input value="student" type="radio" checked="checked" name="cardType"/>学生身份</label>
+                <label class="ft-green"><input type="radio" value="teacher" name="cardType"/>老师身份（或学长）</label>
             </div>
             <div class="ft-small">
                 建议完善信息，让他人更信任你 <label class="ft-gray"><input type="checkbox" checked="checked"/> 记住登录状态</label>

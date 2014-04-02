@@ -30,9 +30,10 @@ var login = {
             var requestJSONObject = {
                 userName: $.trim($("#account").val()),
                 password: $.trim($("#password").val()),
-                go: go
+                go: go,
+                cardType: $("input:checked").val()
             };
-
+            
             $.ajax({
                 url: "/login",
                 type: "POST",

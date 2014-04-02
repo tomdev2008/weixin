@@ -106,6 +106,7 @@ public class LoginProcessor {
         final String userName = requestJSONObject.optString("userName");
         final String password = requestJSONObject.optString("password");
         final String go = requestJSONObject.optString("go", "/user-list");
+        final String cardType = requestJSONObject.getString("cardType");
 
         final JSONObject user = userService.getUserByName(userName);
         if (null == user || !user.optString("password").equals(DESs.encrypt(password, "XHJY"))) {
@@ -126,7 +127,7 @@ public class LoginProcessor {
         if (Strings.isEmptyOrNull(community.optString("Area"))) { // 如果用户还没有设置过圈子
             ret.put("go", "/admin/set-community");
         } else {
-            ret.put("go", go);
+            ret.put("go", go + "?type=" + cardType);
         }
     }
 
