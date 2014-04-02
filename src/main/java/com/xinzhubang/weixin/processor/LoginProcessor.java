@@ -152,6 +152,8 @@ public class LoginProcessor {
 
         if (Strings.isEmptyOrNull(community.optString("Area"))) { // 如果用户还没有设置过圈子
             ret.put("go", "/admin/set-community");
+        } else {
+            ret.put("go", go);
         }
     }
 
