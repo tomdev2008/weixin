@@ -17,7 +17,8 @@
  * @fileOverview 社区
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
- * @version 1.0.0.1, Mar 13, 2014
+ * @author <a href="http://88250.b3log.org">Liang Ding</a>
+ * @version 1.2.1.1, Apr 2, 2014
  */
 var community = {
     salePublish: function() {
@@ -279,6 +280,7 @@ var admin = {
                 success: function(result, textStatus) {
                     if (result.sc) {
                         tip.show("提示", "设置成功");
+                        $("#tipContent").next().text("GO").attr("onclick", "window.location='/user-list'");
                     } else {
                         tip.show("提示", result.msg);
                     }

@@ -16,7 +16,6 @@
 package com.xinzhubang.weixin.service;
 
 import com.xinzhubang.weixin.XZBServletListener;
-import com.xinzhubang.weixin.repository.GuestBookRepository;
 import com.xinzhubang.weixin.repository.ItemRepository;
 import com.xinzhubang.weixin.repository.UserRepository;
 import com.xinzhubang.weixin.repository.WhisperRepository;
@@ -49,7 +48,7 @@ import org.json.JSONObject;
  * 项目服务.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.5.0.0, Mar 29, 2014
+ * @version 1.6.0.0, Apr 2, 2014
  * @since 1.0.0
  */
 @Service
@@ -67,7 +66,7 @@ public class ItemService {
     private WhisperRepository whisperRepository;
 
     @Inject
-    private GuestBookRepository guestBookRepository;
+    private UserService userService;
 
     /**
      * 发送指定的悄悄话.
@@ -271,6 +270,22 @@ public class ItemService {
 
             itemRepository.add(sale);
 
+            // 查询用户是否设置过老师名片
+            final List<JSONObject> userCards = userService.getUserCard(userId, "teacher");
+
+            if (userCards.isEmpty()) { // 没有设置过老师名片
+                // 默认创建
+                final JSONObject userCard = new JSONObject();
+                userCard.put("nickName", user.getString("user_name"));
+                userCard.put("PropertyTitle", "");
+                userCard.put("PropertyRemark", "");
+                userCard.put("Property", 1);
+
+                userCard.put("T_User_ID", Integer.valueOf(userId));
+
+                userService.setUserCard(userCard);
+            }
+
             return true;
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "发布出售 [" + sale.toString() + "] 异常", e);
@@ -321,6 +336,22 @@ public class ItemService {
             demand.put("Mobile", mobile);
 
             itemRepository.add(demand);
+
+            // 查询用户是否设置过学生名片
+            final List<JSONObject> userCards = userService.getUserCard(userId, "student");
+
+            if (userCards.isEmpty()) { // 没有设置过学生名片
+                // 默认创建
+                final JSONObject userCard = new JSONObject();
+                userCard.put("nickName", user.getString("user_name"));
+                userCard.put("PropertyTitle", "");
+                userCard.put("PropertyRemark", "");
+                userCard.put("Property", 0);
+
+                userCard.put("T_User_ID", Integer.valueOf(userId));
+
+                userService.setUserCard(userCard);
+            }
 
             return true;
         } catch (final Exception e) {
