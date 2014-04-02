@@ -18,7 +18,7 @@
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.0.1, Mar 23, 2014
+ * @version 1.2.0.1, Apr 2, 2014
  */
 var login = {
     login: function(go) {
@@ -29,11 +29,12 @@ var login = {
         } else {
             var requestJSONObject = {
                 userName: $.trim($("#account").val()),
-                password: $.trim($("#password").val())
+                password: $.trim($("#password").val()),
+                go: go
             };
 
             $.ajax({
-                url: "/login?go=" + go,
+                url: "/login",
                 type: "POST",
                 cache: false,
                 data: JSON.stringify(requestJSONObject),
@@ -88,7 +89,7 @@ var login = {
             var requestJSONObject = {
                 email: $.trim($("#email").val())
             };
-            
+
             $.ajax({
                 url: "/forget-password",
                 type: "POST",
@@ -96,7 +97,7 @@ var login = {
                 data: JSON.stringify(requestJSONObject),
                 success: function(result, textStatus) {
                     if (result.sc) {
-                        
+
                     }
                 }
             });

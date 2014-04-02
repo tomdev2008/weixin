@@ -43,7 +43,7 @@ import org.json.JSONObject;
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.3.0, Mar 25, 2014
+ * @version 1.2.3.0, Apr 2, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -101,10 +101,11 @@ public class LoginProcessor {
         final JSONObject ret = new JSONObject();
         ret.put(Keys.STATUS_CODE, true);
         renderer.setJSONObject(ret);
-
+        
         final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
         final String userName = requestJSONObject.optString("userName");
         final String password = requestJSONObject.optString("password");
+        final String go = requestJSONObject.optString("go", "/user-list");
 
         final JSONObject user = userService.getUserByName(userName);
         if (null == user || !user.optString("password").equals(DESs.encrypt(password, "XHJY"))) {
@@ -125,7 +126,7 @@ public class LoginProcessor {
         if (Strings.isEmptyOrNull(community.optString("Area"))) { // 如果用户还没有设置过圈子
             ret.put("go", "/admin/set-community");
         } else {
-            ret.put("go", "/user-list");
+            ret.put("go", go);
         }
     }
 
