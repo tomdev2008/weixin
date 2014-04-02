@@ -51,7 +51,7 @@ import org.json.JSONObject;
  * 用户提问。
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.2.4.0, Mar 31, 2014
+ * @version 1.2.5.0, Apr 2, 2014
  * @since 1.0.0
  */
 @Service
@@ -299,7 +299,7 @@ public class QuestionService {
      */
     public List<JSONObject> getAnswerByQuestionId(final String id) throws Exception {
         final Query query = new Query().setFilter(new PropertyFilter("QID", FilterOperator.EQUAL, id));
-        query.addSort("Best", SortDirection.DESCENDING);
+        query.addSort("Best", SortDirection.DESCENDING).addSort("AddTime", SortDirection.DESCENDING);
 
         JSONObject answers = answerRepository.get(query);
 
