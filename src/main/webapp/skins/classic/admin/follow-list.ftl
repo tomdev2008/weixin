@@ -9,13 +9,13 @@
         <ul class="list" data-page="1">
             <#list followingUsers as followingUser>
             <li class="fn-clear">
-                <a href="/user-card?type${type}&userName=${followingUser.userName}">
+                <a href="/user-card?type=<#if followingUser.Property == 0>student<#else>teacher</#if>&userName=${followingUser.userName}">
                     <img class="list-view" 
                          onerror="this.src='/images/default-user-thumbnail.png'" 
                          src="/images/default-user-thumbnail.png"/>
                 </a>
                 <div class="list-content">
-                    <a href="/user-card?type${type}&userName=${followingUser.userName}">
+                    <a href="/user-card?type=<#if followingUser.Property == 0>student<#else>teacher</#if>&userName=${followingUser.userName}">
                         <div class="fn-clear" style="word-wrap: break-word; white-space: normal; word-break: break-all; width: 72%;">
                             <#if followingUser.Property == 0>
                             <span class="fn-left ico-qa">学生</span>
@@ -55,22 +55,24 @@
                         community += '-' + obj.College;
                     }
                 }
-                
+
                 var type = '<span class="fn-left ico-resource">老师</span>';
-                if (obj.Property == 0) {
+                var typeStr = 'teacher';
+                if (obj.Property === 0) {
                     type = '<span class="fn-left ico-qa">学生</span>';
+                    type = 'student';
                 }
-                
+
                 var identification = "";
                 if (obj.IdentificationStatus !== 0) {
                     identification = '<span class="ico ico-cater"></span>';
                 }
                 var liHTML = '<li class="fn-clear">'
-                        + '<a href="/user-card?type=${type}&userName=' + obj.userName + '">'
+                        + '<a href="/user-card?type=' + typeStr + '&userName=' + obj.userName + '">'
                         + '<img class="list-view" onerror="this.src=\'/images/default-user-thumbnail.png\'" src="/images/default-user-thumbnail.png"/>'
                         + '</a>'
                         + '<div class="list-content">'
-                        + '<a href="/user-card?type=${type}&userName=' + obj.userName + '">'
+                        + '<a href="/user-card?type=' + typeStr + '&userName=' + obj.userName + '">'
                         + '<div class="fn-clear" style="word-wrap: break-word; white-space: normal; word-break: break-all; width: 72%;">' + type
                         + '<span class="fn-left ft-dark">&nbsp;' + obj.userName + '</span>'
                         + identification
