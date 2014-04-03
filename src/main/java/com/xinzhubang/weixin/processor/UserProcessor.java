@@ -43,7 +43,7 @@ import org.json.JSONObject;
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.3.2.3, Mar 27, 2014
+ * @version 1.3.3.3, Apr 3, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -313,7 +313,7 @@ public class UserProcessor {
 
         final JSONObject currUser = userService.getCurrentUser(request);
         if (null != currUser) {
-            dataModel.put("isFollow", userService.isFollow(currUser.optString("id"), userId));
+            dataModel.put("isFollow", userService.isFollow(currUser.optString("id"), card.optString("ID")));
         }
 
         dataModel.put("type", type);
