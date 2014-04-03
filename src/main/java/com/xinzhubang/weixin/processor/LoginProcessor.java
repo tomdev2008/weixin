@@ -44,7 +44,7 @@ import org.json.JSONObject;
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.3.3.0, Apr 2, 2014
+ * @version 1.3.4.0, Apr 3, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -127,7 +127,7 @@ public class LoginProcessor {
 
         // 查询用户是否设置过选择的名片
         final List<JSONObject> userCards = userService.getUserCard(userId, cardType);
-        
+
         if (userCards.isEmpty()) { // 没有设置过选择的名片
             // 默认创建
             final JSONObject userCard = new JSONObject();
@@ -140,13 +140,13 @@ public class LoginProcessor {
 
             userService.setUserCard(userCard);
         }
-        
+
         if ("/admin/user-card".equals(go)) {
             ret.put("go", go + "?type=" + cardType);
-            
+
             return;
         }
-        
+
         // 查询用户是否已经设置过圈子
         final JSONObject community = userService.getUserInfo(userId);
 
@@ -246,6 +246,14 @@ public class LoginProcessor {
 
         final JSONObject requestJSONObject = Requests.parseRequestJSONObject(request, response);
         final String email = requestJSONObject.getString("email");
+
+        if (!Strings.isEmail(email)) {
+            ret.put(Keys.STATUS_CODE, false);
+            ret.put(Keys.MSG, "邮箱格式错误！");
+
+            return;
+        }
+
         final String userName = requestJSONObject.getString("user_name");
         final String password = requestJSONObject.getString("password");
 
