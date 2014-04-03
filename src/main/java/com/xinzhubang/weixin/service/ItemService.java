@@ -542,6 +542,13 @@ public class ItemService {
             for (final JSONObject demand : ret) {
                 final String userId = demand.getString("MemberID");
                 final JSONObject user = userRepository.get(userId);
+
+                if (null == user) {
+                    LOGGER.log(Level.WARN, "获取用户异常 [id=" + userId + ']');
+                    
+                    continue;
+                }
+
                 demand.put("userName", user.getString("user_name"));
                 demand.put("IDCardStatus", user.optInt("IDCardStatus"));
             }
