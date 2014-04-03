@@ -33,7 +33,7 @@ import org.b3log.latke.util.StaticResources;
  * Servlet 监听器.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.0.1, Mar 10, 2014
+ * @version 1.0.0.2, Apr 3, 2014
  * @since 1.0.0
  */
 public class XZBServletListener extends AbstractServletListener {
@@ -43,7 +43,7 @@ public class XZBServletListener extends AbstractServletListener {
      */
     private static final Logger LOGGER = Logger.getLogger(XZBServletListener.class.getName());
     
-    public static final int PAGE_SIZE = 2;
+    public static final int PAGE_SIZE = 5;
 
     @Override
     public void contextInitialized(final ServletContextEvent servletContextEvent) {
