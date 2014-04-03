@@ -101,8 +101,8 @@ public class UserService {
             for (final JSONObject j : results) {
                 boolean duplicated = false;
 
-                for (final JSONObject k : ret) { // 按人去重
-                    if (j.optInt("MemberID") == k.optInt("MemberID")) {
+                for (final JSONObject k : ret) { // 按发送者去重
+                    if (j.optInt("SendID") == k.optInt("SendID")) {
                         duplicated = true;
 
                         break;

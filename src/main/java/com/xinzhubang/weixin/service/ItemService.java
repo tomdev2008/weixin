@@ -48,7 +48,7 @@ import org.json.JSONObject;
  * 项目服务.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.6.0.0, Apr 2, 2014
+ * @version 1.6.1.0, Apr 3, 2014
  * @since 1.0.0
  */
 @Service
@@ -131,6 +131,11 @@ public class ItemService {
                 if (!duplicated) {
                     final int keyId = j.getInt("KeyID");
                     final JSONObject item = itemRepository.get(keyId + "");
+                    
+                    if (null == item) { // 容错处理
+                        continue;
+                    }
+                    
                     j.put("item", item);
 
                     j.put("toUser", userRepository.get(j.getString("ToID")));
