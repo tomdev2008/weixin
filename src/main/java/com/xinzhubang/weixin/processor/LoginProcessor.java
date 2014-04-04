@@ -44,7 +44,7 @@ import org.json.JSONObject;
  *
  * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.3.4.0, Apr 3, 2014
+ * @version 1.4.4.0, Apr 4, 2014
  * @since 1.0.0
  */
 @RequestProcessor
@@ -124,6 +124,9 @@ public class LoginProcessor {
         user.put("userId", userId);
 
         Sessions.login(request, response, user);
+
+        // 登录日志
+        userService.addLoginLog(userName, userId, Requests.getRemoteAddr(request));
 
         // 查询用户是否设置过选择的名片
         final List<JSONObject> userCards = userService.getUserCard(userId, cardType);

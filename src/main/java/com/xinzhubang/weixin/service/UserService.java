@@ -17,6 +17,7 @@ package com.xinzhubang.weixin.service;
 
 import com.xinzhubang.weixin.XZBServletListener;
 import com.xinzhubang.weixin.repository.GuestBookRepository;
+import com.xinzhubang.weixin.repository.LoginLogRepository;
 import com.xinzhubang.weixin.repository.SchoolRepository;
 import com.xinzhubang.weixin.repository.UserCollectionRepository;
 import com.xinzhubang.weixin.repository.UserCardRepository;
@@ -55,7 +56,7 @@ import org.json.JSONObject;
  * 用户服务.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.3.5.0, Apr 2, 2014
+ * @version 1.4.5.0, Apr 4, 2014
  * @since 1.0.0
  */
 @Service
@@ -80,6 +81,9 @@ public class UserService {
 
     @Inject
     private GuestBookRepository guestBookRepository;
+
+    @Inject
+    private LoginLogRepository loginLogRepository;
 
     /**
      * 根据用户 id 获取用户的留言.
@@ -815,6 +819,22 @@ public class UserService {
             userInfo.remove("rownum");
 
             userInfoRepository.update(userInfo.getString("ID"), userInfo);
+        }
+    }
+
+    @Transactional
+    public void addLoginLog(final String userName, final String userId, final String ip) {
+        final JSONObject log = new JSONObject();
+
+        log.put("user_id", userId);
+        log.put("user_name", userName);
+        log.put("remark", "微信端");
+        log.put("login_ip", ip);
+
+        try {
+            loginLogRepository.add(log);
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "写入登录日志异常", e);
         }
     }
 }
