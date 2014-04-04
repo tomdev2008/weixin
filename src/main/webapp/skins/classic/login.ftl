@@ -24,7 +24,7 @@
                 建议完善信息，让他人更信任你 <label class="ft-gray"><input type="checkbox" checked="checked"/> 记住登录状态</label>
             </div>
             <button class="button" onclick="login.login('/admin/user-card')">现在就去</button>
-            <button class="button" onclick="login.login('/user-list')">以后完善</button>
+            <button class="button" onclick="login.login('/user-list')">以后完善 &nbsp; &nbsp; &nbsp; 现在登录</button>
             <div class="fn-clear">
                 <a class="fn-left" href="/register">立即注册>></a>
                 <a class="fn-right" href="/forget-password">忘记密码？</a>
