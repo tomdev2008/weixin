@@ -43,6 +43,7 @@ import org.b3log.latke.repository.FilterOperator;
 import org.b3log.latke.repository.PropertyFilter;
 import org.b3log.latke.repository.Query;
 import org.b3log.latke.repository.RepositoryException;
+import org.b3log.latke.repository.SortDirection;
 import org.b3log.latke.repository.annotation.Transactional;
 import org.b3log.latke.service.ServiceException;
 import org.b3log.latke.service.annotation.Service;
@@ -56,7 +57,7 @@ import org.json.JSONObject;
  * 用户服务.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.4.5.0, Apr 4, 2014
+ * @version 1.4.6.0, Apr 8, 2014
  * @since 1.0.0
  */
 @Service
@@ -93,64 +94,80 @@ public class UserService {
      * @return
      */
     public List<JSONObject> getGuestBooksByUserId(final String userId, final int pageNum) {
+        final List<JSONObject> ret = new ArrayList<JSONObject>();
+
         try {
-            final Query query = new Query().setFilter(new PropertyFilter("MemberID", FilterOperator.EQUAL, userId));
-            query.setCurrentPageNum(pageNum).setPageSize(XZBServletListener.PAGE_SIZE);
+            Query query = new Query().addProjection("SendID", Integer.class).
+                    setFilter(new PropertyFilter("MemberID", FilterOperator.EQUAL, userId));
 
             final JSONObject result = guestBookRepository.get(query);
+            final JSONArray array = result.getJSONArray(Keys.RESULTS);
 
-            final List<JSONObject> results = CollectionUtils.jsonArrayToList(result.getJSONArray(Keys.RESULTS));
-            final List<JSONObject> ret = new ArrayList<JSONObject>();
+            final List<String> results = new ArrayList<String>();
 
-            for (final JSONObject j : results) {
-                boolean duplicated = false;
+            for (int i = 0; i < array.length(); i++) {
+                final JSONObject o = array.getJSONObject(i);
+                final String sendId = o.getString("SendID");
 
-                for (final JSONObject k : ret) { // 按发送者去重
-                    if (j.optInt("SendID") == k.optInt("SendID")) {
-                        duplicated = true;
+                if (!results.contains(sendId)) {
+                    results.add(sendId);
+                }
+            }
 
-                        break;
-                    }
+            final int idx = (pageNum - 1) * XZBServletListener.PAGE_SIZE;
+            if (idx >= results.size()) {
+                return ret;
+            }
+
+            final int endIdx = idx + XZBServletListener.PAGE_SIZE - 1 > results.size()
+                               ? results.size()  : idx + XZBServletListener.PAGE_SIZE;
+            final List<String> lists = results.subList(idx, endIdx);
+
+            final JSONObject toUser = userRepository.get(userId);
+
+            for (final String sendId : lists) {
+                List<Filter> filters = new ArrayList<Filter>();
+                filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, userId));
+                filters.add(new PropertyFilter("SendID", FilterOperator.EQUAL, sendId));
+
+                Query q = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters)).
+                        setCurrentPageNum(1).setPageSize(1).addSort("PostTime", SortDirection.DESCENDING);
+
+                final JSONObject r = guestBookRepository.get(q);
+                final JSONArray a = r.getJSONArray(Keys.RESULTS);
+                final JSONObject j = a.getJSONObject(0);
+
+                final JSONObject fromUser = userRepository.get(sendId);
+
+                j.put("toUser", toUser);
+                j.put("fromUser", fromUser);
+                j.put("CreateTime", j.opt("PostTime"));
+
+                j.put("type", "gb"); // 类型是留言
+
+                q = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+                final long c1 = guestBookRepository.count(q);
+
+                long c2 = 0;
+                // 自己留言给自己，查一次就行，互相留言要反过来再查一次
+                if (!sendId.equals(userId)) {
+                    filters = new ArrayList<Filter>();
+                    filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, sendId));
+                    filters.add(new PropertyFilter("SendID", FilterOperator.EQUAL, userId));
+
+                    q = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
+                    c2 = guestBookRepository.count(q);
                 }
 
-                if (!duplicated) {
-                    j.put("toUser", userRepository.get(j.getString("MemberID")));
-                    j.put("fromUser", userRepository.get(j.getString("SendID")));
-                    j.put("CreateTime", j.opt("PostTime"));
+                j.put("count", c1 + c2);
 
-                    j.put("type", "gb"); // 类型是留言
-
-                    final String memberId = j.getString("MemberID");
-                    final String sendId = j.getString("SendID");
-
-                    List<Filter> filters = new ArrayList<Filter>();
-                    filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, memberId));
-                    filters.add(new PropertyFilter("SendID", FilterOperator.EQUAL, sendId));
-
-                    Query q = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
-                    final long c1 = guestBookRepository.count(q);
-
-                    long c2 = 0;
-                    // 自己留言给自己，查一次就行，互相留言要反过来再查一次
-                    if (!sendId.equals(memberId)) {
-                        filters = new ArrayList<Filter>();
-                        filters.add(new PropertyFilter("MemberID", FilterOperator.EQUAL, sendId));
-                        filters.add(new PropertyFilter("SendID", FilterOperator.EQUAL, memberId));
-
-                        q = new Query().setFilter(new CompositeFilter(CompositeFilterOperator.AND, filters));
-                        c2 = guestBookRepository.count(q);
-                    }
-
-                    j.put("count", c1 + c2);
-
-                    ret.add(j);
-                }
+                ret.add(j);
             }
 
             return ret;
 
         } catch (final Exception e) {
-            LOGGER.log(Level.ERROR, "获取用户 [id=" + userId + "] 悄悄话列表异常", e);
+            LOGGER.log(Level.ERROR, "获取用户 [id=" + userId + "] 留言列表异常", e);
 
             return Collections.emptyList();
         }
