@@ -59,6 +59,38 @@ var community = {
             $(this).find("i").addClass("ico-radio-checked").removeClass("ico-radio");
         });
     },
+    saleAudition: function() {
+        if ($.trim($("#month").val()).length === 0
+                || $.trim($("#day").val()).length === 0
+                || $.trim($("#hour").val()).length === 0
+                || $.trim($("#min").val()).length === 0) {
+            tip.show("提交失败", "日期不能为空");
+        } else if ($.trim($("#content").val()).length === 0) {
+            tip.show("提交失败", "内容不能为空");
+        } else {
+            var requestJSONObject = {
+                month: $("#month").val(),
+                day: $("#day").val(),
+                hour: $("#hour").val(),
+                min: $("#min").val(),
+                content: $("#content").val()
+            };
+
+            $.ajax({
+                url: "/sale-audition",
+                type: "POST",
+                cache: false,
+                data: JSON.stringify(requestJSONObject),
+                success: function(result, textStatus) {
+                    if (result.sc) {
+                        community.cancel();
+                    } else {
+                        tip.show("提交失败", result.msg);
+                    }
+                }
+            });
+        }
+    },
     requirementPublish: function() {
         if ($.trim($("#title").val()).length === 0) {
             tip.show("提交失败", "标题不能为空");
@@ -90,6 +122,41 @@ var community = {
                 }
             });
         }
+    },
+    requirementTender: function() {
+        if ($.trim($("#content").val()).length === 0) {
+            tip.show("提交失败", "内容不能为空");
+        } else if ($.trim($("#money").val()).length === 0) {
+            tip.show("提交失败", "价格不能为空");
+        } else if ($(".list li.selected").length === 0) {
+            tip.show("提交失败", "请选择投标服务");
+        } else {
+            var requestJSONObject = {
+                content: $("#content").val(),
+                money: $("#money").val(),
+                id: $(".list li.selected").data("id")
+            };
+
+            $.ajax({
+                url: "/requirement-tender",
+                type: "POST",
+                cache: false,
+                data: JSON.stringify(requestJSONObject),
+                success: function(result, textStatus) {
+                    if (result.sc) {
+                        community.cancel();
+                    } else {
+                        tip.show("提交失败", result.msg);
+                    }
+                }
+            });
+        }
+    },
+    requirementTenderInit: function() {
+        $(".list li").click(function() {
+            $(".list li.selected").removeClass("selected");
+            $(this).addClass("selected");
+        });
     },
     cancel: function() {
         history.back();

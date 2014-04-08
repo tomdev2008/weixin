@@ -263,6 +263,29 @@ public class SaleProcessor {
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
+    
+     /**
+     * 展示发布出售页面.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/sale-audition", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
+    public void showAudition(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+        context.setRenderer(renderer);
+        renderer.setTemplateName("/community/sale-audition.ftl");
+
+        final Map<String, Object> dataModel = renderer.getDataModel();
+        dataModel.put("type", "sale");
+
+        filler.fillHeader(request, response, dataModel);
+        filler.fillFooter(dataModel);
+    }
 
     /**
      * 发布出售.

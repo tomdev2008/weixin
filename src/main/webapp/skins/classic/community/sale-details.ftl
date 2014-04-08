@@ -69,7 +69,7 @@
                 <#if sale.ItemType == 1>
                 <button class="button fn-right" onclick='tip.show("温馨提示", "功能正在开发中，敬请期待");'>我要购买</button>
                 <#else>
-                <button class="button fn-right" onclick='tip.show("温馨提示", "功能正在开发中，敬请期待");'>我要试听</button>
+                <button class="button fn-right" onclick='window.location="/sale-audition"'>我要试听</button>
                 </#if>
                 </#if>
             </div>

@@ -264,6 +264,29 @@ public class RequirementProcessor {
         filler.fillHeader(request, response, dataModel);
         filler.fillFooter(dataModel);
     }
+    
+    /**
+     * 展示需求发布页面.
+     *
+     * @param context the specified context
+     * @param request the specified request
+     * @param response the specified response
+     * @throws Exception exception
+     */
+    @RequestProcessing(value = "/requirement-tender", method = HTTPRequestMethod.GET)
+    @Before(adviceClass = LoginCheck.class)
+    public void showTender(final HTTPRequestContext context, final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        final AbstractFreeMarkerRenderer renderer = new FreeMarkerRenderer();
+        context.setRenderer(renderer);
+        renderer.setTemplateName("/community/requirement-tender.ftl");
+
+        final Map<String, Object> dataModel = renderer.getDataModel();
+        dataModel.put("type", "requirement");
+
+        filler.fillHeader(request, response, dataModel);
+        filler.fillFooter(dataModel);
+    }
 
     /**
      * 发布需求.

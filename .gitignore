@@ -168,3 +168,5 @@ pip-log.txt
 .idea
 symphony.iml
 src/main/resources/local.properties
+src/main/resources/local.properties
+src/main/resources/local.properties

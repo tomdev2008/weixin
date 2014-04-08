@@ -390,6 +390,10 @@ footer {
     -webkit-box-sizing: border-box;
 }
 
+.list li.selected {
+    background-color: #edffcd;
+}
+
 .list li.last {
     border-bottom-width: 0;
 }
@@ -624,3 +628,14 @@ footer {
     display: block;
 }
 /* end search */
+
+/* start tender */
+.tender-tip {
+    background-color: #EEEEEE;
+    font-size: 1.2em;
+    padding: 0.3125em;
+    text-align: center;
+    display: block;
+}
+/* end tender */
+
